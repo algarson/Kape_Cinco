@@ -35,7 +35,7 @@
             </form>
         </div>
         <div class="logo">
-            <img src="images/kape_cinco.jpg" alt="Kape Cinco">
+            <img src="/Kape_Cinco//images//kape_cinco.jpg" alt="Kape Cinco">
         </div>
     </div>
 </body>
