@@ -51,7 +51,7 @@
                     <h3>Fried Fish Dumplings</h3>
                     <p>Rp 20.450</p>
                     <button class="add-to-cart">Add to Cart</button>
-                </div>
+                </div> 
                 <div class="food-item">
                     <img src="food3.jpg" alt="Mango Frost Special">
                     <h3>Mango Frost Special</h3>
@@ -76,8 +76,10 @@
                 <span>Total:</span>
                 <span id="total-amount">Rp 0</span>
             </div>
-            <button id="proceed-to-payment">Proceed to Payment</button>
+            <button id="proceed-to-payment-bills">Proceed to Payment</button>
         </div>
+
+
     </div>
     <script src="home.js"></script>
 </body>

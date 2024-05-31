@@ -14,6 +14,17 @@ document.addEventListener('DOMContentLoaded', () => {
         totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
     }
 
+    // Function to update total amount based on quantities
+    function updateTotal() {
+        let newTotal = 0;
+        document.querySelectorAll('.cart-item').forEach(cartItem => {
+            const price = parseInt(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace('.', ''));
+            const quantity = parseInt(cartItem.querySelector('.item-quantity').textContent);
+            newTotal += price * quantity;
+        });
+        totalAmountElement.textContent = `Rp ${newTotal.toLocaleString()}`;
+    }
+
     document.querySelectorAll('.categories button').forEach(button => {
         button.addEventListener('click', () => {
             // Clear the cart and reset total amount when switching categories
@@ -79,10 +90,48 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Add event listeners for incrementing and decrementing quantities
+    document.querySelectorAll('.increment-quantity').forEach(button => {
+        button.addEventListener('click', () => {
+            const quantityElement = button.parentElement.querySelector('.item-quantity');
+            const quantity = parseInt(quantityElement.textContent);
+            quantityElement.textContent = quantity + 1;
+            updateTotal();
+        });
+    });
+
+    document.querySelectorAll('.decrement-quantity').forEach(button => {
+        button.addEventListener('click', () => {
+            const quantityElement = button.parentElement.querySelector('.item-quantity');
+            const quantity = parseInt(quantityElement.textContent);
+            if (quantity > 1) {
+                quantityElement.textContent = quantity - 1;
+                updateTotal();
+            } else {
+                // Remove the item from the cart
+                const cartItem = button.closest('.cart-item');
+                const price = parseInt(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace('.', ''));
+                totalAmount -= price;
+                totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
+                cartItem.remove();
+            }
+        });
+    });
+    
+    
+
     function addToCart(name, price) {
         const cartItem = document.createElement('div');
         cartItem.classList.add('cart-item');
-        cartItem.innerHTML = `<span>${name}</span><span>Rp ${price.toLocaleString()}</span>`;
+        cartItem.innerHTML = `
+            <div class="quantity-container">
+                <button class="decrement-quantity">-</button>
+                <span class="item-quantity">1</span>
+                <button class="increment-quantity">+</button>
+            </div>
+            <span class="item-name">${name}</span>
+            <span class="item-price">Rp ${price.toLocaleString()}</span>
+        `;
         
         cartItemsContainer.appendChild(cartItem);
         totalAmount += price;

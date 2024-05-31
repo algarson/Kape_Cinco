@@ -161,6 +161,7 @@ body {
 
 .cart-item {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     background-color: #fff;
@@ -201,4 +202,23 @@ body {
     cursor: pointer;
     margin-top: 10px;
     width: 100%; /* Ensure the button fills the available width */
+}
+.bills-section .quantity-container {
+    display: flex;
+    align-items: center;
+}
+
+.bills-section .quantity-container button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bills-section .item-quantity {
+    width: 40px;
+    text-align: center;
 }
