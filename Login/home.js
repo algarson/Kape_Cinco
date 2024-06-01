@@ -24,11 +24,63 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         totalAmountElement.textContent = `Rp ${newTotal.toLocaleString()}`;
     }
+    function addToCart(name, price) {
+        // Check if the item is already in the cart
+        const existingCartItem = Array.from(cartItemsContainer.children).find(item => {
+            return item.querySelector('.item-name').textContent === name;
+        });
+    
+        if (existingCartItem) {
+            // Item already exists, increment quantity
+            const quantityElement = existingCartItem.querySelector('.item-quantity');
+            const quantity = parseInt(quantityElement.textContent);
+            quantityElement.textContent = quantity + 1;
+        } else {
+            // Item doesn't exist, add it to the cart
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+            cartItem.innerHTML = `
+                <div class="quantity-container">
+                    <button class="decrement-quantity">-</button>
+                    <span class="item-quantity">1</span>
+                    <button class="increment-quantity">+</button> 
+                </div>
+                <span class="item-name">${name}</span>
+                <span class="item-price">Rp ${price.toLocaleString()}</span>
+            `;
+    
+            // Add event listeners for the new increment and decrement buttons
+            cartItem.querySelector('.increment-quantity').addEventListener('click', () => {
+                const quantityElement = cartItem.querySelector('.item-quantity');
+                const quantity = parseInt(quantityElement.textContent);
+                quantityElement.textContent = quantity + 1;
+                updateTotal();
+            });
+    
+            cartItem.querySelector('.decrement-quantity').addEventListener('click', () => {
+                const quantityElement = cartItem.querySelector('.item-quantity');
+                const quantity = parseInt(quantityElement.textContent);
+                if (quantity > 1) {
+                    quantityElement.textContent = quantity - 1;
+                    updateTotal();
+                } else {
+                    totalAmount -= price;
+                    totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
+                    cartItem.remove();
+                }
+            });
+    
+            cartItemsContainer.appendChild(cartItem);
+        }
+    
+        // Update total amount
+        totalAmount += price;
+        totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
+    }
+    
 
     document.querySelectorAll('.categories button').forEach(button => {
         button.addEventListener('click', () => {
-            // Clear the cart and reset total amount when switching categories
-            clearCart();
             billsSection.style.display = 'none';
             
             // Remove 'active' class from all category buttons
@@ -56,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
 
     // Search functionality
     const searchInput = document.querySelector('.header input');
@@ -90,51 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Add event listeners for incrementing and decrementing quantities
-    document.querySelectorAll('.increment-quantity').forEach(button => {
-        button.addEventListener('click', () => {
-            const quantityElement = button.parentElement.querySelector('.item-quantity');
-            const quantity = parseInt(quantityElement.textContent);
-            quantityElement.textContent = quantity + 1;
-            updateTotal();
-        });
-    });
-
-    document.querySelectorAll('.decrement-quantity').forEach(button => {
-        button.addEventListener('click', () => {
-            const quantityElement = button.parentElement.querySelector('.item-quantity');
-            const quantity = parseInt(quantityElement.textContent);
-            if (quantity > 1) {
-                quantityElement.textContent = quantity - 1;
-                updateTotal();
-            } else {
-                // Remove the item from the cart
-                const cartItem = button.closest('.cart-item');
-                const price = parseInt(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace('.', ''));
-                totalAmount -= price;
-                totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
-                cartItem.remove();
-            }
-        });
-    });
-    
-    
-
-    function addToCart(name, price) {
-        const cartItem = document.createElement('div');
-        cartItem.classList.add('cart-item');
-        cartItem.innerHTML = `
-            <div class="quantity-container">
-                <button class="decrement-quantity">-</button>
-                <span class="item-quantity">1</span>
-                <button class="increment-quantity">+</button>
-            </div>
-            <span class="item-name">${name}</span>
-            <span class="item-price">Rp ${price.toLocaleString()}</span>
-        `;
-        
-        cartItemsContainer.appendChild(cartItem);
-        totalAmount += price;
-        totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
-    }
+ 
 });
+ 
