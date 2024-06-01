@@ -12,7 +12,7 @@
     <div class="container">
         <div class="sidebar">
             <div class="logo">
-                <img src="/Kape_Cinco//images//kape_cinco.jpg" alt="Logo">
+                <img src="/Kape_Cinco/images/kape_cinco.jpg" alt="Logo">
             </div>
             <nav>
                 <ul>
@@ -33,7 +33,7 @@
             </div>
             <div class="categories">
                 <button class="active">All Items</button>
-                <button>Chicken</button>
+                <button>Silog</button>
                 <button>Steak</button>
                 <button>Fish</button>
                 <button>Salad</button>
@@ -43,9 +43,15 @@
             </div>
             <div class="food-list">
                 <div class="food-item">
-                    <img src="food1.jpg" alt="Honey Fried Chicken">
-                    <h3>Honey Fried Chicken</h3>
-                    <p>Rp 32.110</p>
+                    <img src="food1.jpg" alt="HotSilog">
+                    <h3>HotSilog</h3>
+                    <p>120</p>
+                     <button class="add-to-cart"><span class="material-icons-sharp">add_shopping_cart</span></button>
+                </div>
+                <div class="food-item">
+                    <img src="food1.jpg" alt="HotSilog">
+                    <h3>HotSilog</h3>
+                    <p>120</p>
                      <button class="add-to-cart"><span class="material-icons-sharp">add_shopping_cart</span></button>
                 </div>
                 <div class="food-item">

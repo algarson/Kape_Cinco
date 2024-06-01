@@ -11,25 +11,27 @@ document.addEventListener('DOMContentLoaded', () => {
     function clearCart() {
         cartItemsContainer.innerHTML = '';
         totalAmount = 0;
-        totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
+        totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
     // Function to update total amount based on quantities
     function updateTotal() {
         let newTotal = 0;
         document.querySelectorAll('.cart-item').forEach(cartItem => {
-            const price = parseInt(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace('.', ''));
+            const price = parseFloat(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace(',', ''));
             const quantity = parseInt(cartItem.querySelector('.item-quantity').textContent);
             newTotal += price * quantity;
         });
-        totalAmountElement.textContent = `Rp ${newTotal.toLocaleString()}`;
+        totalAmount = newTotal;
+        totalAmountElement.textContent = `Rp ${newTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
+
     function addToCart(name, price) {
         // Check if the item is already in the cart
         const existingCartItem = Array.from(cartItemsContainer.children).find(item => {
             return item.querySelector('.item-name').textContent === name;
         });
-    
+
         if (existingCartItem) {
             // Item already exists, increment quantity
             const quantityElement = existingCartItem.querySelector('.item-quantity');
@@ -40,15 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const cartItem = document.createElement('div');
             cartItem.classList.add('cart-item');
             cartItem.innerHTML = `
+            <span class="item-name">${name}</span>
+            <span class="item-price">Rp ${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 <div class="quantity-container">
                     <button class="decrement-quantity">-</button>
                     <span class="item-quantity">1</span>
                     <button class="increment-quantity">+</button> 
                 </div>
-                <span class="item-name">${name}</span>
-                <span class="item-price">Rp ${price.toLocaleString()}</span>
             `;
-    
+
             // Add event listeners for the new increment and decrement buttons
             cartItem.querySelector('.increment-quantity').addEventListener('click', () => {
                 const quantityElement = cartItem.querySelector('.item-quantity');
@@ -56,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 quantityElement.textContent = quantity + 1;
                 updateTotal();
             });
-    
+
             cartItem.querySelector('.decrement-quantity').addEventListener('click', () => {
                 const quantityElement = cartItem.querySelector('.item-quantity');
                 const quantity = parseInt(quantityElement.textContent);
@@ -64,25 +66,29 @@ document.addEventListener('DOMContentLoaded', () => {
                     quantityElement.textContent = quantity - 1;
                     updateTotal();
                 } else {
+                    const price = parseFloat(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace(',', ''));
                     totalAmount -= price;
-                    totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
+                    totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                     cartItem.remove();
+                    if (cartItemsContainer.children.length === 0) {
+                        billsSection.style.display = 'none';
+                    }
+                    updateTotal();
                 }
             });
-    
+
             cartItemsContainer.appendChild(cartItem);
         }
-    
+
         // Update total amount
         totalAmount += price;
-        totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString()}`;
+        totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
-    
 
     document.querySelectorAll('.categories button').forEach(button => {
         button.addEventListener('click', () => {
             billsSection.style.display = 'none';
-            
+
             // Remove 'active' class from all category buttons
             document.querySelectorAll('.categories button').forEach(btn => {
                 btn.classList.remove('active');
@@ -109,7 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
     // Search functionality
     const searchInput = document.querySelector('.header input');
     const searchButton = document.querySelector('.header button');
@@ -135,14 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', (event) => {
             const foodItem = event.target.closest('.food-item');
             const foodName = foodItem.querySelector('h3').textContent;
-            const foodPrice = parseInt(foodItem.querySelector('p').textContent.replace('Rp ', '').replace('.', ''));
+            const foodPrice = parseFloat(foodItem.querySelector('p').textContent.replace('Rp ', '').replace(',', ''));
 
             addToCart(foodName, foodPrice);
             // Show the bills section when an item is added to the cart
             billsSection.style.display = 'block';
         });
     });
-
- 
 });
- 
