@@ -57,7 +57,7 @@ h1 {
     display: flex;
     align-items:center;
     padding-left: 20px;
-    color: var(--color-text-black);
+    color: var(--color-primary);
 }
 .top-header-right{
     flex: 10%;
