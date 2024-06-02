@@ -63,7 +63,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.loggedIn) {
-                        window.location.href = '/frontend/Admin/admin.html';
+                        window.location.href = '/frontend/Home/home.html';
                     } else {
                         document.body.classList.remove('hidden');
                     }
@@ -88,7 +88,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.adminExists) {
-                    window.location.href = '/frontend/Admin/admin.html'; 
+                    window.location.href = '/frontend/Home/home.html'; 
                 } else if (data.error) {
                     alert(data.error);
                 }

@@ -7,6 +7,10 @@ body {
     height: 100vh;
 }
 
+.hidden {
+    display: none;
+}
+
 .container {
     display: flex;
     width: 100%;

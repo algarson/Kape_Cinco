@@ -8,10 +8,40 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderDetailsElement = document.getElementById('order-details');
     const modalTotalAmountElement = document.getElementById('modal-total-amount');
     const confirmOrderButton = document.getElementById('confirm-order');
+    const logoutButton = document.getElementById('logout-button');
     let totalAmount = 0;
 
     // Hide the bills section initially
     billsSection.style.display = 'none';
+
+    fetch('/backend/Login/check_login.php')
+    .then(response => response.json())
+    .then(data => {
+        if (!data.loggedIn) {
+            window.location.href = '/frontend/Login/login.html';
+        } else {
+            document.body.classList.remove('hidden');
+        }
+    })
+    .catch(error => console.error('Error:', error));
+
+    function logout() {
+        fetch('/backend/Login/logout.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/frontend/Home/home.html';
+                } else {
+                    alert('Logout failed!');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    logoutButton.addEventListener('click', () => {
+        logout();
+        document.body.classList.remove('hidden');
+    });
 
     // Clear the cart and reset total amount function
     function clearCart() {
