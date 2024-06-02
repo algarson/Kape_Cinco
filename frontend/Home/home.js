@@ -13,7 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Hide the bills section initially
     billsSection.style.display = 'none';
-
+    paymentModal.style.display = 'none';
+    
     fetch('/backend/Login/check_login.php')
     .then(response => response.json())
     .then(data => {
