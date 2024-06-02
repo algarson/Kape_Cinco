@@ -15,11 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     billsSection.style.display = 'none';
     paymentModal.style.display = 'none';
     
-    fetch('/backend/Login/check_login.php')
+    fetch('/Kape_Cinco/backend/Login/check_login.php')
     .then(response => response.json())
     .then(data => {
         if (!data.loggedIn) {
-            window.location.href = '/frontend/Login/login.html';
+            window.location.href = '/Kape_Cinco/frontend/Login/login.html';
         } else {
             document.body.classList.remove('hidden');
         }
@@ -27,11 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(error => console.error('Error:', error));
 
     function logout() {
-        fetch('/backend/Login/logout.php')
+        fetch('/Kape_Cinco/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/frontend/Home/home.html';
+                    window.location.href = '/Kape_Cinco/frontend/Home/home.html';
                 } else {
                     alert('Logout failed!');
                 }

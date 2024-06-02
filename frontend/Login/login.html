@@ -30,40 +30,54 @@
                     </label>
                     <input type="password" id="password" name="password" placeholder="Password">
                 </div>
-                <div class="show-password">
-                    <input type="checkbox" id="show-password">
-                    <label for="show-password">Show Password</label>
-                </div>
                 <button type="submit">Log in</button>
                 <button type="button" onclick="showRegisterForm()">Register</button>
             </form>
 
+       
             <form id="register-form" style="display: none;" method="POST" onsubmit="validateRegistrationForm(event)">
                 <h2>Register</h2>
-                <label for="admin_username">User Name: </label>
-                <input type="text" id="admin_username" name="admin_username" required><br>
-                <label for="admin_password">Password: </label>
-                <input type="password" id="admin_password" name="admin_password" required><br>
-                <label for="confirm_password">Confirm Password: </label>
-                <input type="password" id="confirm_password" name="confirm_password" required><br>
-                <button type="submit">Register</button>
-                <button type="button" onclick="hideRegisterForm()">Cancel</button>
+                <div class="input-group">
+                    <label for="admin_username">
+                        <i class="fas fa-user"></i>
+                    </label>
+                    <input type="text" id="admin_username" name="admin_username" placeholder="User Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="admin_password">
+                        <i class="fas fa-lock"></i>
+                    </label>
+                    <input type="password" id="admin_password" name="admin_password" placeholder="Password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm_password">
+                        <i class="fas fa-lock"></i>
+                    </label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                </div>
+                <div>
+                    <button type="submit">Register</button>
+                </div>
+                <div>
+                    <button type="button" onclick="hideRegisterForm()">Cancel</button>
+                </div>
             </form>
 
             <div id="message"></div>
         </div>
         <div class="logo">
-            <img src="/frontend/images/kape_cinco.jpg" alt="Kape Cinco">
+            <img src="/Kape_Cinco/frontend/images/kape_cinco.jpg" alt="Kape Cinco">
         </div>
+
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            fetch('/backend/Login/check_login.php')
+            fetch('/Kape_Cinco/backend/Login/check_login.php')
                 .then(response => response.json())
                 .then(data => {
                     if (data.loggedIn) {
-                        window.location.href = '/frontend/Home/home.html';
+                        window.location.href = '/Kape_Cinco/frontend/Home/home.html';
                     } else {
                         document.body.classList.remove('hidden');
                     }
@@ -81,14 +95,14 @@
             formData.append('username', username);
             formData.append('password', password);
 
-            fetch('/backend/Login/login.php', {
+            fetch('/Kape_Cinco/backend/Login/login.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.adminExists) {
-                    window.location.href = '/frontend/Home/home.html'; 
+                    window.location.href = '/Kape_Cinco/frontend/Home/home.html'; 
                 } else if (data.error) {
                     alert(data.error);
                 }
@@ -114,7 +128,7 @@
             formData.append('admin_username', username);
             formData.append('admin_password', password);
 
-            fetch('/backend/Login/register.php', {
+            fetch('/Kape_Cinco/backend/Login/register.php', {
                 method: 'POST',
                 body: formData
             })

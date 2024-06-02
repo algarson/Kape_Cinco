@@ -55,9 +55,14 @@ body {
 .sidebar .profile span {
     width: 26px;
     height: 26px;
-    margin-top: 25rem;
+    margin-top: 20rem;
 }
 
+.sidebar .logout span{
+    width: 26px;
+    height: 26px;
+    margin-top: 1rem;
+}
 .main-content {
     flex-grow: 1;
     padding: 20px;
