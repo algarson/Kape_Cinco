@@ -2,6 +2,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const cartItemsContainer = document.querySelector('.cart-items');
     const totalAmountElement = document.getElementById('total-amount');
     const billsSection = document.querySelector('.bills-section');
+    const paymentModal = document.getElementById('payment-modal');
+    const closeButton = document.querySelector('.close-button');
+    const orderNumberElement = document.getElementById('order-number');
+    const orderDetailsElement = document.getElementById('order-details');
+    const modalTotalAmountElement = document.getElementById('modal-total-amount');
+    const confirmOrderButton = document.getElementById('confirm-order');
     let totalAmount = 0;
 
     // Hide the bills section initially
@@ -84,6 +90,62 @@ document.addEventListener('DOMContentLoaded', () => {
         totalAmount += price;
         totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
+
+    // Generate a random order number
+    function generateOrderNumber() {
+        return `ORD-${Math.floor(Math.random() * 1000000)}`;
+    }
+
+    // Display order details in the modal
+    function displayOrderDetails() {
+        orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;
+        orderDetailsElement.innerHTML = '';
+
+        document.querySelectorAll('.cart-item').forEach(cartItem => {
+            const itemName = cartItem.querySelector('.item-name').textContent;
+            const itemPrice = cartItem.querySelector('.item-price').textContent;
+            const itemQuantity = cartItem.querySelector('.item-quantity').textContent;
+
+            const orderDetailItem = document.createElement('div');
+            orderDetailItem.classList.add('order-detail-item');
+            orderDetailItem.innerHTML = `
+                <span class="order-item-name">${itemName}</span>
+                <span class="order-item-quantity">x${itemQuantity}</span>
+                <span class="order-item-price">${itemPrice}</span>
+            `;
+
+            orderDetailsElement.appendChild(orderDetailItem);
+        });
+
+        modalTotalAmountElement.textContent = totalAmountElement.textContent;
+    }
+
+    // Event listener for the Proceed to Payment button
+    document.getElementById('proceed-to-payment-bills').addEventListener('click', () => {
+        displayOrderDetails();
+        paymentModal.style.display = 'block';
+    });
+
+    // Event listener for the close button in the modal
+    closeButton.addEventListener('click', () => {
+        paymentModal.style.display = 'none';
+    });
+
+    // Event listener for the Confirm Order button in the modal
+    confirmOrderButton.addEventListener('click', () => {
+        alert('Order Confirmed!');
+        clearCart();
+        paymentModal.style.display = 'none';
+        billsSection.style.display = 'none';
+    });
+
+    // Event listener for closing the modal when clicking outside of it
+    window.addEventListener('click', (event) => {
+        if (event.target === paymentModal) {
+            paymentModal.style.display = 'none';
+        }
+    });
+
 
     document.querySelectorAll('.categories button').forEach(button => {
         button.addEventListener('click', () => {
