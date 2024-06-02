@@ -28,14 +28,18 @@
                     <input type="password" id="password" placeholder="Password">
                 </div>
                 <div class="show-password">
-                    <input type="checkbox" id="show-password">
+                    <input style="height: 20px; width: 20px;" type="checkbox" id="show-password">
                     <label for="show-password">Show Password</label>
                 </div>
                 <button type="submit">Log in</button>
             </form>
         </div>
         <div class="logo">
+<<<<<<< HEAD
             <img src="/images//kape_cinco.jpg" alt="Kape Cinco">
+=======
+            <img src="/KapeCInco/Kape_Cinco/images/kape_cinco.jpg" alt="Kape Cinco">
+>>>>>>> e05391007e9a396420f7225de5c0dac3d1eb5369
         </div>
     </div>
 </body>
