@@ -35,7 +35,11 @@
             </form>
         </div>
         <div class="logo">
+<<<<<<< HEAD
+            <img src="/images//kape_cinco.jpg" alt="Kape Cinco">
+=======
             <img src="/KapeCInco/Kape_Cinco/images/kape_cinco.jpg" alt="Kape Cinco">
+>>>>>>> e05391007e9a396420f7225de5c0dac3d1eb5369
         </div>
     </div>
 </body>
