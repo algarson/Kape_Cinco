@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hide the bills section initially
     billsSection.style.display = 'none';
     paymentModal.style.display = 'none';
+  
+    
     
     fetch('/Kape_Cinco/backend/Login/check_login.php')
     .then(response => response.json())
@@ -240,4 +242,89 @@ document.addEventListener('DOMContentLoaded', () => {
             billsSection.style.display = 'block';
         });
     });
+
+  // hide the other sections initially
+    document.getElementById('OrderNum-section').style.display ='none'
+    document.getElementById('statistics-section').style.display = 'none';
+    document.getElementById('settings-section').style.display = 'none'
+
+  // Add event listeners to sidebar navigation
+  document.getElementById('nav-home').addEventListener('click', () => {
+    // Handle home navigation
+    document.getElementById('main-content').style.display = 'block';
+    document.getElementById('OrderNum-section').style.display ='none'
+    document.getElementById('statistics-section').style.display = 'none';
+    document.getElementById('settings-section').style.display = 'none'
 });
+
+document.getElementById('nav-Order-num').addEventListener('click', () => {
+    // Handle bills navigation
+    document.getElementById('main-content').style.display = 'none';
+    displayOrderDetails(); // Update order details
+    document.getElementById('OrderNum-section').style.display ='block';
+    document.getElementById('statistics-section').style.display = 'none';
+    document.getElementById('settings-section').style.display = 'none'
+});
+
+document.getElementById('nav-statistics').addEventListener('click', () => {
+    document.getElementById('main-content').style.display = 'none';
+    document.getElementById('OrderNum-section').style.display ='none';
+    document.getElementById('statistics-section').style.display = 'block';
+    document.getElementById('settings-section').style.display = 'none'
+});
+
+document.getElementById('nav-settings').addEventListener('click', () => {
+    document.getElementById('main-content').style.display = 'none';
+    document.getElementById('OrderNum-section').style.display ='none';
+    document.getElementById('statistics-section').style.display = 'none';
+    document.getElementById('settings-section').style.display = 'block'
+});
+
+ // Function to display modal with order details
+ function displayOrderModal(orderNumber) {
+    const modal = document.getElementById('payment-modal');
+    const closeButton = modal.querySelector('.close-button');
+
+    // Here you would fetch order details from your backend based on the order number
+    // For demonstration purposes, let's assume order details are hardcoded
+    const orderDetails = {
+        items: ['Item 1', 'Item 2', 'Item 3'],
+        total: '$100'
+    };
+
+    // Populate modal with order details
+    const orderNumberElement = modal.querySelector('#order-number');
+    orderNumberElement.textContent = `Order Number: ${orderNumber}`;
+
+    const orderDetailsElement = modal.querySelector('#order-details');
+    orderDetailsElement.innerHTML = `
+        <p><strong>Items:</strong> ${orderDetails.items.join(', ')}</p>
+        <p><strong>Total:</strong> ${orderDetails.total}</p>
+    `;
+
+    // Display modal
+    modal.style.display = 'block';
+
+    // Event listener for closing the modal
+    closeButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Event listener for clicking outside the modal to close it
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+}
+
+// Event listener for clicking on order numbers
+document.querySelectorAll('.order-number').forEach(orderNumber => {
+    orderNumber.addEventListener('click', () => {
+        const clickedOrderNumber = orderNumber.textContent;
+        displayOrderModal(clickedOrderNumber);
+    });
+});
+
+});
+
