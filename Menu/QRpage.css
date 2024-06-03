@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap');
+:root{
+    --color-text-black: #333333;
+    --color-text-white: #FFF;
+    --color-primary: #3D2C24;
+    --color-scent-color: #F2E2D2;
+    --color-notif: #FF0060;
+    --color-success: #1B9C85;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Poppins;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--color-scent-color);
+}
+
+.order-card {
+    background-color: var(--color-scent-color);
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    max-width: 400px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.logo-container {
+    margin: 0;
+    background-color: var(--color-scent-color);
+    padding: 30px 20px 20px 20px;
+}
+
+.logo {
+    width: 200px;
+    height: 200px;
+    border-radius: 10rem;
+}
+
+.order-number {
+    background-color: var(--color-primary);
+    color: #fff;
+    padding: 20px 0;
+    width: 100%;
+    
+}
+
+.order-number h2 {
+    margin-bottom: 10px;
+}
+
+.number {
+    font-size: 60px;
+    font-weight: bold;
+}
+
+.order-number p {
+    font-style: italic;
+    margin-top: 10px;
+}
+
+.footer {
+    margin-top: 20px;
+}
+.footer p{
+    font-weight: bold;
+}
+
+.footer p {
+    color: #4c342b;
+}
