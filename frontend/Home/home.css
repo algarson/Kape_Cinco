@@ -1,0 +1,443 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap');
+*{
+    font-family: Poppins;
+
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.sidebar {
+    background-color: #5c4033;
+    color: #fff;
+    width: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.sidebar .logo img {
+    width: 50px;
+    height: 50px;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+  
+}
+
+.sidebar nav ul li {
+    margin: 20px 0;
+   
+    
+}
+
+.sidebar nav ul li a span {
+    width: 26px;
+    height: 26px;
+    text-decoration: none;
+    color: white;
+ 
+}
+
+.sidebar .profile span {
+    width: 26px;
+    height: 26px;
+    margin-top: 18rem;
+}
+
+.sidebar .logout span{
+    width: 26px;
+    height: 26px;
+    margin-top: 1rem;
+}
+.main-content {
+    flex-grow: 1;
+    padding: 20px;
+    background-color: #f5e3d3;
+    display: flex;
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 1rem;
+}
+
+.header input {
+    width: 70%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.header button {
+    padding: 10px 20px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.categories {
+    display: flex;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.categories button {
+    padding: 10px 15px;
+    background-color: #fff;
+    color: #5c4033;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.categories button.active,
+.categories button:hover {
+    background-color: #5c4033;
+    color: #fff;
+}
+
+.food-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    overflow-y: auto;
+}
+
+.food-item {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
+}
+
+.food-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.food-item h3 {
+    margin: 10px 0 5px;
+}
+
+.food-item p {
+    margin: 0;
+    color: #d9534f;
+    font-weight: bold;
+}
+
+.food-item .add-to-cart {
+    margin-top: 10px;
+    padding: 5px 20px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.bills-section {
+    width: 50rem;
+    background-color: #f5e3d3;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Enable vertical scrolling */
+    max-height: calc(100vh - 40px); /* Subtract header and footer height */
+    box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
+    -webkit-box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
+    -moz-box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
+    scroll-behavior: smooth;
+}
+
+
+.bills-section h2 {
+    margin-top: 0;
+}
+
+.cart-items {
+    flex-grow: 12;
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: auto;
+    padding: 10px 0;
+    font-weight: bold;
+}
+
+.total-hr{
+    border: 0;
+    height: 2px;
+    background: none;
+    border-top: 1px dashed #ccc;
+    margin: 20px 0;
+}
+
+.bills-section button {
+    padding: 10px 20px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 10px;
+
+}
+
+.proceed-container {
+    max-height: 100px; /* Set the maximum height of the container */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.bills-section button#proceed-to-payment {
+    padding: 10px 20px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%; /* Ensure the button fills the available width */
+}
+.bills-section .quantity-container {
+    display: flex;
+    align-items: center;
+}
+
+.bills-section .quantity-container button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bills-section .item-quantity {
+    width: 40px;
+    text-align: center;
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    padding-top: 10rem;
+    width: 100%;
+    height: 100%;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation-name: fadeIn;
+    animation-duration: 0.3s;
+}
+
+.modal-content {
+    background-color: #f5e3d3;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #5c4033;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+    color: #5c4033;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.modal-content .modal-total-amount {
+    font-size: 1.2em;
+    color: #333;
+    margin: 20px 0;
+    font-style: bold;
+}
+
+.modal-content div{
+    font-size: 1em;
+    color: #333;
+    margin: 10px 0;
+}
+
+.modal-content .modal-total-amount {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+.modal-content button {
+    padding: 10px 20px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto 0;
+}
+
+.modal-content .close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.modal-content .close-button:hover,
+.modal-content .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.total-hr{
+    border: 0;
+    height: 1px;
+    background: none;
+    border-top: 1px dashed #ccc;
+
+}
+
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+
+
+
+/* 
+sections */
+.OrderNum-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #f5e3d3;
+}
+
+.header-order-section {
+    padding: 10px;
+    background-color: #f5e3d3;
+}
+
+.main-order-section {
+    flex: 1;
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+    background-color: #f5e3d3;
+    box-sizing: border-box;
+    height: 48 %;
+    gap: 10px;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.categories-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+}
+
+
+.column-h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: #5c4033;
+    padding:5px 20px;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.order-card {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#pending-orders { background-color: #f9f9f9a2; }
+#accepted-orders { background-color: #e8f8e8a8; }
+#ongoing-orders { background-color: #e8f0ff88; }
+#canceled-orders { background-color: #ffe8e883; }
+#completed-orders { background-color: #fffce88b; }
+
+
+
+/* PENDING ORDERS */
+
+.order-card li{
+    list-style: none;
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.order-card :hover{
+    background-color: lightgray;
+    cursor: pointer;
+}
