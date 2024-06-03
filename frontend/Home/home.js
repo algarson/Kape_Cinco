@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             newTotal += price * quantity;
         });
         totalAmount = newTotal;
-        totalAmountElement.textContent = `Rp ${newTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        totalAmountElement.textContent = ` ${newTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
     function addToCart(name, price) {
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cartItem.classList.add('cart-item');
             cartItem.innerHTML = `
             <span class="item-name">${name}</span>
-            <span class="item-price">Rp ${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            <span class="item-price"> ${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 <div class="quantity-container">
                     <button class="decrement-quantity">-</button>
                     <span class="item-quantity">1</span>
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     const price = parseFloat(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace(',', ''));
                     totalAmount -= price;
-                    totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                    totalAmountElement.textContent = `${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                     cartItem.remove();
                     if (cartItemsContainer.children.length === 0) {
                         billsSection.style.display = 'none';
@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Update total amount
         totalAmount += price;
-        totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        totalAmountElement.textContent = `${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
     // Generate a random order number
