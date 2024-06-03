@@ -56,15 +56,15 @@ h1 {
     background-color: var(--color-scent-color);
     border-radius: 8px;
     margin-bottom: 10px;
-    height: 8.7rem;
+    height: 7.7rem;
 }
 .card-image-left{
     height: 100%;
     width: 100%;
 }
 #foodID{
+    height: 123px;
     background-size: cover;
-    height: auto;
     background-position: center;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
@@ -98,7 +98,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 5px;
+    padding: 0 9px;
 }
 .quantity-control {
     display: flex;
