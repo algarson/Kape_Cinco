@@ -1,4 +1,84 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async function () {
+    const allItemsContainer = document.getElementById('AllItemsContainer');
+
+    async function fetchAllItems() {
+        try {
+            const rest = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+            const data = await rest.json();
+            return data;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            return [];
+        }
+    }
+
+    async function generateAllItems() {
+        const allItems = await fetchAllItems();
+
+        allItemsContainer.innerHTML = '';
+
+        allItems.forEach(item => {
+            const allItem = document.createElement('div');
+            allItem.className = "food-item";
+            
+            const allItemImage = document.createElement('img');
+            if (item.food_image) {
+                allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
+            } else if (item.drink_image) {
+                allItemImage.src = '/Kape_Cinco/backend/images/' + item.drink_image;
+            } else {
+                allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+            }
+            allItemImage.className = 'all-item-image'; 
+    
+            const allItemName = document.createElement('h3');
+            allItemName.className = "all-item-name"; 
+            if (item.food_name) {
+                allItemName.textContent = item.food_name;
+            } else if (item.drink_name) {
+                allItemName.textContent = item.drink_name;
+            }
+    
+            const allItemPrice = document.createElement('p');
+            allItemPrice.className = "all-item-price"; 
+            if (item.food_price) {
+                allItemPrice.textContent = item.food_price;
+            } else if (item.drink_price) {
+                allItemPrice.textContent = item.drink_price;
+            }
+    
+            const addToCartButton = document.createElement('button');
+            addToCartButton.className = 'add-to-cart';
+    
+            const spanElement = document.createElement('span');
+            spanElement.textContent = 'add to billing';
+            addToCartButton.appendChild(spanElement);
+    
+            allItem.appendChild(allItemImage);
+            allItem.appendChild(allItemName);
+            allItem.appendChild(allItemPrice);
+            allItem.appendChild(addToCartButton);
+    
+            allItemsContainer.appendChild(allItem);
+        });
+
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+            button.addEventListener('click', (event) => {
+                const foodItem = event.target.closest('.food-item');
+                const foodName = foodItem.querySelector('h3').textContent;
+                const foodPrice = parseFloat(foodItem.querySelector('p').textContent.replace(' ', '').replace(',', ''));
+
+                addToCart(foodName, foodPrice);
+                billsSection.style.display = 'block';
+            });
+        });
+    }
+
+    generateAllItems();
+
+    /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
+
+
     const cartItemsContainer = document.querySelector('.cart-items');
     const totalAmountElement = document.getElementById('total-amount');
     const billsSection = document.querySelector('.bills-section');
@@ -15,8 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
     billsSection.style.display = 'none';
     paymentModal.style.display = 'none';
   
-    
-    
     fetch('/Kape_Cinco/backend/Login/check_login.php')
     .then(response => response.json())
     .then(data => {
@@ -123,6 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
         totalAmount += price;
         totalAmountElement.textContent = `${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
+
+    /*------------------------------------- END OF ADD TO CART FUNCTIONS -------------------------------*/
+
 
     // Generate a random order number
     function generateOrderNumber() {
@@ -231,17 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
         billsSection.style.display = 'none';
     });
 
-    document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const foodItem = event.target.closest('.food-item');
-            const foodName = foodItem.querySelector('h3').textContent;
-            const foodPrice = parseFloat(foodItem.querySelector('p').textContent.replace('Rp ', '').replace(',', ''));
-
-            addToCart(foodName, foodPrice);
-            // Show the bills section when an item is added to the cart
-            billsSection.style.display = 'block';
-        });
-    });
 
   // hide the other sections initially
     document.getElementById('OrderNum-section').style.display ='none'
