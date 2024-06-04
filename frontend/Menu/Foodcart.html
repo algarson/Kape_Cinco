@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+      rel="stylesheet">
+    <title>Food Cart</title>
+    <link rel="stylesheet" href="Foodcart.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="back-btn">&lt;</button>
+            <h1>Food Cart</h1>
+        </header>
+        <div class="cart-items">
+            <div class="cart-item" data-price="120">
+                <div class="card-image-left">
+                    <img src="/frontend/images/Hotsilog.jpg" alt="Porksilog" id="foodID" >
+                </div>
+                <div class="item-details-right">
+                    <div class="top-text">
+                        <h2>Porksilog</h2>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                    <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                    <div class="Lower-text">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                            <input type="number" value="1" class="quantity-input" readonly>
+                            <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                        </div>
+                        <div class="item-total">Total: ₱120.00</div>
+                    </div>  
+                </div>
+            </div>
+            <div class="cart-item" data-price="120">
+                <div class="card-image-left">
+                    <img src="/frontend/images/KareKare.jpg" alt="Porksilog" id="foodID" >
+                </div>
+                <div class="item-details-right">
+                    <div class="top-text">
+                        <h2>Porksilog</h2>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                    <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                    <div class="Lower-text">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                            <input type="number" value="1" class="quantity-input" readonly>
+                            <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                        </div>
+                        <div class="item-total">Total: ₱120.00</div>
+                    </div>  
+                </div>
+            </div>
+            <div class="cart-item" data-price="120">
+                <div class="card-image-left">
+                    <img src="/frontend/images/Porksilog.jpg" alt="Porksilog" id="foodID" >
+                </div>
+                <div class="item-details-right">
+                    <div class="top-text">
+                        <h2>Porksilog</h2>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                    <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                    <div class="Lower-text">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                            <input type="number" value="1" class="quantity-input" readonly>
+                            <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                        </div>
+                        <div class="item-total">Total: ₱120.00</div>
+                    </div>  
+                </div>
+            </div>
+            <div class="cart-item" data-price="120">
+                <div class="card-image-left">
+                    <img src="/frontend/images/lagkit.jpg" alt="Porksilog" id="foodID" >
+                </div>
+                <div class="item-details-right">
+                    <div class="top-text">
+                        <h2>Porksilog</h2>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                    <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                    <div class="Lower-text">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                            <input type="number" value="1" class="quantity-input" readonly>
+                            <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                        </div>
+                        <div class="item-total">Total: ₱120.00</div>
+                    </div>  
+                </div>
+            </div>
+            <div class="cart-item" data-price="120">
+                <div class="card-image-left">
+                    <img src="/frontend/images/Kape.jpg" alt="Porksilog" id="foodID" >
+                </div>
+                <div class="item-details-right">
+                    <div class="top-text">
+                        <h2>Porksilog</h2>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                    <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                    <div class="Lower-text">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                            <input type="number" value="1" class="quantity-input" readonly>
+                            <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                        </div>
+                        <div class="item-total">Total: ₱120.00</div>
+                    </div>  
+                </div>
+            </div>
+        </div>
+        <div class="summary">
+            <div class="summary-item">
+                <span>Total items(5 items)</span>
+                <span>₱600.00</span>
+            </div>
+            <div class="summary-item">
+                <span>Delivery Fee</span>
+                <span>₱0.00</span>
+            </div>
+            <div class="summary-item">
+                <span>Discount</span>
+                <span>₱0.00</span>
+            </div>
+            <button class="complete-order-btn">Review Order</button>
+        </div>
+    </div>
+    <script src="foodcart.js"></script>
+</body>
+</html>

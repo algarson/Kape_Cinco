@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap');
 *{
     font-family: Poppins;
-    
+
 }
 
 body {
@@ -9,7 +9,6 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    height: 100vh;
 }
 
 .hidden {
@@ -24,7 +23,7 @@ body {
 .sidebar {
     background-color: #5c4033;
     color: #fff;
-    width: 80px;
+    width: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -173,7 +172,7 @@ body {
     box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
     -webkit-box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
     -moz-box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
-    scroll-behavior: s;
+    scroll-behavior: smooth;
 }
 
 
@@ -352,4 +351,93 @@ body {
 @keyframes fadeIn {
     from {opacity: 0;}
     to {opacity: 1;}
+}
+
+
+
+
+/* 
+sections */
+.OrderNum-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: #f5e3d3;
+}
+
+.header-order-section {
+    padding: 10px;
+    background-color: #f5e3d3;
+}
+
+.main-order-section {
+    flex: 1;
+    display: flex;
+    padding: 10px;
+    flex-direction: row;
+    background-color: #f5e3d3;
+    box-sizing: border-box;
+    height: 48%;
+    gap: 10px;
+}
+
+.column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.categories-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+}
+
+
+.column-h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    background-color: #5c4033;
+    padding:5px 20px;
+    color: white;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.order-card {
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#pending-orders { background-color: #f9f9f9a2; }
+#accepted-orders { background-color: #e8f8e8a8; }
+#ongoing-orders { background-color: #e8f0ff88; }
+#canceled-orders { background-color: #ffe8e883; }
+#completed-orders { background-color: #fffce88b; }
+
+
+
+/* PENDING ORDERS */
+
+.order-card li{
+    list-style: none;
+    margin-bottom: 5px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    text-align: center;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.order-card :hover{
+    background-color: lightgray;
+    cursor: pointer;
 }
