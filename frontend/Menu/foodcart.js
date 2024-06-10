@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             quantityInput.value = currentValue;
 
-            updateTotal(this.parentElement.parentElement);
+            updateTotal(this.closest('.cart-item'));
             updateSummary();
         });
     });
@@ -30,10 +30,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function updateTotal(cartItem) {
+        
         const quantityInput = cartItem.querySelector('.quantity-input');
-        const pricePerItem = parseInt(cartItem.getAttribute('data-price'));
+        const pricePerItem = parseInt(cartItem.getAttribute('data-price'), 10);
+        const quantityValue = parseInt(quantityInput.value, 10);
+
+        if (isNaN(pricePerItem) || isNaN(quantityValue)) {
+            console.error('Invalid price or quantity value');
+            return;
+        }
+
+        const totalPrice = quantityValue * pricePerItem;
         const totalElement = cartItem.querySelector('.item-total');
-        const totalPrice = parseInt(quantityInput.value) * pricePerItem;
         totalElement.textContent = `Total: ₱${totalPrice.toFixed(2)}`;
     }
 
@@ -44,13 +52,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
         quantityInputs.forEach(input => {
             const cartItem = input.closest('.cart-item');
-            const pricePerItem = parseInt(cartItem.getAttribute('data-price'));
-            totalItems += parseInt(input.value);
-            totalPrice += parseInt(input.value) * pricePerItem;
+            const pricePerItem = parseInt(cartItem.getAttribute('data-price'), 10);
+            const quantityValue = parseInt(input.value, 10);
+
+            if (isNaN(pricePerItem) || isNaN(quantityValue)) {
+                console.error('Invalid price or quantity value');
+                return;
+            }
+            
+            totalItems += quantityValue;
+            totalPrice += quantityValue * pricePerItem;
+            
         });
 
-        document.querySelector('.summary-item:nth-child(1) span:nth-child(2)').textContent = `Total items(${totalItems} items)`;
-        document.querySelector('.summary-item:nth-child(1) span:nth-child(1)').textContent = `₱${totalPrice.toFixed(2)}`;
+        const summaryItemsElement = document.querySelector('.summary-item span:first-child');
+        const summaryTotalElement = document.querySelector('.summary-item span:last-child');
+
+        summaryItemsElement.textContent = `Total items(${totalItems} items)`;
+        summaryTotalElement.textContent = `₱${totalPrice.toFixed(2)}`;
     }
 
     // Initial summary update
