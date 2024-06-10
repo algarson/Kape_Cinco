@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function fetchAllItems() {
         try {
-            const rest = await fetch("/Kape_Cinco/backend/Home/allitems.php");
-            const data = await rest.json();
+            const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+            const data = await res.json();
             return data;
         } catch (err) {
             console.error('Error fetching data:', err);
@@ -53,6 +53,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             const spanElement = document.createElement('span');
             spanElement.textContent = 'add to billing';
             addToCartButton.appendChild(spanElement);
+
+            if (item.food_status === 'Unavailable' || item.drink_status === 'Unavailable') {
+                allItemImage.style.opacity = '0.5';
+                addToCartButton.disabled = true;
+                addToCartButton.style.opacity = '0.5';
+                addToCartButton.style.cursor = 'not-allowed';
+            }
     
             allItem.appendChild(allItemImage);
             allItem.appendChild(allItemName);
