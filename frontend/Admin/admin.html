@@ -3,44 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="admin.css">
     <title>Admin Page</title>
-    <style>
-        .hidden {
-            display: none;
-        }
-    </style>
 </head>
-
 <body class="hidden">
-    <h1>Admin Page</h1>
+    <h1>Inventory</h1>
     <button onclick="logout()">Logout</button>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            fetch('/backend/Login/check_login.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (!data.loggedIn) {
-                        window.location.href = '/frontend/Login/login.html';
-                    } else {
-                        document.body.classList.remove('hidden');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        });
+    <nav class="category-nav">
+        <button class="active" data-category="Foods">Foods</button>
+        <button data-category="Drinks">Drinks</button>
+    </nav>
+    <div class="table-container">
+        <table id="inventoryTable">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Name</th>
+                    <th class="drinktype-header">Type</th>
+                    <th>Price</th>
+                    <th class="description-header">Description</th>
+                    <th>Image</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <!-- Items will be dynamically generated here -->
+            </tbody>
+        </table>
+    </div>
 
-        function logout() {
-            fetch('/backend/Login/logout.php')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = '/frontend/Login/login.html';
-                    } else {
-                        alert('Logout failed!');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
-    </script>
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <form id="updateForm" enctype="multipart/form-data">
+                <input type="hidden" name="item_id" id="item_id">
+                <input type="hidden" name="item_type" id="item_type">
+                <label for="item_image">Select Image:</label>
+                <input type="file" name="item_image" id="item_image">
+                <button type="submit">Update</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
 </body>
 </html>
