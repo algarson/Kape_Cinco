@@ -97,10 +97,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     const confirmOrderButton = document.getElementById('confirm-order');
     const logoutButton = document.getElementById('logout-button');
     let totalAmount = 0;
-
+    
+    // Hide the bills section initially
     billsSection.style.display = 'none';
     paymentModal.style.display = 'none';
-    
+
     fetch('/Kape_Cinco/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
@@ -320,6 +321,53 @@ document.addEventListener('DOMContentLoaded', async function () {
         billsSection.style.display = 'none';
     });
 
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', function () {
+            button.parentElement.parentElement.style.display = 'none';
+        });
+    });
+
+    document.querySelectorAll('.order-card').forEach(orderCard => {
+        orderCard.addEventListener('click', function () {
+            const orderNumber = orderCard.querySelector('#order-number').textContent;
+            let modalId;
+            if (orderCard.parentElement.id === 'pending-orders') {
+                modalId = 'pending-orders-modal';
+                document.getElementById('pending-order-number').textContent = orderNumber;
+                // Fetch and display order details
+            } else if (orderCard.parentElement.id === 'accepted-orders') {
+                modalId = 'accepted-orders-modal';
+                document.getElementById('accepted-order-number').textContent = orderNumber;
+                // Fetch and display order details
+            } else if (orderCard.parentElement.id === 'completed-orders') {
+                modalId = 'completed-orders-modal';
+                document.getElementById('completed-order-number').textContent = orderNumber;
+                // Fetch and display order details
+            }
+            document.getElementById(modalId).style.display = 'block';
+            
+            
+        });
+
+    });
+
+
+    document.getElementById('confirm-pending-order').addEventListener('click', function () {
+        alert('Order Confirmed');
+        document.getElementById('pending-orders-modal').style.display = 'none';
+    });
+
+    document.getElementById('cancel-pending-order').addEventListener('click', function () {
+        alert('Order Canceled');
+        document.getElementById('pending-orders-modal').style.display = 'none';
+    });
+
+    document.getElementById('complete-accepted-order').addEventListener('click', function () {
+        alert('Order Completed');
+        document.getElementById('accepted-orders-modal').style.display = 'none';
+    });
+    
+
 
     // Hide the other sections initially
     document.getElementById('OrderNum-section').style.display = 'none';
@@ -371,7 +419,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         };
 
         // Populate modal with order details
-        const orderNumberElement = modal.querySelector('#order-number');
+        const orderNumberElement = modal.querySelector('.order-number');
         orderNumberElement.textContent = `Order Number: ${orderNumber}`;
 
         const orderDetailsElement = modal.querySelector('#order-details');
@@ -397,7 +445,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Event listener for clicking on order numbers
-    document.querySelectorAll('.order-number').forEach(orderNumber => {
+    document.getElementById('#order-number').forEach(orderNumber => {
         orderNumber.addEventListener('click', () => {
             const clickedOrderNumber = orderNumber.textContent;
             displayOrderModal(clickedOrderNumber);
