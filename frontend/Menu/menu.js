@@ -21,15 +21,27 @@ document.addEventListener('DOMContentLoaded', async function () {
             const allItem = document.createElement('div');
             allItem.className = "menu-item";
             
-            const allItemImage = document.createElement('img');
-            if (item.food_image) {
-                allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
-            } else if (item.drink_image) {
-                allItemImage.src = '/Kape_Cinco/backend/images/' + item.drink_image;
-            } else {
-                allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+            if (item.food_name) {
+                allItem.setAttribute('data-category', 'Meals');
+            } else if (item.drink_name) {
+                allItem.setAttribute('data-category', 'Drinks');
             }
-            allItemImage.className = 'all-item-image'; 
+            
+            const allItemImage = document.createElement('img');
+            let imagePath;
+
+            if (item.food_image) {
+                imagePath = 'food_image=' + item.food_image;
+            } else if (item.drink_image) {
+                imagePath = 'drink_image=' + item.drink_image;
+            } else {
+                imagePath = 'default_image';
+            }
+
+            allItemImage.src = imagePath.includes('food_image') ? `/Kape_Cinco/backend/images/${item.food_image}` :
+                              imagePath.includes('drink_image') ? `/Kape_Cinco/backend/images/${item.drink_image}` :
+                              '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+            allItemImage.className = 'all-item-image';
             
             const allItemInfo = document.createElement('div');
             allItemInfo.className = "menu-info";
@@ -48,8 +60,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             allItemPrice.className = "price"; 
             if (item.food_price) {
                 allItemPrice.textContent = item.food_price;
+                allItemInfo.appendChild(allItemPrice);
             } else if (item.drink_price) {
                 allItemPrice.textContent = item.drink_price;
+                allItemInfo.appendChild(allItemPrice);
             }
             
             if (item.food_desc) {
@@ -60,39 +74,91 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             const viewButton = document.createElement('button');
             viewButton.className = 'view-button';
-            viewButton.textContent = 'View';
+            viewButton.textContent = 'View'; 
     
             if (item.food_status === 'Unavailable' || item.drink_status === 'Unavailable') {
                 allItemImage.style.opacity = '0.5';
                 viewButton.disabled = true;
                 viewButton.style.cursor = 'not-allowed';
+            } else {
+                viewButton.addEventListener('click', () => {
+                    const params = new URLSearchParams({
+                        image: item.food_image || item.drink_image || 'default_image',
+                        name: item.food_name || item.drink_name,
+                        desc: item.food_desc || '',
+                        price: item.food_price || item.drink_price
+                    });
+                    window.location.href = `/Kape_Cinco/frontend/Menu/view.html?${params.toString()}`;
+                });
             }
 
             allItem.appendChild(allItemImage);
             allItem.appendChild(allItemInfo);
-
-            allItemInfo.appendChild(allItemPrice);
-            allItemInfo.appendChild(viewButton);
+            allItem.appendChild(viewButton);
     
             allMenuContainer.appendChild(allItem);
         });
-
-        /*
-        document.querySelectorAll('.view-button').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const foodItem = event.target.closest('.menu-item');
-                const foodName = foodItem.querySelector('h3').textContent;
-                const foodPrice = parseFloat(foodItem.querySelector('p').textContent.replace(' ', '').replace(',', ''));
-
-                addToCart(foodName, foodPrice);
-                billsSection.style.display = 'block';
-            });
-        });
-         */
     }
 
     generateAllItems();
 
-     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
+    //------------------------ END OF GENERATE ALL ITEMS ------------------------------//
+
+    document.querySelectorAll('.category-nav button').forEach(button => {
+        button.addEventListener('click', () => {
+
+            // Remove 'active' class from all category buttons
+            document.querySelectorAll('.category-nav button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add 'active' class to the clicked category button
+            button.classList.add('active');
+
+            // Filter food items based on category
+            const category = button.textContent.trim();
+            if (category === 'All') {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.style.display = 'block';
+                });
+            } else {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    if (item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        });
+    });
 
 });
+
+
+//------------------------ START OF MODAL ------------------------------//
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var openModalButton = document.querySelector(".top-header-right .material-icons-sharp");
+
+// Get the <span> element that closes the modal
+var closeModalButton = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+openModalButton.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+closeModalButton.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}

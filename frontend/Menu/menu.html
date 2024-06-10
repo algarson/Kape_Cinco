@@ -11,31 +11,143 @@
 </head>
 <body>
     <header>
-        <div class="Top-header">
-            <div class="top-header-left">
-                <img src="/Kape_Cinco/frontend/images/kape_cinco.jpg" alt="Cinco Logo" style="height:40px; width:40px; border-radius:5rem;">
+        <div class="parent-header">
+            <div class="Top-header">
+                <div class="top-header-left">
+                    <img src="/Kape_Cinco/frontend/images/kape_cinco.jpg" alt="Cinco Logo" style="height:40px; width:40px; border-radius:5rem;">
+                </div>
+                <div class="top-header-mid">
+                    <h1>Menu</h1>
+                </div>
+                <div class="top-header-right">
+                    <span class="material-icons-sharp">fastfood</span>
+                        <!-- Modal Structure -->
+                        <div id="myModal" class="modal">
+                            <div class="modal-content">
+                                <span class="close">&times;</span>
+                                <div class="container">
+                                    <header class="header">
+                                        <h1>Food Cart</h1>
+                                    </header>
+                                    <div class="cart-items">
+                                        <div class="cart-item" data-price="120">
+                                            <div class="card-image-left">
+                                                <img src="/Kape_Cinco/frontend/images/Hotsilog.jpg" alt="Porksilog" id="foodID">
+                                            </div>
+                                            <div class="item-details-right">
+                                                <div class="top-text">
+                                                    <h2>Porksilog</h2>
+                                                    <button class="remove-btn">Remove</button>
+                                                </div>
+                                                <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                                                <div class="Lower-text">
+                                                    <div class="quantity-control">
+                                                        <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                                                        <input type="number" value="1" class="quantity-input" readonly>
+                                                        <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                                                    </div>
+                                                    <div class="item-total">Total: ₱120.00</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="cart-item" data-price="120">
+                                            <div class="card-image-left">
+                                                <img src="/frontend/images/Hotsilog.jpg" alt="Porksilog" id="foodID">
+                                            </div>
+                                            <div class="item-details-right">
+                                                <div class="top-text">
+                                                    <h2>Porksilog</h2>
+                                                    <button class="remove-btn">Remove</button>
+                                                </div>
+                                                <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                                                <div class="Lower-text">
+                                                    <div class="quantity-control">
+                                                        <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                                                        <input type="number" value="1" class="quantity-input" readonly>
+                                                        <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                                                    </div>
+                                                    <div class="item-total">Total: ₱120.00</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="cart-item" data-price="120">
+                                            <div class="card-image-left">
+                                                <img src="/frontend/images/Hotsilog.jpg" alt="Porksilog" id="foodID">
+                                            </div>
+                                            <div class="item-details-right">
+                                                <div class="top-text">
+                                                    <h2>Porksilog</h2>
+                                                    <button class="remove-btn">Remove</button>
+                                                </div>
+                                                <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                                                <div class="Lower-text">
+                                                    <div class="quantity-control">
+                                                        <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                                                        <input type="number" value="1" class="quantity-input" readonly>
+                                                        <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                                                    </div>
+                                                    <div class="item-total">Total: ₱120.00</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="cart-item" data-price="120">
+                                            <div class="card-image-left">
+                                                <img src="/frontend/images/Hotsilog.jpg" alt="Porksilog" id="foodID">
+                                            </div>
+                                            <div class="item-details-right">
+                                                <div class="top-text">
+                                                    <h2>Porksilog</h2>
+                                                    <button class="remove-btn">Remove</button>
+                                                </div>
+                                                <p>Egg, Porkchop, Garlic rice, slice of cucumber & Tomato</p>
+                                                <div class="Lower-text">
+                                                    <div class="quantity-control">
+                                                        <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                                                        <input type="number" value="1" class="quantity-input" readonly>
+                                                        <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                                                    </div>
+                                                    <div class="item-total">Total: ₱120.00</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Add more items as needed -->
+                                    </div>
+                                    <div class="summary">
+                                        <div class="summary-item">
+                                            <span>Total items(5 items)</span>
+                                            <span>₱600.00</span>
+                                        </div>
+                                        <div class="summary-item">
+                                            <span>Delivery Fee</span>
+                                            <span>₱0.00</span>
+                                        </div>
+                                        <div class="summary-item">
+                                            <span>Discount</span>
+                                            <span>₱0.00</span>
+                                        </div>
+                                        <button class="complete-order-btn">Review Order</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
             </div>
-            <div class="top-header-mid">
-                <h1>Menu</h1>
+    
+            <div class="search-container">
+                <div class="search-left">
+                    <span class="material-icons-sharp">search</span>
+                </div>
+                <div class="search-right"><input type="text" placeholder="Search"> 
+                </div>
             </div>
-            <div class="top-header-right">
-                <span class="material-icons-sharp">fastfood</span>
-            </div>
+            <nav class="category-nav">
+                <button class="active">All</button>
+                <button>Meals</button>
+                <button>Drinks</button>
+                <button>Dessert</button>
+            </nav>
         </div>
 
-        <div class="search-container">
-            <div class="search-left">
-                <span class="material-icons-sharp">search</span>
-            </div>
-            <div class="search-right"><input type="text" placeholder="Search"> 
-            </div>
-        </div>
-        <nav class="category-nav">
-            <button class="active">All</button>
-            <button>Meals</button>
-            <button>Drinks</button>
-            <button>Dessert</button>
-        </nav>
     </header>
     <main class="menu-container" id="AllMenuContainer">
         <!-- Repeat .menu-item as needed -->

@@ -112,6 +112,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         })
         .catch(error => console.error('Error:', error));
+    
+        
+    //------------------------------- END OF PAGE LOADING -----------------------------------//
 
     function logout() {
         fetch('/Kape_Cinco/backend/Login/logout.php')
