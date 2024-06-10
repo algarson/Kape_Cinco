@@ -9,25 +9,27 @@
     <title>Food Order</title>
     <link rel="stylesheet" href="view.css">
 </head>
-<body>
+<body class="hidden">
     <div class="container">
-        <div class="back-button"><span class="material-icons-sharp">arrow_back_ios</span></div>
+        <div class="back-button" onclick="goBack()"><span class="material-icons-sharp">arrow_back_ios</span></div>
         <div class="image-container">
-            <img src="../images/Hotsilog.jpg" alt="Hotsilog">
+            <img id="item-image" src="" alt="Item Image">
         </div>
         <div class="details">
-            <h1>Hotsilog</h1>
-            <div class="description"><p>Egg, hotdog, Garlic rice and fresh slice of cucumber & Tomato</p></div>
+            <h1 id="item-name"></h1>
+            <div class="description"><p id="item-desc"></p></div>
             <div class="quantity-control">
-                <button class="quantity-btn"><span class="material-icons-sharp">remove</span></button>
-                <span class="quantity">2</span>
-                <button class="quantity-btn"><span class="material-icons-sharp">add</span></button>                
+                <button class="quantity-btn" onclick="decreaseQuantity()"><span class="material-icons-sharp">remove</span></button>
+                <span class="quantity" id="item-quantity">1</span>
+                <button class="quantity-btn" onclick="increaseQuantity()"><span class="material-icons-sharp">add</span></button>                
             </div>
             <div class="total">
-                <p>Total: P240.00</p>
+                <p id="item-total"></p>
             </div>
-            <button class="order-btn">Add to order</button>
+            <button class="order-btn" onclick="addToOrder()" id="add-order-button"></button>
         </div>
     </div>
+
+    <script src="view.js"></script>
 </body>
 </html>

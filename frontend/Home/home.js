@@ -98,10 +98,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     const logoutButton = document.getElementById('logout-button');
     let totalAmount = 0;
 
-    // Hide the bills section initially
     billsSection.style.display = 'none';
     paymentModal.style.display = 'none';
-  
+    
     fetch('/Kape_Cinco/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
@@ -112,6 +111,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         })
         .catch(error => console.error('Error:', error));
+    
+        
+    //------------------------------- END OF PAGE LOADING -----------------------------------//
 
     function logout() {
         fetch('/Kape_Cinco/backend/Login/logout.php')

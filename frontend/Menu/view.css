@@ -15,6 +15,10 @@ body {
     background-color: #f4ede4;
 }
 
+body.hidden {
+    display: none;
+}
+
 .container {
     width: 90%;
     max-width: 400px;
