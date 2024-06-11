@@ -259,7 +259,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         localStorage.setItem('cart', JSON.stringify(cart));
 
-        // Check if the cart is empty after removing the item
+        
         if (cart.length === 0) {
             const cartItemsContainer = document.querySelector('.cart-items');
             const summaryContainer = document.querySelector('.summary');
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <span>Food Cart is Empty</span>
                 </div>
             `;
-            summaryContainer.innerHTML = ''; // Clear summary
+            summaryContainer.innerHTML = ''; 
         }
     }
     
@@ -329,6 +329,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.querySelector('.close').addEventListener('click', closeCartModal);
 
     updateCartDisplay();
+
+    // --------------------- END OF FOOD CART FUNCTIONS ---------------- //
 
 });
 
