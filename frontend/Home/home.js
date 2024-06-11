@@ -1,5 +1,32 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const allItemsContainer = document.getElementById('AllItemsContainer');
+    const cartItemsContainer = document.querySelector('.cart-items');
+    const totalAmountElement = document.getElementById('total-amount');
+    const billsSection = document.querySelector('.bills-section');
+    const paymentModal = document.getElementById('payment-modal');
+    const closeButton = document.querySelector('.close-button');
+    const orderNumberElement = document.getElementById('order-number');
+    const orderDetailsElement = document.getElementById('order-details');
+    const modalTotalAmountElement = document.getElementById('modal-total-amount');
+    const confirmOrderButton = document.getElementById('confirm-order');
+    const logoutButton = document.getElementById('logout-button');
+    let totalAmount = 0;
+
+    // Hide the bills section initially
+    billsSection.style.display = 'none';
+    paymentModal.style.display = 'none';
+
+    // Check login status
+    fetch('/Kape_Cinco/backend/Login/check_login.php')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.loggedIn) {
+                window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+            } else {
+                document.body.classList.remove('hidden');
+            }
+        })
+        .catch(error => console.error('Error:', error));
 
     async function fetchAllItems() {
         try {
@@ -14,7 +41,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function generateAllItems() {
         const allItems = await fetchAllItems();
-
         allItemsContainer.innerHTML = '';
 
         allItems.forEach(item => {
@@ -85,37 +111,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
 
-
-    const cartItemsContainer = document.querySelector('.cart-items');
-    const totalAmountElement = document.getElementById('total-amount');
-    const billsSection = document.querySelector('.bills-section');
-    const paymentModal = document.getElementById('payment-modal');
-    const closeButton = document.querySelector('.close-button');
-    const orderNumberElement = document.getElementById('order-number');
-    const orderDetailsElement = document.getElementById('order-details');
-    const modalTotalAmountElement = document.getElementById('modal-total-amount');
-    const confirmOrderButton = document.getElementById('confirm-order');
-    const logoutButton = document.getElementById('logout-button');
-    let totalAmount = 0;
-    
-    // Hide the bills section initially
-    billsSection.style.display = 'none';
-    paymentModal.style.display = 'none';
-
-    fetch('/Kape_Cinco/backend/Login/check_login.php')
-        .then(response => response.json())
-        .then(data => {
-            if (!data.loggedIn) {
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html';
-            } else {
-                document.body.classList.remove('hidden');
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    
-        
-    //------------------------------- END OF PAGE LOADING -----------------------------------//
-
     function logout() {
         fetch('/Kape_Cinco/backend/Login/logout.php')
             .then(response => response.json())
@@ -138,19 +133,19 @@ document.addEventListener('DOMContentLoaded', async function () {
     function clearCart() {
         cartItemsContainer.innerHTML = '';
         totalAmount = 0;
-        totalAmountElement.textContent = `Rp ${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        totalAmountElement.textContent = `${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
     // Function to update total amount based on quantities
     function updateTotal() {
         let newTotal = 0;
         document.querySelectorAll('.cart-item').forEach(cartItem => {
-            const price = parseFloat(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace(',', ''));
+            const price = parseFloat(cartItem.querySelector('.item-price').textContent.replace(' ', '').replace(',', ''));
             const quantity = parseInt(cartItem.querySelector('.item-quantity').textContent);
             newTotal += price * quantity;
         });
         totalAmount = newTotal;
-        totalAmountElement.textContent = ` ${newTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        totalAmountElement.textContent = `${newTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
     function addToCart(name, price) {
@@ -169,8 +164,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             const cartItem = document.createElement('div');
             cartItem.classList.add('cart-item');
             cartItem.innerHTML = `
-            <span class="item-name">${name}</span>
-            <span class="item-price"> ${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                <span class="item-name">${name}</span>
+                <span class="item-price">${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                 <div class="quantity-container">
                     <button class="decrement-quantity">-</button>
                     <span class="item-quantity">1</span>
@@ -213,7 +208,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     /*------------------------------------- END OF ADD TO CART FUNCTIONS -------------------------------*/
-
 
     // Generate a random order number
     function generateOrderNumber() {
@@ -345,12 +339,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Fetch and display order details
             }
             document.getElementById(modalId).style.display = 'block';
-            
-            
         });
-
     });
-
 
     document.getElementById('confirm-pending-order').addEventListener('click', function () {
         alert('Order Confirmed');
@@ -366,8 +356,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         alert('Order Completed');
         document.getElementById('accepted-orders-modal').style.display = 'none';
     });
-    
-
 
     // Hide the other sections initially
     document.getElementById('OrderNum-section').style.display = 'none';
@@ -381,6 +369,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('OrderNum-section').style.display = 'none';
         document.getElementById('statistics-section').style.display = 'none';
         document.getElementById('settings-section').style.display = 'none';
+        billsSection.style.display = 'none';
     });
 
     document.getElementById('nav-Order-num').addEventListener('click', () => {
@@ -390,6 +379,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('OrderNum-section').style.display = 'block';
         document.getElementById('statistics-section').style.display = 'none';
         document.getElementById('settings-section').style.display = 'none';
+        billsSection.style.display = 'none';
     });
 
     document.getElementById('nav-statistics').addEventListener('click', () => {
@@ -397,6 +387,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('OrderNum-section').style.display = 'none';
         document.getElementById('statistics-section').style.display = 'block';
         document.getElementById('settings-section').style.display = 'none';
+        billsSection.style.display = 'none';
     });
 
     document.getElementById('nav-settings').addEventListener('click', () => {
@@ -404,6 +395,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('OrderNum-section').style.display = 'none';
         document.getElementById('statistics-section').style.display = 'none';
         document.getElementById('settings-section').style.display = 'block';
+        billsSection.style.display = 'none';
     });
 
     // Function to display modal with order details
@@ -445,11 +437,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Event listener for clicking on order numbers
-    document.getElementById('#order-number').forEach(orderNumber => {
-        orderNumber.addEventListener('click', () => {
-            const clickedOrderNumber = orderNumber.textContent;
+    document.querySelectorAll('.order-card .order-number-item').forEach(orderNumberItem => {
+        orderNumberItem.addEventListener('click', () => {
+            const clickedOrderNumber = orderNumberItem.textContent;
             displayOrderModal(clickedOrderNumber);
         });
     });
-
 });
