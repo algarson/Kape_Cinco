@@ -216,13 +216,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Display order details in the modal
     function displayOrderDetails() {
-        const orderNumberElement = document.querySelector('#order-number');
+        
         const orderDetailsElement = document.querySelector('#order-details');
         const modalTotalAmountElement = document.querySelector('#modal-total-amount');
         const totalAmountElement = document.querySelector('#total-amount'); 
         
         // Setting the order number and order details
-        orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;
         orderDetailsElement.innerHTML = '';
     
         document.querySelectorAll('.cart-item').forEach(cartItem => {
@@ -277,6 +276,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Event listener for the Confirm Order button in the modal
     confirmOrderButton.addEventListener('click', () => {
+        
+        //After Confirm Order lang madisplay yung orderNumber (sa receipt and accepted order)
+        /*
+        const orderNumberElement = document.querySelector('#manual-order-number');
+        orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;*/
+
         alert('Order Confirmed!');
         clearCart();
         paymentModal.style.display = 'none';
@@ -345,7 +350,78 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 /* --------------------  End OF Search functionality     --------------------*/
 
-/* ------------------- modal for pending, accept, completed orders ---------------*/
+/* --------------------------------------------- modal for pending, accept, completed orders ---------------------------------------*/
+
+//----------------------- PENDING ORDER NUMBER FUNCTIONS --------------------//
+    let currentOrderToken = '';
+
+    function fetchAndRenderPendingOrder() {
+        const pendingOrdersContainer = document.getElementById('pending-orders');
+        const pendingOrderNumber = document.getElementById('pending-order-number');
+        const pendingOrderDetails = document.getElementById('pending-order-details');
+        const modalTotalAmount = document.getElementById('pending-modal-total-amount');
+        const modal = document.getElementById('pending-orders-modal');
+       
+        pendingOrdersContainer.innerHTML = ''; 
+
+        // Retrieve all pending orders from localStorage
+        const pendingOrders = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('ORDT-')) {
+                pendingOrders.push(JSON.parse(localStorage.getItem(key)));
+            }
+        }
+
+        pendingOrders.forEach(order => {
+            const orderItem = document.createElement('div');
+            orderItem.classList.add('order-card');
+            orderItem.innerHTML = `
+                <li class="order-number-item"><span id="order-number">${order.orderNumber}</span></li>
+            `;
+            pendingOrdersContainer.appendChild(orderItem);
+
+            orderItem.addEventListener('click', function() {
+                pendingOrderNumber.textContent = order.orderNumber;
+                pendingOrderDetails.innerHTML = order.cart.map(item => `
+                    <div class="order-item">
+                        <span class="food-name">${item.name}</span>
+                        <span class="quantity">${item.quantity}x</span>
+                        <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `).join('');
+                modalTotalAmount.textContent = `₱${order.totalPrice.toFixed(2)}`;
+                currentOrderToken = order.token;
+                modal.style.display = 'block';
+                pendingPayment();
+            });
+        });
+    }
+
+    function pendingPayment () {
+        const pendingTotalAmountElement = document.querySelector('#pending-modal-total-amount');
+        const receivedAmountInput = document.querySelector('#pending-received-amount');
+        const changeAmountElement = document.querySelector('#pending-change-amount');
+
+        function calculateChange() {
+            const totalAmount = parseFloat(pendingTotalAmountElement.textContent.replace('₱', '').trim());
+            const receivedAmount = parseFloat(receivedAmountInput.value);
+
+            if (!isNaN(totalAmount) && !isNaN(receivedAmount)) {
+                const changeAmount = receivedAmount - totalAmount;
+                changeAmountElement.textContent = changeAmount.toFixed(2);
+            } else {
+                changeAmountElement.textContent = '0';
+            }
+        }
+
+        // Event listener for input event on the received amount input field
+        receivedAmountInput.addEventListener('input', calculateChange);
+    }
+
+    //----------------------- PENDING ORDER NUMBER FUNCTIONS --------------------//
+
+    
     document.querySelectorAll('.close-button').forEach(button => {
         button.addEventListener('click', function () {
             button.parentElement.parentElement.style.display = 'none';
@@ -373,20 +449,30 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     });
 
+    fetchAndRenderPendingOrder();
+
     document.getElementById('confirm-pending-order').addEventListener('click', function () {
         alert('Order Confirmed');
         document.getElementById('pending-orders-modal').style.display = 'none';
     });
 
     document.getElementById('cancel-pending-order').addEventListener('click', function () {
-        alert('Order Canceled');
-        document.getElementById('pending-orders-modal').style.display = 'none';
+        if (currentOrderToken) {
+            localStorage.removeItem(currentOrderToken); 
+            alert('Order Canceled');
+            document.getElementById('pending-orders-modal').style.display = 'none';
+            currentOrderToken = ''; 
+            fetchAndRenderPendingOrders(); 
+        }
     });
 
     document.getElementById('complete-accepted-order').addEventListener('click', function () {
         alert('Order Completed');
         document.getElementById('accepted-orders-modal').style.display = 'none';
     });
+    
+    setInterval(fetchAndRenderPendingOrder, 3000);
+
 /* ------------------- modal for pending, accept, completed orders ---------------*/
 
  /* --------------------    Section Categories     --------------------*/
@@ -423,13 +509,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         billsSection.style.display = 'none';
     });
 
+    /*
     document.getElementById('nav-settings').addEventListener('click', () => {
         document.getElementById('main-content').style.display = 'none';
         document.getElementById('OrderNum-section').style.display = 'none';
         document.getElementById('statistics-section').style.display = 'none';
         document.getElementById('settings-section').style.display = 'block';
         billsSection.style.display = 'none';
-    });
+    });*/ //wala naman to ah? comment ko muna - jedd 
 
  /* --------------------    End of Section Categories     --------------------*/
   
