@@ -55,8 +55,17 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
 
     document.querySelector('.complete-order-btn').addEventListener('click', function() {
-        // Logic to confirm the order
-        alert('Order confirmed!');
+        const orderNumber = generateOrderNumber(); 
+        const orderDetails = { orderNumber, totalItems, totalPrice, cart }; 
+
+        localStorage.setItem('pendingOrder', JSON.stringify(orderDetails)); 
+
+        window.location.href = '/Kape_Cinco/frontend/Home/QRpage.html'; 
     });
+
     document.body.classList.remove('hidden');
 });
+
+function generateOrderNumber() {
+    return `ORD-${Math.floor(Math.random() * 1000000)}`;
+}
