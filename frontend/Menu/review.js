@@ -56,11 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.querySelector('.complete-order-btn').addEventListener('click', function() {
         const orderNumber = generateOrderNumber(); 
-        const orderDetails = { orderNumber, totalItems, totalPrice, cart }; 
+        const orderToken = generateOrderToken();
 
-        localStorage.setItem('pendingOrder', JSON.stringify(orderDetails)); 
+        const orderDetails = { orderNumber, totalItems, totalPrice, cart, token: orderToken}; 
 
-        window.location.href = '/Kape_Cinco/frontend/Home/QRpage.html'; 
+        localStorage.setItem(orderToken, JSON.stringify(orderDetails));
+
+        window.location.href = `/Kape_Cinco/frontend/Menu/QRpage.html?orderToken=${orderToken}`;
     });
 
     document.body.classList.remove('hidden');
@@ -68,4 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function generateOrderNumber() {
     return `ORD-${Math.floor(Math.random() * 1000000)}`;
+}
+
+function generateOrderToken() {
+    return 'ORDT-' + Math.random().toString(36).substr(2, 16); 
 }
