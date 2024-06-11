@@ -1,24 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap');
 *{
     font-family: Poppins;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 
 }
 
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
     display: flex;
+    height: 100vh;
+    overflow: hidden;
 }
 
 .hidden {
     display: none;
 }
 
-.container {
-    display: flex;
-    width: 100%;
-}
 
 .sidebar {
     background-color: #5c4033;
@@ -28,6 +26,7 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 20px 0;
+    flex-shrink: 0;
 }
 
 .sidebar .logo img {
@@ -67,6 +66,7 @@ body {
     width: 26px;
     height: 26px;
     margin-top: 1rem;
+    cursor: pointer;
 }
 .main-content {
     flex-grow: 1;
@@ -74,6 +74,7 @@ body {
     background-color: #f5e3d3;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .header {
@@ -162,19 +163,15 @@ body {
 }
 
 .bills-section {
-    width: 50rem;
+    width: 350px;
     background-color: #f5e3d3;
     padding: 20px;
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Enable vertical scrolling */
-    max-height: calc(100vh - 40px); /* Subtract header and footer height */
+    overflow-y: auto;
     box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
-    -webkit-box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
-    -moz-box-shadow: -13px 3px 18px -3px rgba(0,0,0,0.25);
-    scroll-behavior: smooth;
+    flex-shrink: 0;
 }
-
 
 .bills-section h2 {
     margin-top: 0;
@@ -363,6 +360,7 @@ sections */
     display: flex;
     flex-direction: column;
     width: 100%;
+    height: 90%;
     background-color: #f5e3d3;
 }
 
@@ -378,7 +376,7 @@ sections */
     flex-direction: row;
     background-color: #f5e3d3;
     box-sizing: border-box;
-    height: 48%;
+    height: 87%;
     gap: 10px;
 }
 
@@ -397,6 +395,7 @@ sections */
     flex-direction: row;
     justify-content: space-around;
     align-content: center;
+    padding-top: 3rem;
 }
 
 
@@ -440,4 +439,14 @@ sections */
 .order-card :hover{
     background-color: lightgray;
     cursor: pointer;
+}
+
+.statistics-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    gap: 20px;
 }
