@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function fetchAllItems() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/QR/QRAllItems.php");
+            const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
             const data = await res.json();
             return data;
         } catch (err) {
@@ -107,15 +107,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.querySelectorAll('.category-nav button').forEach(button => {
         button.addEventListener('click', () => {
 
-            // Remove 'active' class from all category buttons
             document.querySelectorAll('.category-nav button').forEach(btn => {
                 btn.classList.remove('active');
             });
 
-            // Add 'active' class to the clicked category button
             button.classList.add('active');
 
-            // Filter food items based on category
             const category = button.textContent.trim();
             if (category === 'All') {
                 document.querySelectorAll('.menu-item').forEach(item => {
@@ -132,6 +129,206 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
     });
+
+    //--------------------- END OF CATEGORY BUTTONS ----------------------//
+    
+    function updateCartDisplay() {
+        const cartItemsContainer = document.querySelector('.cart-items');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const summaryContainer = document.querySelector('.summary');
+
+        cartItemsContainer.innerHTML = ''; 
+        summaryContainer.innerHTML = '';
+
+        if (cart.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <div class="summary-item">
+                    <span>Food Cart is Empty</span>
+                </div>
+            `;
+            return; 
+        }
+
+        cart.forEach(item => {
+            const cartItem = document.createElement('div');
+            cartItem.classList.add('cart-item');
+            cartItem.setAttribute('data-price', item.price);
+
+            let imagePath;
+            if (item.image === 'default_image' || !item.image) {
+                imagePath = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+            } else {
+                imagePath = `/Kape_Cinco/backend/images/${item.image}`;
+            }
+
+            cartItem.innerHTML = `
+                <div class="card-image-left">
+                    <img src="${imagePath}" alt="${item.name}" id="foodID">
+                </div>
+                <div class="item-details-right">
+                    <div class="top-text">
+                        <h2>${item.name}</h2>
+                        <button class="remove-btn">Remove</button>
+                    </div>
+                    <p>${item.desc}</p>
+                    <div class="Lower-text">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
+                            <input type="number" value="${item.quantity}" class="quantity-input" readonly>
+                            <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                        </div>
+                        <div class="item-total">Total: ₱${item.total.toFixed(2)}</div>
+                    </div>
+                </div>
+            `;
+
+            cartItemsContainer.appendChild(cartItem);
+        });
+
+        summaryContainer.innerHTML = `
+            <div class="summary-item">
+                <span>Total items(items)</span>
+                <span>₱0.00</span>
+            </div>
+            <div class="summary-item">
+                <span>Delivery Fee</span>
+                <span>₱0.00</span>
+            </div>
+            <div class="summary-item">
+                <span>Discount</span>
+                <span>₱0.00</span>
+            </div>
+            <button class="complete-order-btn">Review Order</button>
+        `;
+
+        addEventListenersToCartItems();
+        updateSummary();
+    }
+
+    function addEventListenersToCartItems() {
+        const quantityButtons = document.querySelectorAll('.quantity-btn');
+        const removeButtons = document.querySelectorAll('.remove-btn');
+    
+        quantityButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const action = this.getAttribute('data-action');
+                const quantityInput = this.parentElement.querySelector('.quantity-input');
+                let currentValue = parseInt(quantityInput.value);
+                
+                if (action === 'increase') {
+                    currentValue++;
+                } else if (action === 'decrease' && currentValue > 1) {
+                    currentValue--;
+                }
+    
+                quantityInput.value = currentValue;
+                updateCartItem(this.closest('.cart-item'), currentValue);
+                updateTotal(this.closest('.cart-item'));
+                updateSummary();
+            });
+        });
+    
+        removeButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const cartItem = this.closest('.cart-item');
+                removeCartItem(cartItem);
+                updateCartDisplay(); 
+            });
+        });
+    }
+    
+    function updateCartItem(cartItem, quantity) {
+        const name = cartItem.querySelector('.top-text h2').textContent;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        cart = cart.map(item => {
+            if (item.name === name) {
+                return { ...item, quantity: quantity };
+            }
+            return item;
+        });
+    
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+    
+    function removeCartItem(cartItem) {
+        const name = cartItem.querySelector('.top-text h2').textContent;
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        cart = cart.filter(item => item.name !== name);
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Check if the cart is empty after removing the item
+        if (cart.length === 0) {
+            const cartItemsContainer = document.querySelector('.cart-items');
+            const summaryContainer = document.querySelector('.summary');
+            
+            cartItemsContainer.innerHTML = `
+                <div class="summary-item">
+                    <span>Food Cart is Empty</span>
+                </div>
+            `;
+            summaryContainer.innerHTML = ''; // Clear summary
+        }
+    }
+    
+    function updateTotal(cartItem) {
+        const quantityInput = cartItem.querySelector('.quantity-input');
+        const pricePerItem = parseInt(cartItem.getAttribute('data-price'), 10);
+        const quantityValue = parseInt(quantityInput.value, 10);
+    
+        if (isNaN(pricePerItem) || isNaN(quantityValue)) {
+            console.error('Invalid price or quantity value');
+            return;
+        }
+    
+        const totalPrice = quantityValue * pricePerItem;
+        const totalElement = cartItem.querySelector('.item-total');
+        totalElement.textContent = `Total: ₱${totalPrice.toFixed(2)}`;
+    }
+    
+    function updateSummary() {
+        const quantityInputs = document.querySelectorAll('.quantity-input');
+        let totalItems = 0;
+        let totalPrice = 0;
+    
+        quantityInputs.forEach(input => {
+            const cartItem = input.closest('.cart-item');
+            const pricePerItem = parseInt(cartItem.getAttribute('data-price'), 10);
+            const quantityValue = parseInt(input.value, 10);
+    
+            if (isNaN(pricePerItem) || isNaN(quantityValue)) {
+                console.error('Invalid price or quantity value');
+                return;
+            }
+            
+            totalItems += quantityValue;
+            totalPrice += quantityValue * pricePerItem;
+        });
+    
+        const summaryItemsElement = document.querySelector('.summary-item span:first-child');
+        const summaryTotalElement = document.querySelector('.summary-item span:last-child');
+    
+        summaryItemsElement.textContent = `Total items(${totalItems} items)`;
+        summaryTotalElement.textContent = `₱${totalPrice.toFixed(2)}`;
+    }
+
+    function showCartModal() {
+        updateCartDisplay();
+        const modal = document.getElementById('myModal');
+        modal.style.display = 'block';
+    }
+
+    function closeCartModal() {
+        const modal = document.getElementById('myModal');
+        modal.style.display = 'none';
+    }
+
+    document.querySelector('.material-icons-sharp').addEventListener('click', showCartModal);
+    document.querySelector('.close').addEventListener('click', closeCartModal);
+
+    updateCartDisplay();
 
 });
 

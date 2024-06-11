@@ -72,6 +72,22 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function addToOrder() {
+        const params = new URLSearchParams(window.location.search);
+        const item = {
+            image: params.get('image'),
+            name: params.get('name'),
+            desc: params.get('desc'),
+            price: parseFloat(params.get('price')),
+            quantity: parseInt(document.getElementById('item-quantity').textContent),
+            total: parseFloat(params.get('price')) * parseInt(document.getElementById('item-quantity').textContent)
+        };
+    
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        cart.push(item);
+        localStorage.setItem('cart', JSON.stringify(cart));
+    
+        alert('Item added to order');
+        redirectToMenu();
     }
 
     window.goBack = goBack;
