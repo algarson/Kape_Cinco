@@ -216,14 +216,20 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Display order details in the modal
     function displayOrderDetails() {
+        const orderNumberElement = document.querySelector('#order-number');
+        const orderDetailsElement = document.querySelector('#order-details');
+        const modalTotalAmountElement = document.querySelector('#modal-total-amount');
+        const totalAmountElement = document.querySelector('#total-amount'); 
+        
+        // Setting the order number and order details
         orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;
         orderDetailsElement.innerHTML = '';
-
+    
         document.querySelectorAll('.cart-item').forEach(cartItem => {
             const itemName = cartItem.querySelector('.item-name').textContent;
             const itemPrice = cartItem.querySelector('.item-price').textContent;
             const itemQuantity = cartItem.querySelector('.item-quantity').textContent;
-
+    
             const orderDetailItem = document.createElement('div');
             orderDetailItem.classList.add('order-detail-item');
             orderDetailItem.innerHTML = `
@@ -231,11 +237,31 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <span class="order-item-quantity">x${itemQuantity}</span>
                 <span class="order-item-price">${itemPrice}</span>
             `;
-
+    
             orderDetailsElement.appendChild(orderDetailItem);
         });
-
-        modalTotalAmountElement.textContent = totalAmountElement.textContent;
+    
+        // Setting the total amount in the modal
+        modalTotalAmountElement.textContent = totalAmountElement.textContent.trim();
+    
+        // Real-time calculation of change
+        const receivedAmountInput = document.querySelector('#received-amount');
+        const changeAmountElement = document.querySelector('#change-amount');
+    
+        function calculateChange() {
+            const totalAmount = parseFloat(modalTotalAmountElement.textContent.trim());
+            const receivedAmount = parseFloat(receivedAmountInput.value);
+    
+            if (!isNaN(totalAmount) && !isNaN(receivedAmount)) {
+                const changeAmount = receivedAmount - totalAmount;
+                changeAmountElement.textContent = changeAmount.toFixed(2);
+            } else {
+                changeAmountElement.textContent = '0';
+            }
+        }
+    
+        // Event listener for input event on the received amount input field
+        receivedAmountInput.addEventListener('input', calculateChange);
     }
 
     // Event listener for the Proceed to Payment button
