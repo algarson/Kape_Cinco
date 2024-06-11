@@ -100,7 +100,7 @@
                 </div>
                 <div class="column" id="completed-orders" >
                     <div class="order-card">
-                        <li class="order-number-item"><span class="order-number">ORD-12346</span></li>
+                        <li class="order-number-item"><span id="order-number">ORD-12346</span></li>
                      
                     </div>
                 </div>
@@ -145,7 +145,7 @@
         </div>
 
     <!-- Pending Orders Modal Structure -->
- <div id="pending-orders-modal" class="modal" style="display: none;">
+    <div id="pending-orders-modal" class="modal" style="display: none;">
     <div class="modal-content">
         <span class="close-button">&times;</span>
         <h2>Pending Order Details</h2>
@@ -167,9 +167,9 @@
         <button id="confirm-pending-order">Confirm Order</button>
         <button id="cancel-pending-order">Cancel Order</button>
     </div>
-
-       <!-- Modal for Accepted Orders -->
-       <div id="accepted-orders-modal" class="modal" style="display: none;">
+    </div>
+    <!-- Modal for Accepted Orders -->
+    <div id="accepted-orders-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Accepted Order Details</h2>
@@ -197,7 +197,7 @@
             </div>
         </div>
     </div>
-</div>
+
 </div> 
     <script src="home.js"></script>
 </body>

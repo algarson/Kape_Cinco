@@ -264,6 +264,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     });
 
+ /*----------------- FOOD CATEGORIES ---------------------------------- */
     document.querySelectorAll('.categories button').forEach(button => {
         button.addEventListener('click', () => {
             billsSection.style.display = 'none';
@@ -293,8 +294,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         });
     });
-
-    // Search functionality
+ /*----------------- END FOOD CATEGORIES ---------------------------------- */
+ 
+/* --------------------    Search functionality     --------------------*/
     const searchInput = document.querySelector('.header input');
     const searchButton = document.querySelector('.header button');
 
@@ -315,6 +317,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         billsSection.style.display = 'none';
     });
 
+/* --------------------  End OF Search functionality     --------------------*/
+
+/* ------------------- modal for pending, accept, completed orders ---------------*/
     document.querySelectorAll('.close-button').forEach(button => {
         button.addEventListener('click', function () {
             button.parentElement.parentElement.style.display = 'none';
@@ -356,7 +361,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         alert('Order Completed');
         document.getElementById('accepted-orders-modal').style.display = 'none';
     });
+/* ------------------- modal for pending, accept, completed orders ---------------*/
 
+ /* --------------------    Section Categories     --------------------*/
     // Hide the other sections initially
     document.getElementById('OrderNum-section').style.display = 'none';
     document.getElementById('statistics-section').style.display = 'none';
@@ -398,49 +405,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         billsSection.style.display = 'none';
     });
 
-    // Function to display modal with order details
-    function displayOrderModal(orderNumber) {
-        const modal = document.getElementById('payment-modal');
-        const closeButton = modal.querySelector('.close-button');
+ /* --------------------    End of Section Categories     --------------------*/
+  
 
-        // Here you would fetch order details from your backend based on the order number
-        // For demonstration purposes, let's assume order details are hardcoded
-        const orderDetails = {
-            items: ['Item 1', 'Item 2', 'Item 3'],
-            total: '$100'
-        };
-
-        // Populate modal with order details
-        const orderNumberElement = modal.querySelector('.order-number');
-        orderNumberElement.textContent = `Order Number: ${orderNumber}`;
-
-        const orderDetailsElement = modal.querySelector('#order-details');
-        orderDetailsElement.innerHTML = `
-            <p><strong>Items:</strong> ${orderDetails.items.join(', ')}</p>
-            <p><strong>Total:</strong> ${orderDetails.total}</p>
-        `;
-
-        // Display modal
-        modal.style.display = 'block';
-
-        // Event listener for closing the modal
-        closeButton.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        // Event listener for clicking outside the modal to close it
-        window.addEventListener('click', (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    }
-
-    // Event listener for clicking on order numbers
-    document.querySelectorAll('.order-card .order-number-item').forEach(orderNumberItem => {
-        orderNumberItem.addEventListener('click', () => {
-            const clickedOrderNumber = orderNumberItem.textContent;
-            displayOrderModal(clickedOrderNumber);
-        });
-    });
 });
