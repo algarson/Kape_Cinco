@@ -1,6 +1,8 @@
 <?php
     include '../server.php';
 
+    date_default_timezone_set('Asia/Manila');
+    
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $orderNumber = $_POST['pending-order-number'];
         $orderDate =  date('YmdHis');

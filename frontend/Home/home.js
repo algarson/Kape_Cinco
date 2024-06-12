@@ -215,13 +215,20 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     // Display order details in the modal
+
+    let currentOrderNumber = '';
     function displayOrderDetails() {
         
         const orderDetailsElement = document.querySelector('#order-details');
         const modalTotalAmountElement = document.querySelector('#modal-total-amount');
         const totalAmountElement = document.querySelector('#total-amount'); 
         
-        // Setting the order number and order details
+        const orderNumberElement = document.querySelector('#manual-order-number');
+        orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;
+        currentOrderNumber = orderNumberElement.textContent.replace('Order Number:', '').trim();
+        
+        const cartItems = [];
+
         orderDetailsElement.innerHTML = '';
     
         document.querySelectorAll('.cart-item').forEach(cartItem => {
@@ -232,14 +239,30 @@ document.addEventListener('DOMContentLoaded', async function () {
             const orderDetailItem = document.createElement('div');
             orderDetailItem.classList.add('order-detail-item');
             orderDetailItem.innerHTML = `
-                <span class="order-item-name">${itemName}</span>
+                <span class="order-item-name>${itemName}</span>
                 <span class="order-item-quantity">x${itemQuantity}</span>
                 <span class="order-item-price">${itemPrice}</span>
             `;
     
             orderDetailsElement.appendChild(orderDetailItem);
+
+            cartItems.push({
+                name: itemName,
+                price: parseFloat(itemPrice.replace('₱', '').trim()),
+                quantity: parseInt(itemQuantity.trim())
+            });
         });
-    
+        
+        const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+        const ManualOrderDetails = {
+            orderNumber: currentOrderNumber,
+            totalPrice: totalPrice,
+            cart: cartItems
+        };
+
+        localStorage.setItem(currentOrderNumber, JSON.stringify(ManualOrderDetails));
+
         // Setting the total amount in the modal
         modalTotalAmountElement.textContent = totalAmountElement.textContent.trim();
     
@@ -266,6 +289,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Event listener for the Proceed to Payment button
     document.getElementById('proceed-to-payment-bills').addEventListener('click', () => {
         displayOrderDetails();
+        console.log(currentOrderNumber);
         paymentModal.style.display = 'block';
     });
 
@@ -276,13 +300,34 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Event listener for the Confirm Order button in the modal
     confirmOrderButton.addEventListener('click', () => {
-        
-        //After Confirm Order lang madisplay yung orderNumber (sa receipt and accepted order)
-        /*
-        const orderNumberElement = document.querySelector('#manual-order-number');
-        orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;*/
+        const orderDetails = JSON.parse(localStorage.getItem(currentOrderNumber));
+        const receivedAmount = document.getElementById('received-amount').value;
 
-        alert('Order Confirmed!');
+        if (!orderDetails) {
+            alert('No order details found!');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('pending-order-number', orderDetails.orderNumber);
+        formData.append('pending-modal-total-amount', orderDetails.totalPrice);
+        formData.append('pending-received-amount', receivedAmount);
+        formData.append('order-details', JSON.stringify(orderDetails.cart));
+
+        fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            if (data.message) {
+                alert('Order Confirmed');
+            } else if (data.error) {
+                alert(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
         clearCart();
         paymentModal.style.display = 'none';
         billsSection.style.display = 'none';
