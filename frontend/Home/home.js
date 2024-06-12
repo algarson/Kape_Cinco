@@ -451,6 +451,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     fetchAndRenderPendingOrder();
 
+    //Confirm Pending Order Button
     document.getElementById('confirm-pending-order').addEventListener('click', function () {
 
         const orderNumber = document.getElementById('pending-order-number').textContent;
@@ -461,11 +462,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         const orderDetails = JSON.parse(localStorage.getItem(orderToken));
         const cart = orderDetails.cart;
         const totalAmount = orderDetails.totalPrice;
-
-        console.log('Order Number:', orderNumber);
-        console.log('Total Amount:', totalAmount);
-        console.log('Received Amount:', receivedAmount);
-        console.log('Order Details:', cart);
 
         const formData = new FormData();
         formData.append('pending-order-number', orderNumber);
@@ -491,6 +487,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         fetchAndRenderPendingOrder();
     });
 
+    //Cancel Pending Order Button
     document.getElementById('cancel-pending-order').addEventListener('click', function () {
         if (currentOrderToken) {
             localStorage.removeItem(currentOrderToken); 
