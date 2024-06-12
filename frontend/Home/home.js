@@ -452,8 +452,43 @@ document.addEventListener('DOMContentLoaded', async function () {
     fetchAndRenderPendingOrder();
 
     document.getElementById('confirm-pending-order').addEventListener('click', function () {
-        alert('Order Confirmed');
+
+        const orderNumber = document.getElementById('pending-order-number').textContent;
+        const receivedAmount = document.getElementById('pending-received-amount').value;
+
+        
+        const orderToken = currentOrderToken; 
+        const orderDetails = JSON.parse(localStorage.getItem(orderToken));
+        const cart = orderDetails.cart;
+        const totalAmount = orderDetails.totalPrice;
+
+        console.log('Order Number:', orderNumber);
+        console.log('Total Amount:', totalAmount);
+        console.log('Received Amount:', receivedAmount);
+        console.log('Order Details:', cart);
+
+        const formData = new FormData();
+        formData.append('pending-order-number', orderNumber);
+        formData.append('pending-modal-total-amount', totalAmount);
+        formData.append('pending-received-amount', receivedAmount);
+        formData.append('order-details', JSON.stringify(cart));
+
+        fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            if (data.message) {
+                alert('Order Confirmed');
+            } else if (data.error) {
+                alert(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+        
         document.getElementById('pending-orders-modal').style.display = 'none';
+        fetchAndRenderPendingOrder();
     });
 
     document.getElementById('cancel-pending-order').addEventListener('click', function () {
@@ -462,7 +497,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             alert('Order Canceled');
             document.getElementById('pending-orders-modal').style.display = 'none';
             currentOrderToken = ''; 
-            fetchAndRenderPendingOrders(); 
+            fetchAndRenderPendingOrder(); 
         }
     });
 
