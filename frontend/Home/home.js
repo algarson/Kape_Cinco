@@ -399,7 +399,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 //----------------------- PENDING ORDER NUMBER FUNCTIONS --------------------//
     let currentOrderToken = '';
-
     function fetchAndRenderPendingOrder() {
         const pendingOrdersContainer = document.getElementById('pending-orders');
         const pendingOrderNumber = document.getElementById('pending-order-number');
@@ -421,6 +420,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         pendingOrders.forEach(order => {
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-card');
+            orderItem.setAttribute('data-order-number', order.orderNumber);
             orderItem.innerHTML = `
                 <li class="order-number-item"><span id="order-number">${order.orderNumber}</span></li>
             `;
@@ -440,6 +440,128 @@ document.addEventListener('DOMContentLoaded', async function () {
                 modal.style.display = 'block';
                 pendingPayment();
             });
+        });
+    }
+
+    let currentOngoingOrderToken = '';
+    function fetchAndRenderOngoingOrder() {
+        const ongoingOrdersContainer = document.getElementById('ongoing-orders');
+        const ongoingOrderNumber = document.getElementById('ongoing-order-number');
+        const ongoingOrderDetails = document.getElementById('ongoing-order-details');
+        const modalTotalAmount = document.getElementById('ongoing-modal-total-amount');
+        const modal = document.getElementById('ongoing-orders-modal');
+
+        ongoingOrdersContainer.innerHTML = ''; 
+
+        const ongoingOrderTokens = JSON.parse(localStorage.getItem('ongoingOrderTokens')) || [];
+    
+        ongoingOrderTokens.forEach(token => {
+            // Check if the token starts with 'ONGOING-'
+            if (token.startsWith('ONGOING-')) {
+                const ongoingOrder = JSON.parse(localStorage.getItem(token));
+                if (ongoingOrder) {
+                    const orderItem = document.createElement('div');
+                    orderItem.classList.add('order-card');
+                    orderItem.innerHTML = `
+                        <li class="order-number-item"><span id="order-number">${ongoingOrder.orderNumber}</span></li>
+                    `;
+                    ongoingOrdersContainer.appendChild(orderItem);
+    
+                    orderItem.addEventListener('click', function () {
+                        ongoingOrderNumber.textContent = ongoingOrder.orderNumber;
+                        ongoingOrderDetails.innerHTML = ongoingOrder.cart.map(item => `
+                            <div class="order-item">
+                                <span class="food-name">${item.name}</span>
+                                <span class="quantity">${item.quantity}x</span>
+                                <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                        `).join('');
+                        modalTotalAmount.textContent = `₱${ongoingOrder.totalPrice.toFixed(2)}`;
+                        currentOngoingOrderToken = token;
+                        modal.style.display = 'block';
+                    });
+                }
+            }
+        });
+    }
+
+    function fetchAndRenderCompleteOrder() {
+        const completedOrdersContainer = document.getElementById('completed-orders');
+        const completedOrderNumber = document.getElementById('completed-order-number');
+        const completedOrderDetails = document.getElementById('completed-order-details');
+        const modalTotalAmount = document.getElementById('completed-modal-total-amount');
+        const modal = document.getElementById('completed-orders-modal');
+
+        completedOrdersContainer.innerHTML = ''; 
+
+        const completedOrderTokens = JSON.parse(localStorage.getItem('completeOrderTokens')) || [];
+    
+        completedOrderTokens.forEach(token => {
+            // Check if the token starts with 'ONGOING-'
+            if (token.startsWith('COMPLETE-')) {
+                const completedOrder = JSON.parse(localStorage.getItem(token));
+                if (completedOrder) {
+                    const orderItem = document.createElement('div');
+                    orderItem.classList.add('order-card');
+                    orderItem.innerHTML = `
+                        <li class="order-number-item"><span id="order-number">${completedOrder.orderNumber}</span></li>
+                    `;
+                    completedOrdersContainer.appendChild(orderItem);
+    
+                    orderItem.addEventListener('click', function () {
+                        completedOrderNumber.textContent = completedOrder.orderNumber;
+                        completedOrderDetails.innerHTML = completedOrder.cart.map(item => `
+                            <div class="order-item">
+                                <span class="food-name">${item.name}</span>
+                                <span class="quantity">${item.quantity}x</span>
+                                <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                        `).join('');
+                        modalTotalAmount.textContent = `₱${completedOrder.totalPrice.toFixed(2)}`;
+                        modal.style.display = 'block';
+                    });
+                }
+            }
+        });
+    }
+
+    function fetchAndRenderCancelOrder() {
+        const canceledOrdersContainer = document.getElementById('canceled-orders');
+        /*const canceledOrderNumber = document.getElementById('completed-order-number');
+        const canceledrderDetails = document.getElementById('completed-order-details');
+        const modalTotalAmount = document.getElementById('canceled-modal-total-amount');*/
+        const modal = document.getElementById('canceled-orders-modal');
+
+        canceledOrdersContainer.innerHTML = ''; 
+
+        const canceledOrderTokens = JSON.parse(localStorage.getItem('canceledOrderTokens')) || [];
+    
+        canceledOrderTokens.forEach(token => {
+            // Check if the token starts with 'ONGOING-'
+            if (token.startsWith('CANCELED-')) {
+                const canceledOrder = JSON.parse(localStorage.getItem(token));
+                if (canceledOrder) {
+                    const orderItem = document.createElement('div');
+                    orderItem.classList.add('order-card');
+                    orderItem.innerHTML = `
+                        <li class="order-number-item"><span id="order-number">${canceledOrder.orderNumber}</span></li>
+                    `;
+                    canceledOrdersContainer.appendChild(orderItem);
+                    /*
+                    orderItem.addEventListener('click', function () {
+                        canceledOrderNumber.textContent = canceledOrder.orderNumber;
+                        canceledOrderDetails.innerHTML = canceledOrder.cart.map(item => `
+                            <div class="order-item">
+                                <span class="food-name">${item.name}</span>
+                                <span class="quantity">${item.quantity}x</span>
+                                <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                            </div>
+                        `).join('');
+                        modalTotalAmount.textContent = `₱${canceledOrder.totalPrice.toFixed(2)}`;
+                        modal.style.display = 'block';
+                    });*/
+                }
+            }
         });
     }
 
@@ -466,7 +588,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     //----------------------- PENDING ORDER NUMBER FUNCTIONS --------------------//
 
-    
     document.querySelectorAll('.close-button').forEach(button => {
         button.addEventListener('click', function () {
             button.parentElement.parentElement.style.display = 'none';
@@ -481,9 +602,9 @@ document.addEventListener('DOMContentLoaded', async function () {
                 modalId = 'pending-orders-modal';
                 document.getElementById('pending-order-number').textContent = orderNumber;
                 // Fetch and display order details
-            } else if (orderCard.parentElement.id === 'accepted-orders') {
-                modalId = 'accepted-orders-modal';
-                document.getElementById('accepted-order-number').textContent = orderNumber;
+            } else if (orderCard.parentElement.id === 'ongoing-orders') {
+                modalId = 'ongoing-orders-modal';
+                document.getElementById('ongoing-order-number').textContent = orderNumber;
                 // Fetch and display order details
             } else if (orderCard.parentElement.id === 'completed-orders') {
                 modalId = 'completed-orders-modal';
@@ -494,7 +615,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
     });
 
-    fetchAndRenderPendingOrder();
+    function initializeOrders() {
+        fetchAndRenderPendingOrder();
+        fetchAndRenderOngoingOrder();
+        fetchAndRenderCancelOrder();
+        fetchAndRenderCompleteOrder();
+    }
+
+    initializeOrders();
 
     //Confirm Pending Order Button
     document.getElementById('confirm-pending-order').addEventListener('click', function () {
@@ -522,6 +650,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(data => {
             if (data.message) {
                 alert('Order Confirmed');
+                const ongoingOrderToken = `ONGOING-${orderNumber}`;
+            
+                localStorage.setItem(ongoingOrderToken, JSON.stringify(orderDetails));
+
+                let ongoingOrderTokens = JSON.parse(localStorage.getItem('ongoingOrderTokens')) || [];
+                ongoingOrderTokens.push(ongoingOrderToken);
+                localStorage.setItem('ongoingOrderTokens', JSON.stringify(ongoingOrderTokens));
+
+                localStorage.removeItem(orderToken); 
+
+                document.getElementById('pending-orders-modal').style.display = 'none';
+                currentOrderToken = '';
+                fetchAndRenderPendingOrder(); 
+                fetchAndRenderOngoingOrder();
+                
             } else if (data.error) {
                 alert(data.error);
             }
@@ -529,23 +672,75 @@ document.addEventListener('DOMContentLoaded', async function () {
         .catch(error => console.error('Error:', error));
         
         document.getElementById('pending-orders-modal').style.display = 'none';
+        
         fetchAndRenderPendingOrder();
     });
 
     //Cancel Pending Order Button
     document.getElementById('cancel-pending-order').addEventListener('click', function () {
+
+        const orderNumber = document.getElementById('pending-order-number').textContent;
+
         if (currentOrderToken) {
-            localStorage.removeItem(currentOrderToken); 
             alert('Order Canceled');
+            
+            const orderToken = currentOrderToken; 
+            const orderDetails = JSON.parse(localStorage.getItem(orderToken));
+
+            const canceledOrderToken = `CANCELED-${orderNumber}`;
+
+            localStorage.setItem(canceledOrderToken, JSON.stringify(orderDetails));
+
+            let canceledOrderTokens = JSON.parse(localStorage.getItem('canceledOrderTokens')) || [];
+            if (!canceledOrderTokens.includes(canceledOrderToken)) {
+                canceledOrderTokens.push(canceledOrderToken);
+                localStorage.setItem('canceledOrderTokens', JSON.stringify(canceledOrderTokens));
+            }
+
+            localStorage.removeItem(orderToken); 
+
             document.getElementById('pending-orders-modal').style.display = 'none';
             currentOrderToken = ''; 
             fetchAndRenderPendingOrder(); 
+            fetchAndRenderCancelOrder();
         }
     });
 
-    document.getElementById('complete-accepted-order').addEventListener('click', function () {
+    document.getElementById('complete-ongoing-order').addEventListener('click', function () {
+        const orderNumber = document.getElementById('completed-order-number').textContent;
+
         alert('Order Completed');
-        document.getElementById('accepted-orders-modal').style.display = 'none';
+        
+        const orderToken = currentOngoingOrderToken; 
+        const orderDetails = JSON.parse(localStorage.getItem(orderToken));
+
+        const completeOrderToken = `COMPLETE-${orderNumber}`;
+
+        localStorage.setItem(completeOrderToken, JSON.stringify(orderDetails));
+
+        let completeOrderTokens = JSON.parse(localStorage.getItem('completeOrderTokens')) || [];
+        if (!completeOrderTokens.includes(completeOrderToken)) {
+            completeOrderTokens.push(completeOrderToken);
+            localStorage.setItem('completeOrderTokens', JSON.stringify(completeOrderTokens));
+        }
+
+        localStorage.removeItem(orderToken); 
+
+        document.getElementById('ongoing-orders-modal').style.display = 'none';
+        currentOngoingOrderToken = '';
+        fetchAndRenderOngoingOrder();
+        fetchAndRenderCompleteOrder();
+    });
+
+    document.getElementById('cancel-ongoing-order').addEventListener('click', function () {
+        if (currentOngoingOrderToken) {
+            localStorage.removeItem(currentOngoingOrderToken); 
+            alert('Order Canceled');
+            document.getElementById('ongoing-orders-modal').style.display = 'none';
+            currentOngoingOrderToken = ''; 
+            fetchAndRenderOngoingOrder();
+            fetchAndRenderCancelOrder();
+        }
     });
     
     setInterval(fetchAndRenderPendingOrder, 3000);

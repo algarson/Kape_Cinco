@@ -534,15 +534,40 @@ sections */
 .chart-container {
     width: 97%;
     margin: auto; 
-
 }
-
-#accepted-orders-chart {
+.accepted-orders-chart {
     background-color: #D9CBBD;
     border-radius: 8px;
     padding: 20px;
     width: 100%;
     height: 420px;
     color: black;
-
 }
+.accepted-orders-chart h2{
+    padding: 0;
+}
+.row{
+    display: flex;
+    align-items: center;
+    justify-content:space-around;
+    margin-top: 15px;
+    height: 70px;
+    background-color: #f5e3d3;
+    border-radius: 10px;
+}
+.columns{
+    display: flex;
+    align-items: center;
+    height: 50px;
+    width: 100px;
+}
+.columns img{
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 50px;
+    width: 50px;
+    border-radius: 10px;
+    margin-right: 10px;
+}
+

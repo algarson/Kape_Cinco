@@ -5,7 +5,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const tableBody = document.getElementById('tableBody');
     const categoryButtons = document.querySelectorAll('.category-nav button');
     const updateModal = document.getElementById('updateModal');
+    const addModal = document.getElementById('addModal');
+    const deleteModal = document.getElementById('deleteModal');
     const closeButton = document.querySelector('.close-button');
+<<<<<<< HEAD
     const inventoryLink = document.getElementById('inventoryLink');
     const statisticsLink = document.getElementById('statisticsLink');
     const mainContent = document.getElementById('mainContent');
@@ -13,9 +16,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     const statisticsSection = document.getElementById('statisticsSection');
     const statisticsChartElement = document.getElementById('statisticsChart').getContext('2d');
     let statisticsChart; // Variable to hold the chart instance
+=======
+    const yesButton = document.querySelector('.yes-button');
+    const noButton = document.querySelector('.no-button');
+    const addButton = document.querySelector('.add-button'); // Add button
+    
+>>>>>>> cfe1bda003bc842b02639b5ed3288830a41d02cf
     
     updateModal.style.display = 'none';
-
+    addButton.addEventListener('click', openAddModal);
     async function fetchAllItems() {
         try {
             const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
@@ -36,6 +45,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             filterItems(category);
         });
     });
+
+    
 
     function createTableRow(item) {
         const row = document.createElement('tr');
@@ -78,8 +89,14 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         const updateCell = document.createElement('td');
         const updateButton = document.createElement('button');
+        const deleteButton = document.createElement('button');
+        deleteButton.className = "deletebtn"
+        deleteButton.textContent = 'Delete';       
         updateButton.className = "updatebtn"
         updateButton.textContent = 'Update';
+        deleteButton.addEventListener('click', () => openDeleteModal(item));
+        updateCell.appendChild(deleteButton);
+        row.appendChild(updateCell);
         updateButton.addEventListener('click', () => openUpdateModal(item));
         updateCell.appendChild(updateButton);
         row.appendChild(updateCell);
@@ -158,11 +175,61 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById('item_type').value = item.food_id ? 'food' : 'drink';
         updateModal.style.display = 'block';
     }
+
+
+    function openAddModal() {   
+        addModal.style.display = 'block';
+    }
+
+    function openDeleteModal(item) {
+        document.getElementById('item_id').value = item.food_id || item.drink_id;
+        document.getElementById('item_type').value = item.food_id ? 'food' : 'drink';
+        deleteModal.style.display = 'block';
+
+        yesButton.onclick = async () => {
+            try {
+                const response = await fetch('/Kape_Cinco/backend/Admin/delete_item.php', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        id: item.food_id || item.drink_id,
+                        type: item.food_id ? 'food' : 'drink'
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Item deleted successfully');
+                    deleteModal.style.display = 'none';
+                    await generateAllItems();
+                } else {
+                    alert('Delete failed: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the item.');
+            }
+        };
+    }
     
     closeButton.addEventListener('click', function() {
         updateModal.style.display = 'none';
     });
+
+    closeButton.addEventListener('click', function() {
+        addModal.style.display = 'none';
+    });
+
+    closeButton.addEventListener('click', function() {
+        deleteModal.style.display = 'none';
+    });
     
+
+    noButton.addEventListener('click', function () {
+        deleteModal.style.display = 'none';
+    });
+
     document.getElementById('updateForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
@@ -192,6 +259,36 @@ document.addEventListener("DOMContentLoaded", async function () {
             console.error('Error updating item:', error);
             alert('An error occurred during the update.');
         }
+        
+        document.getElementById('addForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            console.log('Add Form submitted');
+            for (const pair of formData.entries()) {
+                console.log(pair[0] + ', ' + pair[1]);
+            }
+    
+            try {
+                const response = await fetch('/Kape_Cinco/backend/Admin/add_item.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.success) {
+                    alert('Item added successfully');
+                    addModal.style.display = 'none';
+                    await generateAllItems();
+                } else {
+                    alert('Add failed: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while adding the item.');
+            }
+        });
+    
+        // Event listener for the "Add" button to open the addModal
+        
     });
 
     // Add event listeners for navigation links
