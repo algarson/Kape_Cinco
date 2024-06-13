@@ -1,10 +1,18 @@
-document.addEventListener("DOMContentLoaded", async function (){
 
+
+
+document.addEventListener("DOMContentLoaded", async function () {
     const tableBody = document.getElementById('tableBody');
     const categoryButtons = document.querySelectorAll('.category-nav button');
     const updateModal = document.getElementById('updateModal');
     const closeButton = document.querySelector('.close-button');
-    
+    const inventoryLink = document.getElementById('inventoryLink');
+    const statisticsLink = document.getElementById('statisticsLink');
+    const mainContent = document.getElementById('mainContent');
+    const inventorySection = document.getElementById('inventorySection');
+    const statisticsSection = document.getElementById('statisticsSection');
+    const statisticsChartElement = document.getElementById('statisticsChart').getContext('2d');
+    let statisticsChart; // Variable to hold the chart instance
     
     updateModal.style.display = 'none';
 
@@ -19,16 +27,6 @@ document.addEventListener("DOMContentLoaded", async function (){
         }
     }
 
-    categoryButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            categoryButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-
-            const category = button.getAttribute('data-category');
-            filterItems(category);
-        });
-    });
-    
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
             categoryButtons.forEach(btn => btn.classList.remove('active'));
@@ -86,7 +84,6 @@ document.addEventListener("DOMContentLoaded", async function (){
         updateCell.appendChild(updateButton);
         row.appendChild(updateCell);
         
-
         row.setAttribute('data-category', item.food_name ? 'Foods' : 'Drinks');
         return row;
     }
@@ -141,23 +138,20 @@ document.addEventListener("DOMContentLoaded", async function (){
         })
         .catch(error => console.error('Error:', error));
     
-    
     function logout() {
-    fetch('/Kape_Cinco/backend/Login/logout.php')
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html';
-            } else {
-                alert('Logout failed!');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        fetch('/Kape_Cinco/backend/Login/logout.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+                } else {
+                    alert('Logout failed!');
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     window.logout = logout;
-
-    //----------------------------- END OF DISPLAY ITEMS ------------------------ //
 
     function openUpdateModal(item) {
         document.getElementById('item_id').value = item.food_id || item.drink_id;
@@ -173,27 +167,199 @@ document.addEventListener("DOMContentLoaded", async function (){
         event.preventDefault();
         const formData = new FormData(event.target);
         console.log('Form submitted');
-        // Log form data key-value pairs
         for (const pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }
 
         try {
-            const response = await fetch('/Kape_Cinco/backend/Admin/update_item.php', {
+            const response = await fetch('/Kape_Cinco/backend/Home/updateitem.php', {
                 method: 'POST',
                 body: formData
             });
-            const result = await response.json();
-            if (result.success) {
-                alert('Item updated successfully');
-                updateModal.style.display = 'none';
-                await generateAllItems(); 
+
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    updateModal.style.display = 'none';
+                    generateAllItems();
+                } else {
+                    alert('Update failed!');
+                }
             } else {
-                alert('Update failed: ' + result.message);
+                alert('Update request failed!');
             }
         } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while updating the item.');
+            console.error('Error updating item:', error);
+            alert('An error occurred during the update.');
         }
     });
+
+    // Add event listeners for navigation links
+    inventoryLink.addEventListener('click', () => {
+        inventoryLink.classList.add('active');
+        statisticsLink.classList.remove('active');
+        inventorySection.style.display = '';
+        statisticsSection.style.display = 'none';
+        document.body.classList.add('inventory-active');
+        filterItems('Foods');  // Set default category to Foods on inventory section load
+    });
+
+    statisticsLink.addEventListener('click', () => {
+        inventoryLink.classList.remove('active');
+        statisticsLink.classList.add('active');
+        inventorySection.style.display = 'none';
+        statisticsSection.style.display = '';
+        document.body.classList.remove('inventory-active');
+    });
+
+
+    inventoryLink.addEventListener('click', () => {
+        inventoryLink.classList.add('active');
+        statisticsLink.classList.remove('active');
+        inventorySection.style.display = '';
+        statisticsSection.style.display = 'none';
+    });
+
+    statisticsLink.addEventListener('click', () => {
+        inventoryLink.classList.remove('active');
+        statisticsLink.classList.add('active');
+        inventorySection.style.display = 'none';
+        statisticsSection.style.display = '';
+        generateStatisticsChart('weekly'); // Default to weekly view
+    });
+    
+     // Event listener for weekly button
+     document.getElementById('weeklyBtn').addEventListener('click', () => {
+        generateStatisticsChart('weekly');
+    });
+
+    // Event listener for monthly button
+    document.getElementById('monthlyBtn').addEventListener('click', () => {
+        generateStatisticsChart('monthly');
+    });
+
+    // Event listener for yearly button
+    document.getElementById('yearlyBtn').addEventListener('click', () => {
+        generateStatisticsChart('yearly');
+    });
+
+    // Set default view on page load
+    inventoryLink.click();
+
+    function generateStatisticsChart(timeframe = 'weekly') {
+        let chartData = {};
+    
+        switch (timeframe) {
+            case 'weekly':
+                chartData = {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [
+                        {
+                            label: 'Revenue',
+                            data: [1000, 1500, 2000, 2500],
+                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Expenses',
+                            data: [400, 600, 800, 1000],
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Profit',
+                            data: [600, 900, 1200, 1500],
+                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                };
+                break;
+                case 'monthly':
+                    chartData = {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        datasets: [
+                            {
+                                label: 'Revenue',
+                                data: [1200, 1500, 1800, 1900, 2200, 2500, 2800, 3000, 2700, 2400, 2100, 1800],
+                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                borderColor: 'rgba(75, 192, 192, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Expenses',
+                                data: [400, 500, 600, 700, 800, 900, 1000, 1100, 1000, 900, 800, 700],
+                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Profit',
+                                data: [800, 1000, 1200, 1200, 1400, 1600, 1800, 1900, 1700, 1500, 1300, 1100],
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    };
+                    break;
+                
+                    case 'yearly':
+                        chartData = {
+                            labels: ['2020', '2021', '2022', '2023', '2024'],
+                            datasets: [
+                                {
+                                    label: 'Revenue',
+                                    data: [15000, 18000, 20000, 22000, 25000],
+                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                    borderColor: 'rgba(75, 192, 192, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'Expenses',
+                                    data: [6000, 7000, 8000, 9000, 10000],
+                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                                    borderColor: 'rgba(255, 99, 132, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: 'Profit',
+                                    data: [9000, 11000, 12000, 13000, 15000],
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        };
+                        break;
+                    
+            default:
+                chartData = {}; // Handle unexpected cases
+        }
+    
+        const chartOptions = {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        };
+    
+        // Replace existing chart with new chart based on selected timeframe
+        if (statisticsChart) {
+            statisticsChart.destroy(); // Destroy existing chart instance
+        }
+        statisticsChart = new Chart(statisticsChartElement, {
+            type: 'bar',
+            data: chartData,
+            options: chartOptions
+        });
+    }
+    
+
+    // Set default view on page load
+    inventoryLink.click();
 });

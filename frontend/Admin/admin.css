@@ -87,12 +87,13 @@ main {
 
 
 .table-container {
-    background-color: white;
+    background-color: #faf0e7;
+
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 95%;
-    max-height: 530px; /* Set a fixed max height */
+    max-height: 600px; /* Set a fixed max height */
 }
 
 table {
@@ -174,4 +175,70 @@ th {
 .image_item{
     height: 30px;
     width: 30px;
+}
+
+/* Ensure the active class highlights the active link */
+.navbar a.active {
+    font-weight: bold;
+    color: #000;
+    background-color: #f5e3d3;
+    padding: 10px;
+    border-radius: 20px;
+}
+
+/* Hide non-active sections */
+#statisticsSection {
+    background-color: #f3eae2;
+    display: flex;
+    align-content: ce;
+    width: 90%;
+    padding: 20px;
+    height: 70vh;
+    border-radius: 20px;
+    margin-top: 5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+.statscontent {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-options {
+    margin-bottom: 20px;
+}
+
+.chart-options button {
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: white;
+    margin: 10px;
+    border: none;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: #4e342e;
+    cursor: pointer;
+}
+
+#statisticsChart {
+    margin: auto;
+    max-width: 90%;
+    position: relative;
+    /* Additional styles for the chart canvas */
+}
+
+
+/* Hide category-nav by default and only show when on inventory section */
+.category-nav {
+    display: none;
+}
+
+/* Show category-nav when inventory section is active */
+body.inventory-active .category-nav {
+    display: flex;
 }
