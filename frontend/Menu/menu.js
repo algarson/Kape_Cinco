@@ -201,6 +201,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             <button class="complete-order-btn">Review Order</button>
         `;
 
+        document.querySelector('.complete-order-btn').addEventListener('click', function() {
+            window.location.href = '/Kape_Cinco/frontend/Menu/review.html';
+        });
+
         addEventListenersToCartItems();
         updateSummary();
     }

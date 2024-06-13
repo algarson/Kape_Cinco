@@ -64,8 +64,9 @@ document.addEventListener("DOMContentLoaded", async function (){
         row.appendChild(descCell);
 
         const imageCell = document.createElement('td');
-        const image = document.createElement('img');
-        image.src = item.food_image
+        const image = document.createElement('img') ;
+        image.className = "image_item";
+        image.src = item.food_image 
                     ? `/Kape_Cinco/backend/images/${item.food_image}`
                     : item.drink_image
                     ? `/Kape_Cinco/backend/images/${item.drink_image}`

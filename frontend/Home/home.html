@@ -75,38 +75,33 @@
             </div>
             <div class="main-order-section">
                 <div class="column" id="pending-orders">
-                    <div class="order-card">
-                        <li class="order-number-item"><span id="order-number">ORD-12345</span></li>
-                 
-                    </div>
+                        <!-- Pending Order Numbers -->
                 </div>
+
                 <div class="column" id="accepted-orders">
                     <div class="order-card"> 
                         <li class="order-number-item"><span id="order-number">ORD-12346</span></li>
-
                     </div>
                 </div>
                 <div class="column" id="ongoing-orders">
                     <div class="order-card">
                         <li class="order-number-item"><span id="order-number">ORD-12346</span></li>
-
                     </div>
                 </div>
                 <div class="column" id="canceled-orders">
                     <div class="order-card"> 
                         <li class="order-number-item"><span id="order-number">ORD-12347</span></li>
-                
                     </div>
                 </div>
                 <div class="column" id="completed-orders" >
                     <div class="order-card">
-                        <li class="order-number-item"><span class="order-number">ORD-12346</span></li>
-                     
+                        <li class="order-number-item"><span id="order-number">ORD-12346</span></li>
                     </div>
                 </div>
             </div>
         </div>
         
+<<<<<<< HEAD
             
     
         <div id="statistics-section" class="section">
@@ -148,6 +143,11 @@
                      <h2>Sales Chart</h2>
                 </canvas>
             </div>
+=======
+        <div class="statistics-section" id="statistics-section">
+            <h2>Statistics</h2>
+            <!-- Add statistics content here -->
+>>>>>>> ae8ca49dfd84c5ca91af9dfecb5ac5a22581ba8e
         </div>
 
         <div class="settings-section" id="settings-section">
@@ -160,7 +160,7 @@
             <div class="modal-content">
                 <span class="close-button">&times;</span>
                 <h2>Order Summary</h2>
-                <div id="order-number" ></div>
+                <div id="manual-order-number" ></div>
                 <div id="order-details" ></div>
                 <hr class="total-hr">
                 <div class="total">
@@ -181,31 +181,33 @@
         </div>
 
     <!-- Pending Orders Modal Structure -->
- <div id="pending-orders-modal" class="modal" style="display: none;">
-    <div class="modal-content">
-        <span class="close-button">&times;</span>
-        <h2>Pending Order Details</h2>
-        <div id="pending-order-number"></div>
-        <div id="pending-order-details"></div>
-        <hr class="total-hr">
-        <div class="total">
-            <span>Total: </span>
-            <span id="modal-total-amount">0</span>
+    <div id="pending-orders-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Pending Order Details</h2>
+            <div id="pending-order-number"></div>
+            <div id="pending-order-details">
+                <!-- Order Details Here -->
+            </div>
+            <hr class="total-hr">
+            <div class="total">
+                <span>Total: </span>
+                <span id="pending-modal-total-amount">0</span>
+            </div>
+            <div class="payment-section">
+                <label for="pending-received-amount">Amount Received:</label>
+                <input type="number" id="pending-received-amount" min="0" step="0.01" placeholder="Enter amount received">
+            </div>
+            <div class="change-section">
+                <span>Change: </span>
+                <span id="pending-change-amount">0</span>
+            </div>
+            <button id="confirm-pending-order">Confirm Order</button>
+            <button id="cancel-pending-order">Cancel Order</button>
         </div>
-        <div class="payment-section">
-            <label for="received-amount">Amount Received:</label>
-            <input type="number" id="received-amount" min="0" step="0.01" placeholder="Enter amount received">
-        </div>
-        <div class="change-section">
-            <span>Change: </span>
-            <span id="change-amount">0</span>
-        </div>
-        <button id="confirm-pending-order">Confirm Order</button>
-        <button id="cancel-pending-order">Cancel Order</button>
     </div>
-
-       <!-- Modal for Accepted Orders -->
-       <div id="accepted-orders-modal" class="modal" style="display: none;">
+    <!-- Modal for Accepted Orders -->
+    <div id="accepted-orders-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h2>Accepted Order Details</h2>
@@ -233,7 +235,7 @@
             </div>
         </div>
     </div>
-</div>
+
 </div> 
     <script src="home.js"></script>
 </body>

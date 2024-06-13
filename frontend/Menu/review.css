@@ -19,6 +19,10 @@ body {
     background-color: #f2e3da;
 }
 
+body.hidden {
+    display: none;
+}
+
 .container {
     width: 100%;
     max-width: 500px;

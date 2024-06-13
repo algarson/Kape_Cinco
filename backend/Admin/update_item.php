@@ -2,9 +2,6 @@
     include '../server.php'; 
 
     $response = ['success' => false, 'message' => ''];
-    $fileTmpPath = '';
-    $fileName = '';
-    $fileDest = '';
 
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $item_id = $_POST['item_id'];
@@ -21,13 +18,6 @@
             $fileName = ($item_type == 'food') ? $fileNamePrefix . 'foodimage.' . $fileExtension : $fileNamePrefix . 'drinkimage.' . $fileExtension;
             
             $fileDest = $uploadDir . $fileName;
-
-            $response['debug'] = [
-                'file_tmp_path' => $fileTmpPath,
-                'file_name' => $fileName,
-                'file_destination' => $fileDest
-            ];
-
         
             if (move_uploaded_file($fileTmpPath, $fileDest)) {
                 // Update the database with the filename

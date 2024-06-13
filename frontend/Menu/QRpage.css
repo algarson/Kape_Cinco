@@ -23,6 +23,9 @@ body {
     background-color: var(--color-scent-color);
 }
 
+body.hidden{
+    display: none;
+}
 .order-card {
     background-color: var(--color-scent-color);
     width: 100%;
