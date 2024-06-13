@@ -66,7 +66,6 @@
                 <h2>My Orders</h2>
                 <div class="categories-header">
                     <h3 class="column-h3">Pending Orders</h3>
-                    <h3  class="column-h3">Accepted Orders</h3>
                     <h3  class="column-h3">Ongoing Orders</h3>
                     <h3  class="column-h3">Canceled Orders</h3>
                     <h3  class="column-h3">Completed Orders</h3>
@@ -78,25 +77,16 @@
                         <!-- Pending Order Numbers -->
                 </div>
 
-                <div class="column" id="accepted-orders">
-                    <div class="order-card"> 
-                        <li class="order-number-item"><span id="order-number">ORD-12346</span></li>
-                    </div>
-                </div>
                 <div class="column" id="ongoing-orders">
-                    <div class="order-card">
-                        <li class="order-number-item"><span id="order-number">ORD-12346</span></li>
-                    </div>
+                        <!-- Ongoing Order Numbers-->
                 </div>
+
                 <div class="column" id="canceled-orders">
-                    <div class="order-card"> 
-                        <li class="order-number-item"><span id="order-number">ORD-12347</span></li>
-                    </div>
+                    <!-- Canceled Order Numbers-->
                 </div>
+                
                 <div class="column" id="completed-orders" >
-                    <div class="order-card">
-                        <li class="order-number-item"><span id="order-number">ORD-12346</span></li>
-                    </div>
+                    <!-- Completed Order Numbers-->
                 </div>
             </div>
         </div>
@@ -162,19 +152,20 @@
             <button id="cancel-pending-order">Cancel Order</button>
         </div>
     </div>
-    <!-- Modal for Accepted Orders -->
-    <div id="accepted-orders-modal" class="modal" style="display: none;">
+    <!-- Modal for Ongoing Orders -->
+    <div id="ongoing-orders-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <h2>Accepted Order Details</h2>
-            <div id="accepted-order-number"></div>
-            <div id="accepted-order-details"></div>
+            <h2>Confirmed Order Number</h2>
+            <div id="ongoing-order-number"></div>
+            <div id="ongoing-order-details"></div>
             <hr class="total-hr">
             <div class="total">
                 <span>Total: </span>
-                <span id="accepted-modal-total-amount">0</span>
+                <span id="ongoing-modal-total-amount">0</span>
             </div>
-            <button id="complete-accepted-order">Complete Order</button>
+            <button id="complete-ongoing-order">Complete Order</button>
+            <button id="cancel-ongoing-order">Cancel Order</button>
         </div>
     </div>
     <!-- Modal for Completed Orders -->
