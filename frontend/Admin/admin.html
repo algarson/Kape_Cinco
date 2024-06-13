@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
     <title>Admin Page</title>
 </head>
 <body>
     <header>
         <img src="/Kape_Cinco//frontend//images/kape_cinco.jpg" alt="Logo" class="logo">
         <nav class="navbar">
-            <a href="#" class="active">Inventory</a>
-            <a href="#">Statistics</a>
+            <a href="#" id="inventoryLink" class="active">Inventory</a>
+            <a href="#" id="statisticsLink">Statistics</a>
         </nav>
         <button onclick="logout()" class="logout">Logout</button>
     </header>
@@ -19,10 +22,12 @@
         <button class="active" data-category="Foods">Foods</button>
         <button data-category="Drinks">Drinks</button>
     </nav>
+    <main id="mainContent">
+        <div class="table-container" id="inventorySection">
     <div>
         
     </div>
-    <main>
+ 
         <button class="add-button" onclick="openAddModal()">Add</button>
         <div class="table-container">
             <table id="inventoryTable">
@@ -61,6 +66,8 @@
             </div>
         </div>
 
+       
+            
         <div id="deleteModal" class="modal">
             <div class="modal-content">
                 <span class="close-button">&times;</span>
@@ -81,6 +88,14 @@
                     <button type="submit">Add</button>
                 </form>
             </div>
+        </div>
+        <div id="statisticsSection" style="display: none;">
+            <div class="chart-options">
+                <button id="weeklyBtn">Weekly</button>
+                <button id="monthlyBtn">Monthly</button>
+                <button id="yearlyBtn">Yearly</button>
+            </div>
+            <canvas id="statisticsChart"></canvas>
         </div>
     </main>
 
