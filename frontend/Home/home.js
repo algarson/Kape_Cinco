@@ -10,6 +10,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     const modalTotalAmountElement = document.getElementById('modal-total-amount');
     const confirmOrderButton = document.getElementById('confirm-order');
     const logoutButton = document.getElementById('logout-button');
+    const totalIncome = document.getElementById('total-income-amount');
+    const totalOrders = document.getElementById('total-order-amount');
+
     let totalAmount = 0;
 
     // Hide the bills section initially
@@ -780,6 +783,27 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.getElementById('settings-section').style.display = 'none';
         billsSection.style.display = 'none';
     });
+
+    async function dailySales () {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Home/stats.php");
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    }
+
+    async function displaySales () {
+        const totalSales = await dailySales();
+
+        console.log(totalSales);
+        totalIncome.innerHTML = totalSales[0].Sales;
+        totalOrders.innerHTML = totalSales[0].total_orders;
+
+    }
+
+    displaySales()
 
     /*
     document.getElementById('nav-settings').addEventListener('click', () => {
