@@ -93,7 +93,6 @@ main {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 95%;
     max-height: 530px; /* Set a fixed max height */
-    overflow-y: auto;  /* Enable vertical scrolling */
 }
 
 table {
@@ -103,7 +102,7 @@ table {
 }
 
 .table-body-container {
-    max-height: 500px; /* Set a max-height for the scrollable area */
+    max-height: 450px; /* Set a max-height for the scrollable area */
     overflow-y: auto;  /* Enable vertical scrolling */
 }
 
