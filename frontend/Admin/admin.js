@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const addModal = document.getElementById('addModal');
     const deleteModal = document.getElementById('deleteModal');
     const closeButton = document.querySelector('.close-button');
-<<<<<<< HEAD
     const inventoryLink = document.getElementById('inventoryLink');
     const statisticsLink = document.getElementById('statisticsLink');
     const mainContent = document.getElementById('mainContent');
@@ -16,12 +15,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     const statisticsSection = document.getElementById('statisticsSection');
     const statisticsChartElement = document.getElementById('statisticsChart').getContext('2d');
     let statisticsChart; // Variable to hold the chart instance
-=======
     const yesButton = document.querySelector('.yes-button');
     const noButton = document.querySelector('.no-button');
-    const addButton = document.querySelector('.add-button'); // Add button
-    
->>>>>>> cfe1bda003bc842b02639b5ed3288830a41d02cf
+    const addButton = document.querySelector('.add-button'); // Add but
     
     updateModal.style.display = 'none';
     addButton.addEventListener('click', openAddModal);
@@ -291,8 +287,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         
     });
 
-    // Add event listeners for navigation links
-    inventoryLink.addEventListener('click', () => {
+     // Add event listeners for navigation links
+     inventoryLink.addEventListener('click', () => {
         inventoryLink.classList.add('active');
         statisticsLink.classList.remove('active');
         inventorySection.style.display = '';
@@ -324,7 +320,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         statisticsSection.style.display = '';
         generateStatisticsChart('weekly'); // Default to weekly view
     });
-    
+
      // Event listener for weekly button
      document.getElementById('weeklyBtn').addEventListener('click', () => {
         generateStatisticsChart('weekly');
@@ -345,7 +341,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function generateStatisticsChart(timeframe = 'weekly') {
         let chartData = {};
-    
+
         switch (timeframe) {
             case 'weekly':
                 chartData = {
@@ -403,7 +399,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                         ]
                     };
                     break;
-                
+
                     case 'yearly':
                         chartData = {
                             labels: ['2020', '2021', '2022', '2023', '2024'],
@@ -432,11 +428,11 @@ document.addEventListener("DOMContentLoaded", async function () {
                             ]
                         };
                         break;
-                    
+
             default:
                 chartData = {}; // Handle unexpected cases
         }
-    
+
         const chartOptions = {
             scales: {
                 y: {
@@ -444,7 +440,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             }
         };
-    
+
         // Replace existing chart with new chart based on selected timeframe
         if (statisticsChart) {
             statisticsChart.destroy(); // Destroy existing chart instance
@@ -455,7 +451,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             options: chartOptions
         });
     }
-    
+
 
     // Set default view on page load
     inventoryLink.click();
