@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", async function (){
 
         const updateCell = document.createElement('td');
         const updateButton = document.createElement('button');
+        updateButton.className = "updatebtn"
         updateButton.textContent = 'Update';
         updateButton.addEventListener('click', () => openUpdateModal(item));
         updateCell.appendChild(updateButton);

@@ -11,18 +11,16 @@
         <img src="/Kape_Cinco//frontend//images/kape_cinco.jpg" alt="Logo" class="logo">
         <nav class="navbar">
             <a href="#" class="active">Inventory</a>
-            <a href="#">Storage</a>
             <a href="#">Statistics</a>
-            <button onclick="logout()" class="logout">Logout</button>
         </nav>
+        <button onclick="logout()" class="logout">Logout</button>
     </header>
-
+    <nav class="category-nav">
+        <button class="active" data-category="Foods">Foods</button>
+        <button data-category="Drinks">Drinks</button>
+    </nav>
     <main>
-        <h1>Inventory</h1>
-        <nav class="category-nav">
-            <button class="active" data-category="Foods">Foods</button>
-            <button data-category="Drinks">Drinks</button>
-        </nav>
+        
         <div class="table-container">
             <table id="inventoryTable">
                 <thead>
@@ -34,12 +32,17 @@
                         <th class="description-header">Description</th>
                         <th>Image</th>
                         <th>Status</th>
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                    <!-- Items will be dynamically generated here -->
-                </tbody>
             </table>
+            <div class="table-body-container">
+                <table>
+                    <tbody id="tableBody">
+                        <!-- Items will be dynamically generated here -->
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <div id="updateModal" class="modal">

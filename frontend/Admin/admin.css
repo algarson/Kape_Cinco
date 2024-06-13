@@ -1,28 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap');
+
 /* Reset some default browser styles */
-body, h1, nav, table {
+*{
+    font-family: Poppins;
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+    font-size: 12px;
+    
+
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    background-color: #f5e3d3;
+    
+}
+
+
+h1, nav, table {
     font-family: 'Arial', sans-serif;
 }
 
 /* Header and Navbar styling */
 header {
     background-color: #4e342e;
-    padding: 10px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 5px 20px;
+    height: 70px;
 }
 
 .logo {
-    height: 50px;
+    height: 40px;
+    margin-left: 20px;
+    border-radius: 50%;
 }
 
 .navbar a, .logout {
     color: white;
     text-decoration: none;
     margin: 0 15px;
-    font-size: 18px;
 }
 
 .navbar a.active, .navbar a:hover, .logout:hover {
@@ -35,50 +55,60 @@ header {
     cursor: pointer;
 }
 
-body {
-    background-color: #f5f5f5;
-    padding: 20px;
-}
 
-h1 {
-    color: #4e342e;
-    margin-bottom: 20px;
-}
 
 .category-nav {
-    margin-bottom: 20px;
+    margin: 10px 0 10px 40px;
 }
 
 .category-nav button {
     background-color: #8d6e63;
+    border-radius: 20px;
     color: white;
     border: none;
     padding: 10px 20px;
     margin-right: 10px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 12px;
 }
 
 .category-nav button.active {
     background-color: #4e342e;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Changed to flex-start to avoid stretching */
+    height: calc(100vh - 70px - 40px); /* Adjust to account for header and nav height */
+    overflow: hidden;
+}
+
+
 .table-container {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
+    width: 95%;
+    max-height: 530px; /* Set a fixed max height */
+    overflow-y: auto;  /* Enable vertical scrolling */
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+}
+
+.table-body-container {
+    max-height: 500px; /* Set a max-height for the scrollable area */
+    overflow-y: auto;  /* Enable vertical scrolling */
 }
 
 th, td {
-    text-align: right;
+    text-align: center;
     padding: 5px;
     border-bottom: 1px solid #ddd;
 }
@@ -86,6 +116,10 @@ th, td {
 th {
     background-color: #8d6e63;
     color: white;
+    font-weight: normal;
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .modal {
@@ -128,6 +162,10 @@ th {
 #updateForm {
     display: flex;
     flex-direction: column;
+}
+
+.updatebtn{
+    padding: 5px;
 }
 
 #updateForm label, #updateForm input, #updateForm button {
