@@ -322,6 +322,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(data => {
             if (data.message) {
                 alert('Order Confirmed');
+                const manualOngoingOrderNumber = `MANUAL-ONGOING-${orderDetails.orderNumber}`;
+            
+                localStorage.setItem(manualOngoingOrderNumber, JSON.stringify(orderDetails));
+
+                let manualOngoingOrderNumbers = JSON.parse(localStorage.getItem('ManualOngoingOrderNumbers')) || [];
+                manualOngoingOrderNumbers.push(manualOngoingOrderNumber);
+                localStorage.setItem('ManualOngoingOrderNumbers', JSON.stringify(manualOngoingOrderNumbers));
+            
+            fetchAndRenderOngoingOrder();
             } else if (data.error) {
                 alert(data.error);
             }
@@ -454,35 +463,49 @@ document.addEventListener('DOMContentLoaded', async function () {
         ongoingOrdersContainer.innerHTML = ''; 
 
         const ongoingOrderTokens = JSON.parse(localStorage.getItem('ongoingOrderTokens')) || [];
-    
+        const manualOrderNumbers = JSON.parse(localStorage.getItem('ManualOngoingOrderNumbers')) || [];
+
+        const renderOrder = (orderDetails, orderNumber) => {
+            const orderItem = document.createElement('div');
+            orderItem.classList.add('order-card');
+            orderItem.innerHTML = `
+                <li class="order-number-item"><span id="order-number">${orderDetails.orderNumber}</span></li>
+            `;
+            ongoingOrdersContainer.appendChild(orderItem);
+
+            orderItem.addEventListener('click', function () {
+                ongoingOrderNumber.textContent = orderDetails.orderNumber;
+                ongoingOrderDetails.innerHTML = orderDetails.cart.map(item => `
+                    <div class="order-item">
+                        <span class="food-name">${item.name}</span>
+                        <span class="quantity">${item.quantity}x</span>
+                        <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `).join('');
+                modalTotalAmount.textContent = `₱${orderDetails.totalPrice.toFixed(2)}`;
+                currentOngoingOrderToken = orderNumber; // Note: This should be set to the correct variable based on your context
+                modal.style.display = 'block';
+            });
+        };
+
         ongoingOrderTokens.forEach(token => {
-            // Check if the token starts with 'ONGOING-'
             if (token.startsWith('ONGOING-')) {
                 const ongoingOrder = JSON.parse(localStorage.getItem(token));
                 if (ongoingOrder) {
-                    const orderItem = document.createElement('div');
-                    orderItem.classList.add('order-card');
-                    orderItem.innerHTML = `
-                        <li class="order-number-item"><span id="order-number">${ongoingOrder.orderNumber}</span></li>
-                    `;
-                    ongoingOrdersContainer.appendChild(orderItem);
-    
-                    orderItem.addEventListener('click', function () {
-                        ongoingOrderNumber.textContent = ongoingOrder.orderNumber;
-                        ongoingOrderDetails.innerHTML = ongoingOrder.cart.map(item => `
-                            <div class="order-item">
-                                <span class="food-name">${item.name}</span>
-                                <span class="quantity">${item.quantity}x</span>
-                                <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
-                            </div>
-                        `).join('');
-                        modalTotalAmount.textContent = `₱${ongoingOrder.totalPrice.toFixed(2)}`;
-                        currentOngoingOrderToken = token;
-                        modal.style.display = 'block';
-                    });
+                    renderOrder(ongoingOrder, token);
                 }
             }
         });
+
+        manualOrderNumbers.forEach(orderNumber => {
+            if (orderNumber.startsWith('MANUAL-ONGOING-')) {
+                const manualOrderDetails = JSON.parse(localStorage.getItem(orderNumber));
+                if (manualOrderDetails) {
+                    renderOrder(manualOrderDetails, orderNumber);
+                }
+            }
+        });
+
     }
 
     function fetchAndRenderCompleteOrder() {
@@ -494,32 +517,45 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         completedOrdersContainer.innerHTML = ''; 
 
-        const completedOrderTokens = JSON.parse(localStorage.getItem('completeOrderTokens')) || [];
-    
-        completedOrderTokens.forEach(token => {
-            // Check if the token starts with 'ONGOING-'
+        const completeOrderTokens = JSON.parse(localStorage.getItem('completeOrderTokens')) || [];
+        const manualCompleteOrderNumbers = JSON.parse(localStorage.getItem('ManualCompleteOrderNumbers')) || [];
+
+        const renderOrder = (orderDetails, orderNumber) => {
+            const orderItem = document.createElement('div');
+            orderItem.classList.add('order-card');
+            orderItem.innerHTML = `
+                <li class="order-number-item"><span id="order-number">${orderDetails.orderNumber}</span></li>
+            `;
+            completedOrdersContainer.appendChild(orderItem);
+
+            orderItem.addEventListener('click', function () {
+                completedOrderNumber.textContent = orderDetails.orderNumber;
+                completedOrderDetails.innerHTML = orderDetails.cart.map(item => `
+                    <div class="order-item">
+                        <span class="food-name">${item.name}</span>
+                        <span class="quantity">${item.quantity}x</span>
+                        <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `).join('');
+                modalTotalAmount.textContent = `₱${orderDetails.totalPrice.toFixed(2)}`;
+                modal.style.display = 'block';
+            });
+        };
+
+        completeOrderTokens.forEach(token => {
             if (token.startsWith('COMPLETE-')) {
                 const completedOrder = JSON.parse(localStorage.getItem(token));
                 if (completedOrder) {
-                    const orderItem = document.createElement('div');
-                    orderItem.classList.add('order-card');
-                    orderItem.innerHTML = `
-                        <li class="order-number-item"><span id="order-number">${completedOrder.orderNumber}</span></li>
-                    `;
-                    completedOrdersContainer.appendChild(orderItem);
-    
-                    orderItem.addEventListener('click', function () {
-                        completedOrderNumber.textContent = completedOrder.orderNumber;
-                        completedOrderDetails.innerHTML = completedOrder.cart.map(item => `
-                            <div class="order-item">
-                                <span class="food-name">${item.name}</span>
-                                <span class="quantity">${item.quantity}x</span>
-                                <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
-                            </div>
-                        `).join('');
-                        modalTotalAmount.textContent = `₱${completedOrder.totalPrice.toFixed(2)}`;
-                        modal.style.display = 'block';
-                    });
+                    renderOrder(completedOrder, token);
+                }
+            }
+        });
+
+        manualCompleteOrderNumbers.forEach(orderNumber => {
+            if (orderNumber.startsWith('MANUAL-COMPLETE-')) {
+                const manualOrderDetails = JSON.parse(localStorage.getItem(orderNumber));
+                if (manualOrderDetails) {
+                    renderOrder(manualOrderDetails, orderNumber);
                 }
             }
         });
@@ -527,39 +563,42 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function fetchAndRenderCancelOrder() {
         const canceledOrdersContainer = document.getElementById('canceled-orders');
-        /*const canceledOrderNumber = document.getElementById('completed-order-number');
-        const canceledrderDetails = document.getElementById('completed-order-details');
-        const modalTotalAmount = document.getElementById('canceled-modal-total-amount');*/
+        const canceledOrderNumber = document.getElementById('canceled-order-number');
+        const canceledOrderDetails = document.getElementById('canceled-order-details');
+        const modalTotalAmount = document.getElementById('canceled-modal-total-amount');
         const modal = document.getElementById('canceled-orders-modal');
-
+    
         canceledOrdersContainer.innerHTML = ''; 
-
+    
         const canceledOrderTokens = JSON.parse(localStorage.getItem('canceledOrderTokens')) || [];
     
+        const renderOrder = (orderDetails, orderNumber) => {
+            const orderItem = document.createElement('div');
+            orderItem.classList.add('order-card');
+            orderItem.innerHTML = `
+                <li class="order-number-item"><span id="order-number">${orderDetails.orderNumber}</span></li>
+            `;
+            canceledOrdersContainer.appendChild(orderItem);
+            /*
+            orderItem.addEventListener('click', function () {
+                canceledOrderNumber.textContent = orderDetails.orderNumber;
+                canceledOrderDetails.innerHTML = orderDetails.cart.map(item => `
+                    <div class="order-item">
+                        <span class="food-name">${item.name}</span>
+                        <span class="quantity">${item.quantity}x</span>
+                        <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                `).join('');
+                modalTotalAmount.textContent = `₱${orderDetails.totalPrice.toFixed(2)}`;
+                modal.style.display = 'block';
+            });*/
+        };
+    
         canceledOrderTokens.forEach(token => {
-            // Check if the token starts with 'ONGOING-'
             if (token.startsWith('CANCELED-')) {
                 const canceledOrder = JSON.parse(localStorage.getItem(token));
                 if (canceledOrder) {
-                    const orderItem = document.createElement('div');
-                    orderItem.classList.add('order-card');
-                    orderItem.innerHTML = `
-                        <li class="order-number-item"><span id="order-number">${canceledOrder.orderNumber}</span></li>
-                    `;
-                    canceledOrdersContainer.appendChild(orderItem);
-                    /*
-                    orderItem.addEventListener('click', function () {
-                        canceledOrderNumber.textContent = canceledOrder.orderNumber;
-                        canceledOrderDetails.innerHTML = canceledOrder.cart.map(item => `
-                            <div class="order-item">
-                                <span class="food-name">${item.name}</span>
-                                <span class="quantity">${item.quantity}x</span>
-                                <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
-                            </div>
-                        `).join('');
-                        modalTotalAmount.textContent = `₱${canceledOrder.totalPrice.toFixed(2)}`;
-                        modal.style.display = 'block';
-                    });*/
+                    renderOrder(canceledOrder, token);
                 }
             }
         });
@@ -662,6 +701,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 document.getElementById('pending-orders-modal').style.display = 'none';
                 currentOrderToken = '';
+                currentOngoingOrderToken = ongoingOrderToken;
                 fetchAndRenderPendingOrder(); 
                 fetchAndRenderOngoingOrder();
                 
@@ -707,21 +747,30 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     document.getElementById('complete-ongoing-order').addEventListener('click', function () {
-        const orderNumber = document.getElementById('completed-order-number').textContent;
-
+        const orderNumber = document.getElementById('ongoing-order-number').textContent; // Correct ID
+        const isManualOrder = orderNumber.startsWith('MANUAL-'); // Check if the order is manual
+    
         alert('Order Completed');
-        
-        const orderToken = currentOngoingOrderToken; 
+    
+        const orderToken = currentOngoingOrderToken;
         const orderDetails = JSON.parse(localStorage.getItem(orderToken));
-
-        const completeOrderToken = `COMPLETE-${orderNumber}`;
-
+    
+        const completeOrderToken = isManualOrder ? `MANUAL-COMPLETE-${orderNumber}` : `COMPLETE-${orderNumber}`;
+    
         localStorage.setItem(completeOrderToken, JSON.stringify(orderDetails));
-
-        let completeOrderTokens = JSON.parse(localStorage.getItem('completeOrderTokens')) || [];
-        if (!completeOrderTokens.includes(completeOrderToken)) {
-            completeOrderTokens.push(completeOrderToken);
-            localStorage.setItem('completeOrderTokens', JSON.stringify(completeOrderTokens));
+    
+        if (isManualOrder) {
+            let manualCompleteOrderNumbers = JSON.parse(localStorage.getItem('ManualCompleteOrderNumbers')) || [];
+            if (!manualCompleteOrderNumbers.includes(completeOrderToken)) {
+                manualCompleteOrderNumbers.push(completeOrderToken);
+                localStorage.setItem('ManualCompleteOrderNumbers', JSON.stringify(manualCompleteOrderNumbers));
+            }
+        } else {
+            let completeOrderTokens = JSON.parse(localStorage.getItem('completeOrderTokens')) || [];
+            if (!completeOrderTokens.includes(completeOrderToken)) {
+                completeOrderTokens.push(completeOrderToken);
+                localStorage.setItem('completeOrderTokens', JSON.stringify(completeOrderTokens));
+            }
         }
 
         localStorage.removeItem(orderToken); 
@@ -733,12 +782,29 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     document.getElementById('cancel-ongoing-order').addEventListener('click', function () {
+        const orderNumber = document.getElementById('ongoing-order-number').textContent; // Use the correct ID
+
         if (currentOngoingOrderToken) {
-            localStorage.removeItem(currentOngoingOrderToken); 
             alert('Order Canceled');
-            document.getElementById('ongoing-orders-modal').style.display = 'none';
+            
+            const orderToken = currentOngoingOrderToken;
+            const orderDetails = JSON.parse(localStorage.getItem(orderToken));
+
+            const canceledOrderToken = `CANCELED-${orderNumber}`;
+
+            localStorage.setItem(canceledOrderToken, JSON.stringify(orderDetails));
+
+            let canceledOrderTokens = JSON.parse(localStorage.getItem('canceledOrderTokens')) || [];
+            if (!canceledOrderTokens.includes(canceledOrderToken)) {
+                canceledOrderTokens.push(canceledOrderToken);
+                localStorage.setItem('canceledOrderTokens', JSON.stringify(canceledOrderTokens));
+            }
+
+            localStorage.removeItem(orderToken); 
+
+            document.getElementById('ongoing-orders-modal').style.display = 'none'; // Correct ID for ongoing orders modal
             currentOngoingOrderToken = ''; 
-            fetchAndRenderOngoingOrder();
+            fetchAndRenderOngoingOrder(); 
             fetchAndRenderCancelOrder();
         }
     });
