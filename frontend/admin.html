@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="hidden">
+    <h1>Admin Page</h1>
+    <button onclick="logout()">Logout</button>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Check session on page load
+            fetch('/backend/check_login.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.loggedIn) {
+                        window.location.href = '/frontend/login.html';
+                    } else {
+                        document.body.classList.remove('hidden');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        });
+
+        // Function to logout
+        function logout() {
+            fetch('/backend/logout.php')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/frontend/login.html';
+                    } else {
+                        alert('Logout failed!');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
