@@ -235,7 +235,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         try {
-            const response = await fetch('/Kape_Cinco/backend/Home/updateitem.php', {
+            const response = await fetch('/Kape_Cinco/backend/Admin/update_item.php', {
                 method: 'POST',
                 body: formData
             });
