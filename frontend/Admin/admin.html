@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
     <title>Admin Page</title>
 </head>
 <body>
@@ -24,12 +22,7 @@
     </nav>
     <main id="mainContent">
         <div class="table-container" id="inventorySection">
-    <div>
-        
-    </div>
- 
-        <button class="add-button" onclick="openAddModal()">Add</button>
-        <div class="table-container">
+            <button class="add-button" onclick="openAddModal()">Add</button>
             <table id="inventoryTable">
                 <thead>
                     <tr>
@@ -66,8 +59,6 @@
             </div>
         </div>
 
-       
-            
         <div id="deleteModal" class="modal">
             <div class="modal-content">
                 <span class="close-button">&times;</span>
@@ -80,15 +71,24 @@
         <div id="addModal" class="modal">
             <div class="modal-content">
                 <span class="close-button">&times;</span>
-                <form id="updateForm" enctype="multipart/form-data">
-                    <input type="hidden" name="item_id" id="item_id">
-                    <input type="hidden" name="item_type" id="item_type">
-                    <label for="item_image">Select Image:</label>
-                    <input type="file" name="item_image" id="item_image">
+                <form id="addForm" enctype="multipart/form-data">
+                    <label for="add_category">Category:</label>
+                    <input type="text" id="add_category" name="add_category">
+                    <label for="add_name">Name:</label>
+                    <input type="text" id="add_name" name="add_name">
+                    <label for="add_type">Type:</label>
+                    <input type="text" id="add_type" name="add_type">
+                    <label for="add_price">Price:</label>
+                    <input type="number" id="add_price" name="add_price">
+                    <label for="add_description">Description:</label>
+                    <textarea id="add_description" name="add_description"></textarea>
+                    <label for="add_image">Select Image:</label>
+                    <input type="file" id="add_image" name="add_image">
                     <button type="submit">Add</button>
                 </form>
             </div>
         </div>
+
         <div id="statisticsSection" style="display: none;">
             <div class="chart-options">
                 <button id="weeklyBtn">Weekly</button>
@@ -100,5 +100,8 @@
     </main>
 
     <script src="admin.js"></script>
+    <script>
+        // Your JavaScript code can be included here if necessary
+    </script>
 </body>
 </html>
