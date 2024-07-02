@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <p>kindly present this number in the counter</p>
     `;
     
-    const countdownDuration = 20 * 60 * 1000; 
+    const countdownDuration = 20 * 1000; 
     const orderDate = new Date(orderDetails.orderDate); 
     const endTime = orderDate.getTime() + countdownDuration; 
 

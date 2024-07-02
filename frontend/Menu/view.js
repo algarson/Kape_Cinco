@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function updateTotal() {
         const item = JSON.parse(localStorage.getItem('itemDetails'));
-
         const price = item.price;
         const quantity = parseInt(document.getElementById('item-quantity').textContent);
         const total = quantity * price;
@@ -91,6 +90,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         localStorage.setItem('cart', JSON.stringify(cart));
     
         alert('Item added to order');
+        localStorage.removeItem('itemDetails');
         redirectToMenu();
     }
 

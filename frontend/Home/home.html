@@ -171,7 +171,7 @@
                 <hr class="total-hr">
                 <div class="total">
                     <span>Total: </span>
-                    <span id="modal-total-amount"> 0</span>
+                    <span id="modal-total-amount"></span>
                 </div>
                 <div class="payment-section">
                     <label for="received-amount">Amount Received:</label>
@@ -216,13 +216,17 @@
     <div id="ongoing-orders-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-            <h2>Confirmed Order Number</h2>
+            <h2>Ongoing Order Number</h2>
             <div id="ongoing-order-number"></div>
             <div id="ongoing-order-details"></div>
             <hr class="total-hr">
             <div class="total">
                 <span>Total: </span>
                 <span id="ongoing-modal-total-amount">0</span>
+            </div>
+            <div class="total">
+                <span>Total Amount Received: </span>
+                <span id="ongoing-modal-received-amount"></span>
             </div>
             <button id="complete-ongoing-order">Complete Order</button>
             <button id="cancel-ongoing-order">Cancel Order</button>
@@ -237,9 +241,27 @@
             <div id="completed-order-details"></div>
             <hr class="total-hr">
             <div class="total">
-                <span>Total: </span>
-                <span id="completed-modal-total-amount">0</span>
+                <span>Total Amount Received: </span>
+                <span id="completed-modal-received-amount"></span>
             </div>
+            <div class="total">
+                <span>Total: </span>
+                <span id="completed-modal-total-amount"></span>
+            </div>
+            <div class="total">
+                <span>Change: </span>
+                <span id="completed-modal-change-amount"></span>
+            </div>
+        </div>
+    </div>
+    <!-- Modal for Canceled Orders -->
+    <div id="canceled-orders-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Canceled Order Details</h2>
+            <div id="canceled-order-number"></div>
+            <div id="canceled-order-details"></div>
+            <hr class="total-hr">
         </div>
     </div>
 

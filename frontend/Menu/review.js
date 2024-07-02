@@ -58,15 +58,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const orderNumber = generateOrderNumber(); 
         const orderToken = generateOrderToken();
         const receivedAmount = 0;
+        const orderStats = '';
 
         const orderDetails = { orderNumber, token: orderToken, orderDate: new Date().toISOString() }; 
 
         localStorage.setItem(orderToken, JSON.stringify(orderDetails));
 
         const formData = new FormData();
-        formData.append('pending-order-number', orderNumber);
-        formData.append('pending-modal-total-amount', totalPrice);
-        formData.append('pending-received-amount', receivedAmount);
+        formData.append('order-number', orderNumber);
+        formData.append('total-amount', totalPrice);
+        formData.append('received-amount', receivedAmount);
+        formData.append('order-stats', orderStats);
         formData.append('order-details', JSON.stringify(cart));
 
         fetch('/Kape_Cinco/backend/Home/confirm_order.php', {

@@ -5,9 +5,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     const billsSection = document.querySelector('.bills-section');
     const paymentModal = document.getElementById('payment-modal');
     const closeButton = document.querySelector('.close-button');
-    const orderNumberElement = document.getElementById('order-number');
-    const orderDetailsElement = document.getElementById('order-details');
-    const modalTotalAmountElement = document.getElementById('modal-total-amount');
     const confirmOrderButton = document.getElementById('confirm-order');
     const logoutButton = document.getElementById('logout-button');
     const totalIncome = document.getElementById('total-income-amount');
@@ -34,6 +31,17 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function fetchAllItems() {
         try {
             const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            return [];
+        }
+    }
+    
+    async function fetchAllOrders() {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Home/allorders.php");
             const data = await res.json();
             return data;
         } catch (err) {
@@ -207,7 +215,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Update total amount
         totalAmount += price;
-        totalAmountElement.textContent = `${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        totalAmountElement.textContent = `₱${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
     /*------------------------------------- END OF ADD TO CART FUNCTIONS -------------------------------*/
@@ -219,20 +227,19 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // Display order details in the modal
 
-    let currentOrderNumber = '';
     function displayOrderDetails() {
         
         const orderDetailsElement = document.querySelector('#order-details');
         const modalTotalAmountElement = document.querySelector('#modal-total-amount');
         const totalAmountElement = document.querySelector('#total-amount'); 
-        
         const orderNumberElement = document.querySelector('#manual-order-number');
+
         orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;
-        currentOrderNumber = orderNumberElement.textContent.replace('Order Number:', '').trim();
-        
-        const cartItems = [];
+        const orderNumber = orderNumberElement.textContent.replace('Order Number:', '').trim();
 
         orderDetailsElement.innerHTML = '';
+
+        const cartItems = [];
     
         document.querySelectorAll('.cart-item').forEach(cartItem => {
             const itemName = cartItem.querySelector('.item-name').textContent;
@@ -244,7 +251,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             orderDetailItem.innerHTML = `
                 <span class="order-item-name>${itemName}</span>
                 <span class="order-item-quantity">x${itemQuantity}</span>
-                <span class="order-item-price">${itemPrice}</span>
+                <span class="order-item-price">₱${itemPrice}</span>
             `;
     
             orderDetailsElement.appendChild(orderDetailItem);
@@ -255,26 +262,23 @@ document.addEventListener('DOMContentLoaded', async function () {
                 quantity: parseInt(itemQuantity.trim())
             });
         });
-        
+
         const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
         const ManualOrderDetails = {
-            orderNumber: currentOrderNumber,
+            orderNumber: orderNumber,
             totalPrice: totalPrice,
             cart: cartItems
         };
 
-        localStorage.setItem(currentOrderNumber, JSON.stringify(ManualOrderDetails));
+        localStorage.setItem('ManualOrderDetails', JSON.stringify(ManualOrderDetails));
 
-        // Setting the total amount in the modal
         modalTotalAmountElement.textContent = totalAmountElement.textContent.trim();
-    
-        // Real-time calculation of change
         const receivedAmountInput = document.querySelector('#received-amount');
         const changeAmountElement = document.querySelector('#change-amount');
     
         function calculateChange() {
-            const totalAmount = parseFloat(modalTotalAmountElement.textContent.trim());
+            const totalAmount = parseFloat(modalTotalAmountElement.textContent.replace('₱', '').trim());
             const receivedAmount = parseFloat(receivedAmountInput.value);
     
             if (!isNaN(totalAmount) && !isNaN(receivedAmount)) {
@@ -285,36 +289,45 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
     
-        // Event listener for input event on the received amount input field
         receivedAmountInput.addEventListener('input', calculateChange);
     }
 
     // Event listener for the Proceed to Payment button
     document.getElementById('proceed-to-payment-bills').addEventListener('click', () => {
         displayOrderDetails();
-        console.log(currentOrderNumber);
         paymentModal.style.display = 'block';
     });
 
     // Event listener for the close button in the modal
     closeButton.addEventListener('click', () => {
+        clearAmountFields ()
         paymentModal.style.display = 'none';
     });
+    
+    function clearAmountFields () {
+        const receivedAmountInput = document.querySelector('#received-amount');
+        const changeAmountElement = document.querySelector('#change-amount');
+
+        receivedAmountInput.value = '';
+        changeAmountElement.textContent = '';
+    }
 
     // Event listener for the Confirm Order button in the modal
     confirmOrderButton.addEventListener('click', () => {
-        const orderDetails = JSON.parse(localStorage.getItem(currentOrderNumber));
+        const orderDetails = JSON.parse(localStorage.getItem('ManualOrderDetails'));
         const receivedAmount = document.getElementById('received-amount').value;
+        const orderStats = 'Ongoing';
 
-        if (!orderDetails) {
+        if (!orderDetails.orderNumber) {
             alert('No order details found!');
             return;
         }
 
         const formData = new FormData();
-        formData.append('pending-order-number', orderDetails.orderNumber);
-        formData.append('pending-modal-total-amount', orderDetails.totalPrice);
-        formData.append('pending-received-amount', receivedAmount);
+        formData.append('order-number', orderDetails.orderNumber);
+        formData.append('total-amount', orderDetails.totalPrice);
+        formData.append('received-amount', receivedAmount);
+        formData.append('order-stats', orderStats);
         formData.append('order-details', JSON.stringify(orderDetails.cart));
 
         fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
@@ -325,15 +338,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(data => {
             if (data.message) {
                 alert('Order Confirmed');
-                const manualOngoingOrderNumber = `MANUAL-ONGOING-${orderDetails.orderNumber}`;
-            
-                localStorage.setItem(manualOngoingOrderNumber, JSON.stringify(orderDetails));
-
-                let manualOngoingOrderNumbers = JSON.parse(localStorage.getItem('ManualOngoingOrderNumbers')) || [];
-                manualOngoingOrderNumbers.push(manualOngoingOrderNumber);
-                localStorage.setItem('ManualOngoingOrderNumbers', JSON.stringify(manualOngoingOrderNumbers));
-            
-            fetchAndRenderOngoingOrder();
+                clearAmountFields ()
+                fetchAndRenderOngoingOrder();
             } else if (data.error) {
                 alert(data.error);
             }
@@ -345,9 +351,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         billsSection.style.display = 'none';
     });
 
-    // Event listener for closing the modal when clicking outside of it
     window.addEventListener('click', (event) => {
         if (event.target === paymentModal) {
+            clearAmountFields ()
             paymentModal.style.display = 'none';
         }
     });
@@ -410,8 +416,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 /* --------------------------------------------- modal for pending, accept, completed orders ---------------------------------------*/
 
 //----------------------- PENDING ORDER NUMBER FUNCTIONS --------------------//
-    let currentOrderToken = '';
-    function fetchAndRenderPendingOrder() {
+
+    //Fetch Pending Orders
+    async function fetchAndRenderPendingOrder() {
+        const orders = await fetchAllOrders();
+        //console.log(orders);
         const pendingOrdersContainer = document.getElementById('pending-orders');
         const pendingOrderNumber = document.getElementById('pending-order-number');
         const pendingOrderDetails = document.getElementById('pending-order-details');
@@ -420,151 +429,119 @@ document.addEventListener('DOMContentLoaded', async function () {
        
         pendingOrdersContainer.innerHTML = ''; 
 
-        // Retrieve all pending orders from localStorage
-        const pendingOrders = [];
-        for (let i = 0; i < localStorage.length; i++) {
-            const key = localStorage.key(i);
-            if (key.startsWith('ORDT-')) {
-                pendingOrders.push(JSON.parse(localStorage.getItem(key)));
-            }
-        }
+        const pendingOrders = orders.filter(order => order.order_status === 'Pending');
 
         pendingOrders.forEach(order => {
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-card');
-            orderItem.setAttribute('data-order-number', order.orderNumber);
+            orderItem.setAttribute('data-order-number', order.order_number);
             orderItem.innerHTML = `
-                <li class="order-number-item"><span id="order-number">${order.orderNumber}</span></li>
+                <li class="order-number-item"><span id="order-number">${order.order_number}</span></li>
             `;
             pendingOrdersContainer.appendChild(orderItem);
 
             orderItem.addEventListener('click', function() {
-                pendingOrderNumber.textContent = order.orderNumber;
+                pendingOrderNumber.textContent = order.order_number;
                 pendingOrderDetails.innerHTML = order.cart.map(item => `
                     <div class="order-item">
-                        <span class="food-name">${item.name}</span>
-                        <span class="quantity">${item.quantity}x</span>
-                        <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                        <span class="food-name">${item.item_name}</span>
+                        <span class="quantity">${item.item_quantity}x</span>
+                        <span class="total">Total: ₱${item.item_total_price.toFixed(2)}</span>
                     </div>
                 `).join('');
-                modalTotalAmount.textContent = `₱${order.totalPrice.toFixed(2)}`;
-                currentOrderToken = order.token;
+                modalTotalAmount.textContent = `₱${order.order_total_amount.toFixed(2)}`;
                 modal.style.display = 'block';
                 pendingPayment();
             });
         });
     }
 
-    let currentOngoingOrderToken = '';
-    function fetchAndRenderOngoingOrder() {
+    //Fetch Ongoing Orders
+    async function fetchAndRenderOngoingOrder() {
+        const orders = await fetchAllOrders();
+
         const ongoingOrdersContainer = document.getElementById('ongoing-orders');
         const ongoingOrderNumber = document.getElementById('ongoing-order-number');
         const ongoingOrderDetails = document.getElementById('ongoing-order-details');
         const modalTotalAmount = document.getElementById('ongoing-modal-total-amount');
+        const modalTotalReceived = document.getElementById('ongoing-modal-received-amount');
+
         const modal = document.getElementById('ongoing-orders-modal');
 
         ongoingOrdersContainer.innerHTML = ''; 
 
-        const ongoingOrderTokens = JSON.parse(localStorage.getItem('ongoingOrderTokens')) || [];
-        const manualOrderNumbers = JSON.parse(localStorage.getItem('ManualOngoingOrderNumbers')) || [];
+        const ongoingOrders = orders.filter(order => order.order_status === 'Ongoing');
 
-        const renderOrder = (orderDetails, orderNumber) => {
+        ongoingOrders.forEach(order => {
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-card');
             orderItem.innerHTML = `
-                <li class="order-number-item"><span id="order-number">${orderDetails.orderNumber}</span></li>
+                <li class="order-number-item"><span id="order-number">${order.order_number}</span></li>
             `;
             ongoingOrdersContainer.appendChild(orderItem);
 
             orderItem.addEventListener('click', function () {
-                ongoingOrderNumber.textContent = orderDetails.orderNumber;
-                ongoingOrderDetails.innerHTML = orderDetails.cart.map(item => `
+                ongoingOrderNumber.textContent = order.order_number;
+                ongoingOrderDetails.innerHTML = order.cart.map(item => `
                     <div class="order-item">
-                        <span class="food-name">${item.name}</span>
-                        <span class="quantity">${item.quantity}x</span>
-                        <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                        <span class="food-name">${item.item_name}</span>
+                        <span class="quantity">${item.item_quantity}x</span>
+                        <span class="total">Total: ₱${item.item_total_price.toFixed(2)}</span>
                     </div>
                 `).join('');
-                modalTotalAmount.textContent = `₱${orderDetails.totalPrice.toFixed(2)}`;
-                currentOngoingOrderToken = orderNumber; // Note: This should be set to the correct variable based on your context
+                modalTotalAmount.textContent = `₱${order.order_total_amount.toFixed(2)}`;
+                modalTotalReceived.textContent = `₱${order.order_payment_received.toFixed(2)}`;
                 modal.style.display = 'block';
             });
-        };
-
-        ongoingOrderTokens.forEach(token => {
-            if (token.startsWith('ONGOING-')) {
-                const ongoingOrder = JSON.parse(localStorage.getItem(token));
-                if (ongoingOrder) {
-                    renderOrder(ongoingOrder, token);
-                }
-            }
         });
-
-        manualOrderNumbers.forEach(orderNumber => {
-            if (orderNumber.startsWith('MANUAL-ONGOING-')) {
-                const manualOrderDetails = JSON.parse(localStorage.getItem(orderNumber));
-                if (manualOrderDetails) {
-                    renderOrder(manualOrderDetails, orderNumber);
-                }
-            }
-        });
-
     }
 
-    function fetchAndRenderCompleteOrder() {
+    //Fetch Completed Orders
+    async function fetchAndRenderCompleteOrder() {
+        const orders = await fetchAllOrders();
+
         const completedOrdersContainer = document.getElementById('completed-orders');
         const completedOrderNumber = document.getElementById('completed-order-number');
         const completedOrderDetails = document.getElementById('completed-order-details');
         const modalTotalAmount = document.getElementById('completed-modal-total-amount');
+        const modalTotalReceived = document.getElementById('completed-modal-received-amount');
+        const modalTotalChange = document.getElementById('completed-modal-change-amount');
         const modal = document.getElementById('completed-orders-modal');
 
         completedOrdersContainer.innerHTML = ''; 
+        const completedOrders = orders.filter(order => order.order_status === 'Completed');
 
-        const completeOrderTokens = JSON.parse(localStorage.getItem('completeOrderTokens')) || [];
-        const manualCompleteOrderNumbers = JSON.parse(localStorage.getItem('ManualCompleteOrderNumbers')) || [];
-
-        const renderOrder = (orderDetails, orderNumber) => {
+        completedOrders.forEach(order => {
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-card');
             orderItem.innerHTML = `
-                <li class="order-number-item"><span id="order-number">${orderDetails.orderNumber}</span></li>
+                <li class="order-number-item"><span id="order-number">${order.order_number}</span></li>
             `;
             completedOrdersContainer.appendChild(orderItem);
 
             orderItem.addEventListener('click', function () {
-                completedOrderNumber.textContent = orderDetails.orderNumber;
-                completedOrderDetails.innerHTML = orderDetails.cart.map(item => `
+                completedOrderNumber.textContent = order.order_number;
+                completedOrderDetails.innerHTML = order.cart.map(item => `
                     <div class="order-item">
-                        <span class="food-name">${item.name}</span>
-                        <span class="quantity">${item.quantity}x</span>
-                        <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                        <span class="food-name">${item.item_name}</span>
+                        <span class="quantity">${item.item_quantity}x</span>
+                        <span class="total">Total: ₱${item.item_total_price.toFixed(2)}</span>
                     </div>
                 `).join('');
-                modalTotalAmount.textContent = `₱${orderDetails.totalPrice.toFixed(2)}`;
+                modalTotalAmount.textContent = `₱${order.order_total_amount.toFixed(2)}`;
+                modalTotalReceived.textContent = `₱${order.order_payment_received.toFixed(2)}`;
+
+                const change = order.order_payment_received - order.order_total_amount;
+                modalTotalChange.textContent = `₱${change.toFixed(2)}`;
                 modal.style.display = 'block';
             });
-        };
-
-        completeOrderTokens.forEach(token => {
-            if (token.startsWith('COMPLETE-')) {
-                const completedOrder = JSON.parse(localStorage.getItem(token));
-                if (completedOrder) {
-                    renderOrder(completedOrder, token);
-                }
-            }
-        });
-
-        manualCompleteOrderNumbers.forEach(orderNumber => {
-            if (orderNumber.startsWith('MANUAL-COMPLETE-')) {
-                const manualOrderDetails = JSON.parse(localStorage.getItem(orderNumber));
-                if (manualOrderDetails) {
-                    renderOrder(manualOrderDetails, orderNumber);
-                }
-            }
         });
     }
 
-    function fetchAndRenderCancelOrder() {
+    //Fetch Canceled Orders
+    async function fetchAndRenderCancelOrder() {
+        const orders = await fetchAllOrders();
+
         const canceledOrdersContainer = document.getElementById('canceled-orders');
         const canceledOrderNumber = document.getElementById('canceled-order-number');
         const canceledOrderDetails = document.getElementById('canceled-order-details');
@@ -573,37 +550,25 @@ document.addEventListener('DOMContentLoaded', async function () {
     
         canceledOrdersContainer.innerHTML = ''; 
     
-        const canceledOrderTokens = JSON.parse(localStorage.getItem('canceledOrderTokens')) || [];
+        const canceledOrders = orders.filter(order => order.order_status === 'Canceled');
     
-        const renderOrder = (orderDetails, orderNumber) => {
+        canceledOrders.forEach(order => {
             const orderItem = document.createElement('div');
             orderItem.classList.add('order-card');
             orderItem.innerHTML = `
-                <li class="order-number-item"><span id="order-number">${orderDetails.orderNumber}</span></li>
+                <li class="order-number-item"><span id="order-number">${order.order_number}</span></li>
             `;
-            canceledOrdersContainer.appendChild(orderItem);
-            /*
+            canceledOrdersContainer.appendChild(orderItem);/*
             orderItem.addEventListener('click', function () {
-                canceledOrderNumber.textContent = orderDetails.orderNumber;
-                canceledOrderDetails.innerHTML = orderDetails.cart.map(item => `
+                canceledOrderNumber.textContent = order.order_number;
+                canceledOrderDetails.innerHTML = order.cart.map(item => `
                     <div class="order-item">
-                        <span class="food-name">${item.name}</span>
-                        <span class="quantity">${item.quantity}x</span>
-                        <span class="total">Total: ₱${(item.price * item.quantity).toFixed(2)}</span>
+                        <span class="total">Total: ₱${item.item_total_price.toFixed(2)}</span>
                     </div>
                 `).join('');
-                modalTotalAmount.textContent = `₱${orderDetails.totalPrice.toFixed(2)}`;
+                //modalTotalAmount.textContent = `₱${order.order_payment_received.toFixed(2)}`;
                 modal.style.display = 'block';
             });*/
-        };
-    
-        canceledOrderTokens.forEach(token => {
-            if (token.startsWith('CANCELED-')) {
-                const canceledOrder = JSON.parse(localStorage.getItem(token));
-                if (canceledOrder) {
-                    renderOrder(canceledOrder, token);
-                }
-            }
         });
     }
 
@@ -624,7 +589,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         }
 
-        // Event listener for input event on the received amount input field
         receivedAmountInput.addEventListener('input', calculateChange);
     }
 
@@ -667,148 +631,152 @@ document.addEventListener('DOMContentLoaded', async function () {
     initializeOrders();
 
     //Confirm Pending Order Button
-    document.getElementById('confirm-pending-order').addEventListener('click', function () {
-
-        const orderNumber = document.getElementById('pending-order-number').textContent;
-        const receivedAmount = document.getElementById('pending-received-amount').value;
-
-        
-        const orderToken = currentOrderToken; 
-        const orderDetails = JSON.parse(localStorage.getItem(orderToken));
-        const cart = orderDetails.cart;
-        const totalAmount = orderDetails.totalPrice;
+    document.getElementById('confirm-pending-order').addEventListener('click',  async function () {
+        const orderNumber = document.getElementById('pending-order-number').textContent.replace('Order Number:', '').trim();
+        const receivedAmountInput = document.getElementById('pending-received-amount');
+        const receivedAmount = parseFloat(receivedAmountInput.value);
+        const orderStatus = 'Ongoing';
 
         const formData = new FormData();
-        formData.append('pending-order-number', orderNumber);
-        formData.append('pending-modal-total-amount', totalAmount);
-        formData.append('pending-received-amount', receivedAmount);
-        formData.append('order-details', JSON.stringify(cart));
+        formData.append('order-number', orderNumber);
+        formData.append('received-amount',receivedAmount);
+        formData.append('order-stats',orderStatus);
+       
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+                method: 'POST',
+                body: formData
+            });
 
-        fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json()) 
-        .then(data => {
-            if (data.message) {
-                alert('Order Confirmed');
-                const ongoingOrderToken = `ONGOING-${orderNumber}`;
-            
-                localStorage.setItem(ongoingOrderToken, JSON.stringify(orderDetails));
-
-                let ongoingOrderTokens = JSON.parse(localStorage.getItem('ongoingOrderTokens')) || [];
-                ongoingOrderTokens.push(ongoingOrderToken);
-                localStorage.setItem('ongoingOrderTokens', JSON.stringify(ongoingOrderTokens));
-
-                localStorage.removeItem(orderToken); 
-
-                document.getElementById('pending-orders-modal').style.display = 'none';
-                currentOrderToken = '';
-                currentOngoingOrderToken = ongoingOrderToken;
-                fetchAndRenderPendingOrder(); 
-                fetchAndRenderOngoingOrder();
-                
-            } else if (data.error) {
-                alert(data.error);
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    alert("Pending Order Confirmed");
+                    fetchAndRenderOngoingOrder();
+                    fetchAndRenderPendingOrder();
+                    document.getElementById('pending-orders-modal').style.display = 'none';
+                } else {
+                    alert('Update failed!');
+                }
+            } else {
+                alert('Update request failed!');
             }
-        })
-        .catch(error => console.error('Error:', error));
-        
-        document.getElementById('pending-orders-modal').style.display = 'none';
-        
-        fetchAndRenderPendingOrder();
+        } catch (error) {
+            console.error('Error updating item:', error);
+            alert('An error occurred during the update.');
+        }
     });
 
     //Cancel Pending Order Button
-    document.getElementById('cancel-pending-order').addEventListener('click', function () {
+    document.getElementById('cancel-pending-order').addEventListener('click', async function () {
+        const orderNumber = document.getElementById('pending-order-number').textContent.replace('Order Number:', '').trim();
+        const receivedAmountInput = document.getElementById('pending-received-amount');
+        const receivedAmount = parseFloat(receivedAmountInput.value);
 
-        const orderNumber = document.getElementById('pending-order-number').textContent;
+        if (receivedAmount === ''){
+            receivedAmount = 0;
+        }
+        const orderStatus = 'Canceled';
 
-        if (currentOrderToken) {
-            alert('Order Canceled');
-            
-            const orderToken = currentOrderToken; 
-            const orderDetails = JSON.parse(localStorage.getItem(orderToken));
+        const formData = new FormData();
+        formData.append('order-number', orderNumber);
+        formData.append('received-amount',receivedAmount);
+        formData.append('order-stats',orderStatus);
+       
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+                method: 'POST',
+                body: formData
+            });
 
-            const canceledOrderToken = `CANCELED-${orderNumber}`;
-
-            localStorage.setItem(canceledOrderToken, JSON.stringify(orderDetails));
-
-            let canceledOrderTokens = JSON.parse(localStorage.getItem('canceledOrderTokens')) || [];
-            if (!canceledOrderTokens.includes(canceledOrderToken)) {
-                canceledOrderTokens.push(canceledOrderToken);
-                localStorage.setItem('canceledOrderTokens', JSON.stringify(canceledOrderTokens));
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    alert("Pending Order Canceled");
+                    fetchAndRenderCancelOrder();
+                    fetchAndRenderPendingOrder();
+                    document.getElementById('pending-orders-modal').style.display = 'none';
+                } else {
+                    alert('Update failed!');
+                }
+            } else {
+                alert('Update request failed!');
             }
-
-            localStorage.removeItem(orderToken); 
-
-            document.getElementById('pending-orders-modal').style.display = 'none';
-            currentOrderToken = ''; 
-            fetchAndRenderPendingOrder(); 
-            fetchAndRenderCancelOrder();
+        } catch (error) {
+            console.error('Error updating item:', error);
+            alert('An error occurred during the update.');
         }
     });
 
-    document.getElementById('complete-ongoing-order').addEventListener('click', function () {
-        const orderNumber = document.getElementById('ongoing-order-number').textContent; // Correct ID
-        const isManualOrder = orderNumber.startsWith('MANUAL-'); // Check if the order is manual
-    
-        alert('Order Completed');
-    
-        const orderToken = currentOngoingOrderToken;
-        const orderDetails = JSON.parse(localStorage.getItem(orderToken));
-    
-        const completeOrderToken = isManualOrder ? `MANUAL-COMPLETE-${orderNumber}` : `COMPLETE-${orderNumber}`;
-    
-        localStorage.setItem(completeOrderToken, JSON.stringify(orderDetails));
-    
-        if (isManualOrder) {
-            let manualCompleteOrderNumbers = JSON.parse(localStorage.getItem('ManualCompleteOrderNumbers')) || [];
-            if (!manualCompleteOrderNumbers.includes(completeOrderToken)) {
-                manualCompleteOrderNumbers.push(completeOrderToken);
-                localStorage.setItem('ManualCompleteOrderNumbers', JSON.stringify(manualCompleteOrderNumbers));
+    //Complete Ongoing Order Button
+    document.getElementById('complete-ongoing-order').addEventListener('click', async function () {
+        const orderNumber = document.getElementById('ongoing-order-number').textContent.replace('Order Number:', '').trim();
+        const receivedAmount = document.getElementById('ongoing-modal-received-amount').textContent.replace('₱', '').trim();
+        const orderStatus = 'Completed';
+
+        const formData = new FormData();
+        formData.append('order-number', orderNumber);
+        formData.append('received-amount',receivedAmount);
+        formData.append('order-stats',orderStatus);
+       
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    alert("Ongoing Order Completed");
+                    fetchAndRenderOngoingOrder();
+                    fetchAndRenderCompleteOrder();
+                    document.getElementById('ongoing-orders-modal').style.display = 'none';
+                } else {
+                    alert('Update failed!');
+                }
+            } else {
+                alert('Update request failed!');
             }
-        } else {
-            let completeOrderTokens = JSON.parse(localStorage.getItem('completeOrderTokens')) || [];
-            if (!completeOrderTokens.includes(completeOrderToken)) {
-                completeOrderTokens.push(completeOrderToken);
-                localStorage.setItem('completeOrderTokens', JSON.stringify(completeOrderTokens));
-            }
+        } catch (error) {
+            console.error('Error updating item:', error);
+            alert('An error occurred during the update.');
         }
-
-        localStorage.removeItem(orderToken); 
-
-        document.getElementById('ongoing-orders-modal').style.display = 'none';
-        currentOngoingOrderToken = '';
-        fetchAndRenderOngoingOrder();
-        fetchAndRenderCompleteOrder();
     });
 
-    document.getElementById('cancel-ongoing-order').addEventListener('click', function () {
-        const orderNumber = document.getElementById('ongoing-order-number').textContent; // Use the correct ID
+    //Cancel Ongoing Order Button
+    document.getElementById('cancel-ongoing-order').addEventListener('click', async function () {
+        const orderNumber = document.getElementById('ongoing-order-number').textContent.replace('Order Number:', '').trim();
+        const receivedAmount = document.getElementById('ongoing-modal-received-amount').textContent.replace('₱', '').trim();
+        const orderStatus = 'Canceled';
 
-        if (currentOngoingOrderToken) {
-            alert('Order Canceled');
-            
-            const orderToken = currentOngoingOrderToken;
-            const orderDetails = JSON.parse(localStorage.getItem(orderToken));
+        const formData = new FormData();
+        formData.append('order-number', orderNumber);
+        formData.append('received-amount',receivedAmount);
+        formData.append('order-stats',orderStatus);
+       
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+                method: 'POST',
+                body: formData
+            });
 
-            const canceledOrderToken = `CANCELED-${orderNumber}`;
-
-            localStorage.setItem(canceledOrderToken, JSON.stringify(orderDetails));
-
-            let canceledOrderTokens = JSON.parse(localStorage.getItem('canceledOrderTokens')) || [];
-            if (!canceledOrderTokens.includes(canceledOrderToken)) {
-                canceledOrderTokens.push(canceledOrderToken);
-                localStorage.setItem('canceledOrderTokens', JSON.stringify(canceledOrderTokens));
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    alert("Ongoing Order Canceled");
+                    fetchAndRenderOngoingOrder();
+                    fetchAndRenderCancelOrder();
+                    document.getElementById('ongoing-orders-modal').style.display = 'none';
+                } else {
+                    alert('Update failed!');
+                }
+            } else {
+                alert('Update request failed!');
             }
-
-            localStorage.removeItem(orderToken); 
-
-            document.getElementById('ongoing-orders-modal').style.display = 'none'; // Correct ID for ongoing orders modal
-            currentOngoingOrderToken = ''; 
-            fetchAndRenderOngoingOrder(); 
-            fetchAndRenderCancelOrder();
+        } catch (error) {
+            console.error('Error updating item:', error);
+            alert('An error occurred during the update.');
         }
     });
     
@@ -869,7 +837,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     }
 
-    displaySales()
+    //displaySales()
 
     /*
     document.getElementById('nav-settings').addEventListener('click', () => {

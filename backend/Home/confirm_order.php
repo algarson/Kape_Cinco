@@ -4,11 +4,15 @@
     date_default_timezone_set('Asia/Manila');
     
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        $orderNumber = $_POST['pending-order-number'];
+        $orderNumber = $_POST['order-number'];
         $orderDate =  date('YmdHis');
-        $orderTotalAmount = $_POST['pending-modal-total-amount'];
-        $orderAmountReceived = $_POST['pending-received-amount'];
-        $orderStatus = 'Pending';
+        $orderTotalAmount = $_POST['total-amount'];
+        $orderAmountReceived = $_POST['received-amount'];
+        $orderStatus = $_POST['order-stats'];
+        
+        if ($orderStatus === ''){
+            $orderStatus = 'Pending';
+        }
         $TotalPrice = 0;
 
         $orderDetailsRaw = $_POST['order-details'];
