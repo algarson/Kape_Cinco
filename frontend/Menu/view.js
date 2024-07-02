@@ -1,18 +1,12 @@
 document.addEventListener('DOMContentLoaded', async function () {
     async function fetchItemDetails() {
-        const params = new URLSearchParams(window.location.search);
-        const item = {
-            image: params.get('image'),
-            name: params.get('name'),
-            desc: params.get('desc'),
-            price: params.get('price')
-        };
+        const item = JSON.parse(localStorage.getItem('itemDetails'));
 
-        if (!item.name || !item.price) {
+        if (!item || !item.name || !item.price) {
             redirectToMenu();
             return null;
         }
-
+        
         return item;
     }
 
@@ -64,26 +58,36 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     function updateTotal() {
-        const params = new URLSearchParams(window.location.search);
-        const price = parseFloat(params.get('price'));
+        const item = JSON.parse(localStorage.getItem('itemDetails'));
+
+        const price = item.price;
         const quantity = parseInt(document.getElementById('item-quantity').textContent);
         const total = quantity * price;
         document.getElementById('item-total').textContent = `Total: ₱${total.toFixed(2)}`;
     }
 
     function addToOrder() {
-        const params = new URLSearchParams(window.location.search);
-        const item = {
-            image: params.get('image'),
-            name: params.get('name'),
-            desc: params.get('desc'),
-            price: parseFloat(params.get('price')),
+        const item = JSON.parse(localStorage.getItem('itemDetails'));
+
+        const cartItem = {
+            image: item.image,
+            name: item.name,
+            desc: item.desc,
+            price: parseFloat(item.price),
             quantity: parseInt(document.getElementById('item-quantity').textContent),
-            total: parseFloat(params.get('price')) * parseInt(document.getElementById('item-quantity').textContent)
+            total: item.price * parseInt(document.getElementById('item-quantity').textContent)
         };
     
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        cart.push(item);
+        const existingItemIndex = cart.findIndex(cartItem => cartItem.name === item.name);
+
+        if (existingItemIndex !== -1) {
+            cart[existingItemIndex].quantity += cartItem.quantity;
+            cart[existingItemIndex].total += cartItem.total;
+        } else {
+            cart.push(cartItem);
+        }
+        //console.log(cartItem);
         localStorage.setItem('cart', JSON.stringify(cart));
     
         alert('Item added to order');

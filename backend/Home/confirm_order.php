@@ -8,15 +8,16 @@
         $orderDate =  date('YmdHis');
         $orderTotalAmount = $_POST['pending-modal-total-amount'];
         $orderAmountReceived = $_POST['pending-received-amount'];
+        $orderStatus = 'Pending';
         $TotalPrice = 0;
 
         $orderDetailsRaw = $_POST['order-details'];
         $orderDetails = json_decode($orderDetailsRaw, true);
 
-        $sql1 = "INSERT INTO order_number_table (order_number, order_date, order_total_amount, order_payment_received)
-                 VALUES (?, ?, ?, ?)";
+        $sql1 = "INSERT INTO order_number_table (order_number, order_date, order_total_amount, order_payment_received, order_status)
+                 VALUES (?, ?, ?, ?, ?)";
         $stmt1 = $conn->prepare($sql1);
-        $stmt1->bind_param("ssdd", $orderNumber, $orderDate, $orderTotalAmount, $orderAmountReceived);
+        $stmt1->bind_param("ssdds", $orderNumber, $orderDate, $orderTotalAmount, $orderAmountReceived, $orderStatus);
         if ($stmt1->execute()) {
 
             $sql2 = "INSERT INTO order_details_table (order_number, item_name, item_quantity, item_price, item_total_price) VALUES (?, ?, ?, ?, ?)";

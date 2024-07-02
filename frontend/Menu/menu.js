@@ -82,13 +82,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 viewButton.style.cursor = 'not-allowed';
             } else {
                 viewButton.addEventListener('click', () => {
-                    const params = new URLSearchParams({
+                    const orderitems = {
                         image: item.food_image || item.drink_image || 'default_image',
                         name: item.food_name || item.drink_name,
                         desc: item.food_desc || '',
                         price: item.food_price || item.drink_price
-                    });
-                    window.location.href = `/Kape_Cinco/frontend/Menu/view.html?${params.toString()}`;
+                    };
+                    setItemDetails(orderitems);
                 });
             }
 
@@ -98,6 +98,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     
             allMenuContainer.appendChild(allItem);
         });
+        //localStorage.removeItem('cart');
+    }
+
+    function setItemDetails(orderitems) {
+        localStorage.setItem('itemDetails', JSON.stringify(orderitems));
+        window.location.href = '/Kape_Cinco/frontend/Menu/view.html';
     }
 
     generateAllItems();
@@ -139,7 +145,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         cartItemsContainer.innerHTML = ''; 
         summaryContainer.innerHTML = '';
-
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = `
                 <div class="summary-item">
@@ -148,7 +153,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             `;
             return; 
         }
-
+        //console.log(cart);
         cart.forEach(item => {
             const cartItem = document.createElement('div');
             cartItem.classList.add('cart-item');
@@ -160,7 +165,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
                 imagePath = `/Kape_Cinco/backend/images/${item.image}`;
             }
-
+            
             cartItem.innerHTML = `
                 <div class="card-image-left">
                     <img src="${imagePath}" alt="${item.name}" id="foodID">

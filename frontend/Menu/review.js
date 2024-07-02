@@ -57,14 +57,37 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelector('.complete-order-btn').addEventListener('click', function() {
         const orderNumber = generateOrderNumber(); 
         const orderToken = generateOrderToken();
+        const receivedAmount = 0;
 
-        const orderDetails = { orderNumber, totalItems, totalPrice, cart, token: orderToken}; 
+        const orderDetails = { orderNumber, token: orderToken, orderDate: new Date().toISOString() }; 
 
         localStorage.setItem(orderToken, JSON.stringify(orderDetails));
 
-        window.location.href = `/Kape_Cinco/frontend/Menu/QRpage.html?orderToken=${orderToken}`;
-    });
+        const formData = new FormData();
+        formData.append('pending-order-number', orderNumber);
+        formData.append('pending-modal-total-amount', totalPrice);
+        formData.append('pending-received-amount', receivedAmount);
+        formData.append('order-details', JSON.stringify(cart));
 
+        fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            if (data.message) {
+                alert('Order Confirmed');
+                localStorage.removeItem('cart');
+                console.log(cart);
+                window.location.href = `/Kape_Cinco/frontend/Menu/QRpage.html?order=${orderToken}`;
+            } else if (data.error) {
+                alert(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+        
+    });
+    
     document.body.classList.remove('hidden');
 });
 
