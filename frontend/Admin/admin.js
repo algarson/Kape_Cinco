@@ -87,9 +87,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         const updateButton = document.createElement('button');
         const deleteButton = document.createElement('button');
         deleteButton.className = "deletebtn"
-        deleteButton.textContent = 'Delete';       
+        deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
         updateButton.className = "updatebtn"
-        updateButton.textContent = 'Update';
+        updateButton.innerHTML = '<i class="fas fa-edit"></i> ';
         deleteButton.addEventListener('click', () => openDeleteModal(item));
         updateCell.appendChild(deleteButton);
         row.appendChild(updateCell);

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Admin Page</title>
 </head>
@@ -22,7 +23,7 @@
     </nav>
     <main id="mainContent">
         <div class="table-container" id="inventorySection">
-            <button class="add-button" onclick="openAddModal()">Add</button>
+            <button class="add-button" onclick="openAddModal()">+ Add</button>
             <table id="inventoryTable">
                 <thead>
                     <tr>
@@ -33,17 +34,13 @@
                         <th class="description-header">Description</th>
                         <th>Image</th>
                         <th>Status</th>
-                        <th></th>
+                        <th>..</th>
                     </tr>
                 </thead>
+                <tbody id="tableBody">
+                    <!-- Items will be dynamically generated here -->
+                </tbody>
             </table>
-            <div class="table-body-container">
-                <table>
-                    <tbody id="tableBody">
-                        <!-- Items will be dynamically generated here -->
-                    </tbody>
-                </table>
-            </div>
         </div>
 
         <div id="updateModal" class="modal">
@@ -105,3 +102,4 @@
     </script>
 </body>
 </html>
+s
