@@ -11,6 +11,22 @@ document.addEventListener('DOMContentLoaded', async function () {
             return [];
         }
     }
+    
+    /* --------------------    Search functionality     --------------------*/
+    const searchInput = document.querySelector('.search-right input');
+
+    searchInput.addEventListener('input', () => {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+    
+        document.querySelectorAll('.menu-item').forEach(item => {
+            const foodName = item.querySelector('h2').textContent.toLowerCase();
+            if (foodName.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
 
     async function generateAllItems() {
         const allItems = await fetchAllItems();
@@ -28,19 +44,13 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
             
             const allItemImage = document.createElement('img');
-            let imagePath;
-
             if (item.food_image) {
-                imagePath = 'food_image=' + item.food_image;
+                allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
             } else if (item.drink_image) {
-                imagePath = 'drink_image=' + item.drink_image;
+                allItemImage.src = '/Kape_Cinco/backend/images/' + item.drink_image;
             } else {
-                imagePath = 'default_image';
+                allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
             }
-
-            allItemImage.src = imagePath.includes('food_image') ? `/Kape_Cinco/backend/images/${item.food_image}` :
-                              imagePath.includes('drink_image') ? `/Kape_Cinco/backend/images/${item.drink_image}` :
-                              '/Kape_Cinco/frontend/images/kape_cinco.jpg';
             allItemImage.className = 'all-item-image';
             
             const allItemInfo = document.createElement('div');

@@ -58,6 +58,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             const allItem = document.createElement('div');
             allItem.className = "food-item";
             
+            if (item.food_name) {
+                allItem.setAttribute('data-category', 'Silog');
+            } else if (item.drink_name) {
+                allItem.setAttribute('data-category', 'Drinks');
+            }
+
             const allItemImage = document.createElement('img');
             if (item.food_image) {
                 allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
@@ -120,6 +126,58 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     generateAllItems();
 
+    /* ------------------------- FOOD CATEGORIES ------------------------- */
+    document.querySelectorAll('.categories button').forEach(button => {
+        button.addEventListener('click', () => {
+            billsSection.style.display = 'none';
+
+            // Remove 'active' class from all category buttons
+            document.querySelectorAll('.categories button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Add 'active' class to the clicked category button
+            button.classList.add('active');
+
+            // Filter food items based on category
+            const category = button.textContent.trim();
+            if (category === 'All Items') {
+                document.querySelectorAll('.food-item').forEach(item => {
+                    item.style.display = 'block';
+                });
+            } else {
+                document.querySelectorAll('.food-item').forEach(item => {
+                    if (item.getAttribute('data-category') === category) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+        });
+    });
+ 
+    /* --------------------    Search functionality     --------------------*/
+    const searchInput = document.querySelector('.header input');
+    const searchButton = document.querySelector('.header button');
+
+    searchButton.addEventListener('click', () => {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+
+        document.querySelectorAll('.food-item').forEach(item => {
+            const foodName = item.querySelector('h3').textContent.toLowerCase();
+            if (foodName.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        /*
+        // Clear the cart and reset total amount when searching
+        clearCart();
+        billsSection.style.display = 'none';*/
+    });
+
     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
 
     function logout() {
@@ -140,11 +198,37 @@ document.addEventListener('DOMContentLoaded', async function () {
         document.body.classList.remove('hidden');
     });
 
+    /* ------------------------- CLEAR FUNCTIONS ----------------------------*/
+    
     // Clear the cart and reset total amount function
     function clearCart() {
         cartItemsContainer.innerHTML = '';
         totalAmount = 0;
         totalAmountElement.textContent = `${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
+    // Event listener for the close button in the modal
+    closeButton.addEventListener('click', () => {
+        clearAmountFields ()
+        paymentModal.style.display = 'none';
+    });
+    
+    // Clear the amount fields on payment modal
+    function clearAmountFields () {
+        const receivedAmountInput = document.querySelector('#received-amount');
+        const changeAmountElement = document.querySelector('#change-amount');
+
+        receivedAmountInput.value = '';
+        changeAmountElement.textContent = '';
+    }
+
+    // Clear the amount fields on pending orders modal
+    function clearPendingAmountFields () {
+        const receivedAmountInput = document.querySelector('#pending-received-amount');
+        const changeAmountElement = document.querySelector('#pending-change-amount');
+
+        receivedAmountInput.value = '';
+        changeAmountElement.textContent = '';
     }
 
     // Function to update total amount based on quantities
@@ -296,22 +380,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     document.getElementById('proceed-to-payment-bills').addEventListener('click', () => {
         displayOrderDetails();
         paymentModal.style.display = 'block';
-    });
-
-    // Event listener for the close button in the modal
-    closeButton.addEventListener('click', () => {
-        clearAmountFields ()
-        paymentModal.style.display = 'none';
-    });
+    }); 
     
-    function clearAmountFields () {
-        const receivedAmountInput = document.querySelector('#received-amount');
-        const changeAmountElement = document.querySelector('#change-amount');
-
-        receivedAmountInput.value = '';
-        changeAmountElement.textContent = '';
-    }
-
     // Event listener for the Confirm Order button in the modal
     confirmOrderButton.addEventListener('click', () => {
         const orderDetails = JSON.parse(localStorage.getItem('ManualOrderDetails'));
@@ -357,61 +427,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             paymentModal.style.display = 'none';
         }
     });
-
- /*----------------- FOOD CATEGORIES ---------------------------------- */
-    document.querySelectorAll('.categories button').forEach(button => {
-        button.addEventListener('click', () => {
-            billsSection.style.display = 'none';
-
-            // Remove 'active' class from all category buttons
-            document.querySelectorAll('.categories button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-
-            // Add 'active' class to the clicked category button
-            button.classList.add('active');
-
-            // Filter food items based on category
-            const category = button.textContent.trim();
-            if (category === 'All Items') {
-                document.querySelectorAll('.food-item').forEach(item => {
-                    item.style.display = 'block';
-                });
-            } else {
-                document.querySelectorAll('.food-item').forEach(item => {
-                    if (item.querySelector('h3').textContent.includes(category)) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            }
-        });
-    });
- /*----------------- END FOOD CATEGORIES ---------------------------------- */
- 
-/* --------------------    Search functionality     --------------------*/
-    const searchInput = document.querySelector('.header input');
-    const searchButton = document.querySelector('.header button');
-
-    searchButton.addEventListener('click', () => {
-        const searchTerm = searchInput.value.toLowerCase().trim();
-
-        document.querySelectorAll('.food-item').forEach(item => {
-            const foodName = item.querySelector('h3').textContent.toLowerCase();
-            if (foodName.includes(searchTerm)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-
-        // Clear the cart and reset total amount when searching
-        clearCart();
-        billsSection.style.display = 'none';
-    });
-
-/* --------------------  End OF Search functionality     --------------------*/
 
 /* --------------------------------------------- modal for pending, accept, completed orders ---------------------------------------*/
 
@@ -596,6 +611,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     document.querySelectorAll('.close-button').forEach(button => {
         button.addEventListener('click', function () {
+            clearPendingAmountFields();
             button.parentElement.parentElement.style.display = 'none';
         });
     });
@@ -654,6 +670,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     alert("Pending Order Confirmed");
                     fetchAndRenderOngoingOrder();
                     fetchAndRenderPendingOrder();
+                    clearPendingAmountFields();
                     document.getElementById('pending-orders-modal').style.display = 'none';
                 } else {
                     alert('Update failed!');
@@ -837,7 +854,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     }
 
-    //displaySales()
+    displaySales()
 
     /*
     document.getElementById('nav-settings').addEventListener('click', () => {
