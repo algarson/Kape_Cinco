@@ -8,7 +8,25 @@
         $item_type = $_POST['item_type'];
         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Kape_Cinco/backend/images/';
         $currentDate = date('YmdHis');
-    
+        
+        $tableName = ($item_type == 'food') ? 'foods_table' : 'drinks_table';
+        $imageColumn = ($item_type == 'food') ? 'food_image' : 'drink_image';
+        $idColumn = ($item_type == 'food') ? 'food_id' : 'drink_id';
+
+        $sql = "SELECT $imageColumn FROM $tableName WHERE $idColumn = ?";
+        if ($stmt = $conn->prepare($sql)) {
+            $stmt->bind_param('i', $item_id);
+            $stmt->execute();
+            $stmt->bind_result($currentImage);
+            $stmt->fetch();
+            $stmt->close();
+
+            // Check if an image already exists and delete it
+            if ($currentImage && file_exists($uploadDir . $currentImage)) {
+                unlink($uploadDir . $currentImage);
+            }
+        }
+
         if (isset($_FILES['item_image']) && $_FILES['item_image']['error'] == UPLOAD_ERR_OK) {
             $fileTmpPath = $_FILES['item_image']['tmp_name'];
             

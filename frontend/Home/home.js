@@ -58,12 +58,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             const allItem = document.createElement('div');
             allItem.className = "food-item";
             
-            if (item.food_name) {
-                allItem.setAttribute('data-category', 'Silog');
-            } else if (item.drink_name) {
-                allItem.setAttribute('data-category', 'Drinks');
-            }
-
+            const category = item.food_type || item.drink_type;
+            const categoryMapping = {
+                'Iced': 'Coffee', 
+                'Hot': 'Coffee', 
+                'Iced/Hot': 'Coffee',
+                'Misc': 'Misc Drinks'
+            };
+            
+            allItem.setAttribute('data-category', categoryMapping[category] || category);
+            
             const allItemImage = document.createElement('img');
             if (item.food_image) {
                 allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
@@ -140,20 +144,17 @@ document.addEventListener('DOMContentLoaded', async function () {
             button.classList.add('active');
 
             // Filter food items based on category
-            const category = button.textContent.trim();
-            if (category === 'All Items') {
-                document.querySelectorAll('.food-item').forEach(item => {
+            const category = button.getAttribute('data-category');
+            
+            // Filter items based on the category
+            document.querySelectorAll('.food-item').forEach(item => {
+                const itemCategory = item.getAttribute('data-category');
+                if (category === 'All Items' || itemCategory === category) {
                     item.style.display = 'block';
-                });
-            } else {
-                document.querySelectorAll('.food-item').forEach(item => {
-                    if (item.getAttribute('data-category') === category) {
-                        item.style.display = 'block';
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            }
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         });
     });
  
