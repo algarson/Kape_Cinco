@@ -124,8 +124,8 @@ body {
 
 .food-list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px;
     overflow-y: auto;
 }
 
@@ -139,13 +139,24 @@ body {
 
 .food-item img {
     width: 100%;
-    height: auto;
+    height: 350px; 
+    object-fit: cover; 
     border-radius: 10px;
 }
+
+.all-item-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover; 
+    position: relative;
+}
+
+
 
 .food-item h3 {
     margin: 10px 0 5px;
 }
+
 
 .food-item p {
     margin: 0;
@@ -571,3 +582,23 @@ sections */
     margin-right: 10px;
 }
 
+
+
+/* Responsive layout for smaller screens for images on a foodlist*/
+@media (max-width: 1024px) {
+    .food-list {
+        grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .food-list {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .food-list {
+        grid-template-columns: 1fr; /* 1 column for very small screens */
+    }
+}
