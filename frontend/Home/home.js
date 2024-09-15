@@ -50,85 +50,126 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    
     async function generateAllItems() {
-        const allItems = await fetchAllItems();
-        allItemsContainer.innerHTML = '';
-
-        allItems.forEach(item => {
-            const allItem = document.createElement('div');
-            allItem.className = "food-item";
-            
-            const category = item.food_type || item.drink_type;
-            const categoryMapping = {
-                'Iced': 'Coffee', 
-                'Hot': 'Coffee', 
-                'Iced/Hot': 'Coffee',
-                'Misc': 'Misc Drinks'
-            };
-            
-            allItem.setAttribute('data-category', categoryMapping[category] || category);
-            
-            const allItemImage = document.createElement('img');
-            if (item.food_image) {
-                allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
-            } else if (item.drink_image) {
-                allItemImage.src = '/Kape_Cinco/backend/images/' + item.drink_image;
-            } else {
-                allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
-            }
-            allItemImage.className = 'all-item-image'; 
+        try {
+            const allItems = await fetchAllItems();
+            console.log('Fetched items:', allItems); // Log the fetched data
+            const allItemsContainer = document.getElementById('AllItemsContainer'); // Use the correct ID
+            allItemsContainer.innerHTML = '';
     
-            const allItemName = document.createElement('h3');
-            allItemName.className = "all-item-name"; 
-            if (item.food_name) {
-                allItemName.textContent = item.food_name;
-            } else if (item.drink_name) {
-                allItemName.textContent = item.drink_name;
-            }
+            allItems.forEach(item => {
+                console.log('Processing item:', item); // Log each item being processed
+                
+                const allItem = document.createElement('div');
+                allItem.className = "food-item";
+                
+                // Set the category based on item type
+                if (item.food_name) {
+                    allItem.setAttribute('data-category', 'Silog');
+                } else if (item.drink_name) {
+                    allItem.setAttribute('data-category', 'Drinks');
+                }
     
-            const allItemPrice = document.createElement('p');
-            allItemPrice.className = "all-item-price"; 
-            if (item.food_price) {
-                allItemPrice.textContent = item.food_price;
-            } else if (item.drink_price) {
-                allItemPrice.textContent = item.drink_price;
-            }
+                // Item image
+                const allItemImage = document.createElement('img');
+                if (item.food_image) {
+                    allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
+                } else if (item.drink_image) {
+                    allItemImage.src = '/Kape_Cinco/backend/images/' + item.drink_image;
+                } else {
+                    allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+                }
+                allItemImage.className = 'all-item-image'; 
     
-            const addToCartButton = document.createElement('button');
-            addToCartButton.className = 'add-to-cart';
+                // Item name
+                const allItemName = document.createElement('h3');
+                allItemName.className = "all-item-name"; 
+                allItemName.textContent = item.food_name || item.drink_name;
     
-            const spanElement = document.createElement('span');
-            spanElement.textContent = 'add to billing';
-            addToCartButton.appendChild(spanElement);
-
-            if (item.food_status === 'Unavailable' || item.drink_status === 'Unavailable') {
-                allItemImage.style.opacity = '0.5';
-                addToCartButton.disabled = true;
-                addToCartButton.style.opacity = '0.5';
-                addToCartButton.style.cursor = 'not-allowed';
-            }
+                // Item price
+                const allItemPrice = document.createElement('p');
+                allItemPrice.className = "all-item-price"; 
+                allItemPrice.textContent = '₱' + (item.food_price || item.drink_price);
     
-            allItem.appendChild(allItemImage);
-            allItem.appendChild(allItemName);
-            allItem.appendChild(allItemPrice);
-            allItem.appendChild(addToCartButton);
+                // Create a container for dropdown and button
+                const bottomContainer = document.createElement('div');
+                bottomContainer.className = 'bottom-container';
     
-            allItemsContainer.appendChild(allItem);
-        });
-
-        document.querySelectorAll('.add-to-cart').forEach(button => {
-            button.addEventListener('click', (event) => {
-                const foodItem = event.target.closest('.food-item');
-                const foodName = foodItem.querySelector('h3').textContent;
-                const foodPrice = parseFloat(foodItem.querySelector('p').textContent.replace(' ', '').replace(',', ''));
-
-                addToCart(foodName, foodPrice);
-                billsSection.style.display = 'block';
+                // Create a dynamic select dropdown for variants if they exist
+                if (item.variants && item.variants.length > 0) {
+                    const variantSelect = document.createElement('select');
+                    variantSelect.className = 'variant-select';
+                    variantSelect.innerHTML = `<option value="">Select variant</option>`;
+                    
+                    item.variants.forEach(variant => {
+                        const option = document.createElement('option');
+                        option.value = variant.variant_name;
+                        option.textContent = `${variant.variant_name} - ₱${variant.variant_price}`;
+                        option.dataset.price = variant.variant_price;
+                        variantSelect.appendChild(option);
+                    });
+    
+                    // Update the item name and price when variant changes
+                    variantSelect.addEventListener('change', (event) => {
+                        const selectedOption = event.target.selectedOptions[0];
+                        const variantPrice = parseFloat(selectedOption.dataset.price);
+    
+                        // Update item name and price
+                        allItemName.textContent = `${item.food_name || item.drink_name} (${selectedOption.value})`;
+                        allItemPrice.textContent = `₱${variantPrice.toFixed(2)}`;
+                    });
+    
+                    bottomContainer.appendChild(variantSelect); // Append the variant select to the bottom container
+                }
+    
+                // Add to billing button
+                const addToCartButton = document.createElement('button');
+                addToCartButton.className = 'add-to-cart';
+                const spanElement = document.createElement('span');
+                spanElement.textContent = 'Add to billing';
+                addToCartButton.appendChild(spanElement);
+    
+                bottomContainer.appendChild(addToCartButton); // Append the button to the bottom container
+    
+                allItem.appendChild(allItemImage);
+                allItem.appendChild(allItemName);
+                allItem.appendChild(allItemPrice);
+                allItem.appendChild(bottomContainer); // Append the bottom container to the item
+    
+                // Handle unavailable status
+                if (item.food_status === 'Unavailable' || item.drink_status === 'Unavailable') {
+                    allItemImage.style.opacity = '0.5';
+                    addToCartButton.disabled = true;
+                    addToCartButton.style.opacity = '0.5';
+                    addToCartButton.style.cursor = 'not-allowed';
+                }
+    
+                allItemsContainer.appendChild(allItem);
             });
-        });
+    
+            // Event listener for adding items to the cart
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const foodItem = event.target.closest('.food-item');
+                    const foodName = foodItem.querySelector('h3').textContent;
+                    const foodPrice = parseFloat(foodItem.querySelector('p').textContent.replace('₱', '').replace(',', ''));
+    
+                    // Get the selected variant, if any
+                    const variant = foodItem.querySelector('.variant-select') ? foodItem.querySelector('.variant-select').value : null;
+    
+                    // Pass the variant to the addToCart function if it exists
+                    addToCart(foodName, foodPrice, variant);
+                    billsSection.style.display = 'block';
+                });
+            });
+        } catch (error) {
+            console.error('Error generating items:', error);
+        }
     }
-
+    
     generateAllItems();
+    
 
     /* ------------------------- FOOD CATEGORIES ------------------------- */
     document.querySelectorAll('.categories button').forEach(button => {
