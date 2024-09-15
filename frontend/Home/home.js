@@ -386,6 +386,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Event listener for the Confirm Order button in the modal
     confirmOrderButton.addEventListener('click', () => {
         const orderDetails = JSON.parse(localStorage.getItem('ManualOrderDetails'));
+        const pendingTotalAmountElement = document.querySelector('#modal-total-amount');
+        const totalAmount = parseFloat(pendingTotalAmountElement.textContent.replace('₱', '').trim());
         const receivedAmount = document.getElementById('received-amount').value;
         const orderStats = 'Ongoing';
 
@@ -394,32 +396,37 @@ document.addEventListener('DOMContentLoaded', async function () {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('order-number', orderDetails.orderNumber);
-        formData.append('total-amount', orderDetails.totalPrice);
-        formData.append('received-amount', receivedAmount);
-        formData.append('order-stats', orderStats);
-        formData.append('order-details', JSON.stringify(orderDetails.cart));
+        if (isNaN(receivedAmount) || receivedAmount <= 0 || receivedAmount < totalAmount) {
+            alert('Please enter a valid amount');
+        } else {
+            const formData = new FormData();
+            formData.append('order-number', orderDetails.orderNumber);
+            formData.append('total-amount', orderDetails.totalPrice);
+            formData.append('received-amount', receivedAmount);
+            formData.append('order-stats', orderStats);
+            formData.append('order-details', JSON.stringify(orderDetails.cart));
 
-        fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json()) 
-        .then(data => {
-            if (data.message) {
-                alert('Order Confirmed');
-                clearAmountFields ()
-                fetchAndRenderOngoingOrder();
-            } else if (data.error) {
-                alert(data.error);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json()) 
+            .then(data => {
+                if (data.message) {
+                    alert('Order Confirmed');
+                    clearAmountFields ()
+                    fetchAndRenderOngoingOrder();
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
 
-        clearCart();
-        paymentModal.style.display = 'none';
-        billsSection.style.display = 'none';
+            clearCart();
+            paymentModal.style.display = 'none';
+            billsSection.style.display = 'none';
+        }
+        
     });
 
     window.addEventListener('click', (event) => {
@@ -650,39 +657,47 @@ document.addEventListener('DOMContentLoaded', async function () {
     //Confirm Pending Order Button
     document.getElementById('confirm-pending-order').addEventListener('click',  async function () {
         const orderNumber = document.getElementById('pending-order-number').textContent.replace('Order Number:', '').trim();
+        const pendingTotalAmountElement = document.querySelector('#pending-modal-total-amount');
+        const totalAmount = parseFloat(pendingTotalAmountElement.textContent.replace('₱', '').trim());
         const receivedAmountInput = document.getElementById('pending-received-amount');
         const receivedAmount = parseFloat(receivedAmountInput.value);
-        const orderStatus = 'Ongoing';
 
-        const formData = new FormData();
-        formData.append('order-number', orderNumber);
-        formData.append('received-amount',receivedAmount);
-        formData.append('order-stats',orderStatus);
-       
-        try {
-            const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
-                method: 'POST',
-                body: formData
-            });
+        if (isNaN(receivedAmount) || receivedAmount <= 0 || receivedAmount < totalAmount) {
+            alert('Please enter a valid amount');
+        } else {
+            const orderStatus = 'Ongoing';
 
-            if (response.ok) {
-                const responseData = await response.json();
-                if (responseData.success) {
-                    alert("Pending Order Confirmed");
-                    fetchAndRenderOngoingOrder();
-                    fetchAndRenderPendingOrder();
-                    clearPendingAmountFields();
-                    document.getElementById('pending-orders-modal').style.display = 'none';
+            const formData = new FormData();
+            formData.append('order-number', orderNumber);
+            formData.append('received-amount',receivedAmount);
+            formData.append('order-stats',orderStatus);
+        
+            try {
+                const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    if (responseData.success) {
+                        alert("Pending Order Confirmed");
+                        fetchAndRenderOngoingOrder();
+                        fetchAndRenderPendingOrder();
+                        clearPendingAmountFields();
+                        document.getElementById('pending-orders-modal').style.display = 'none';
+                    } else {
+                        alert('Update failed!');
+                    }
                 } else {
-                    alert('Update failed!');
+                    alert('Update request failed!');
                 }
-            } else {
-                alert('Update request failed!');
+            } catch (error) {
+                console.error('Error updating item:', error);
+                alert('An error occurred during the update.');
             }
-        } catch (error) {
-            console.error('Error updating item:', error);
-            alert('An error occurred during the update.');
         }
+        
     });
 
     //Cancel Pending Order Button
@@ -836,6 +851,45 @@ document.addEventListener('DOMContentLoaded', async function () {
         billsSection.style.display = 'none';
     });
 
+    /* --------------------------- DAILY SALES ---------------------------- */
+    /*async function fetchandRenderDailySales() {
+        try {
+            const orders = await fetchAllOrders();
+            console.log(orders);
+            const rowParent = document.getElementById('row-parent');
+            rowParent.innerHTML = '';
+
+            const today = new Date().toISOString().split('T')[0];
+    
+            // Filter for completed orders
+            const completedOrders = orders.filter(order => order.order_status === 'Completed');
+    
+            // Filter for orders that were completed today
+            const completedOrdersToday = completedOrders.filter(order => {
+                const orderDate = order.order_date.split(' ')[0];
+                return orderDate === today;
+            });
+    
+            // Loop through each completed order and create dynamic rows
+            completedOrdersToday.reverse().forEach(order => {
+                const orderHtml = document.createElement('div');
+                orderHtml.classList.add('row');
+                orderHtml.innerHTML = order.cart.map(item => `
+                        <div class="columns">
+                            <img src="${item.item_image ? '/Kape_Cinco/backend/images/' + item.item_image : '/Kape_Cinco/frontend/images/kape_cinco.jpg'}" alt="${item.item_name}">
+                            <strong>${item.item_name}</strong>
+                        </div>
+                        <div class="columns"><strong>Orders: ${item.item_quantity}</strong></div>
+                        <div class="columns"><strong>Total: ₱${item.item_total_price.toFixed(2)}</strong></div>
+                `).join('');
+    
+                rowParent.appendChild(orderHtml);
+            });
+        } catch (err) {
+            console.error('Error rendering daily sales:', err);
+        }
+    }*/
+
     async function dailySales () {
         try {
             const res = await fetch("/Kape_Cinco/backend/Home/stats.php");
@@ -852,11 +906,18 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.log(totalSales);
         totalIncome.innerHTML = totalSales[0].Sales;
         totalOrders.innerHTML = totalSales[0].total_orders;
-
     }
+    
+    
+    function InitializeDailySales(){
+        displaySales();
+        fetchandRenderDailySales();
+    }
+    
+    InitializeDailySales();
 
-    displaySales()
-
+    //setInterval(fetchandRenderDailySales,3000);
+    setInterval(displaySales,3000);
     /*
     document.getElementById('nav-settings').addEventListener('click', () => {
         document.getElementById('main-content').style.display = 'none';
