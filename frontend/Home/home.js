@@ -54,24 +54,22 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function generateAllItems() {
         try {
             const allItems = await fetchAllItems();
-            console.log('Fetched items:', allItems); // Log the fetched data
-            const allItemsContainer = document.getElementById('AllItemsContainer'); // Use the correct ID
             allItemsContainer.innerHTML = '';
-    
+
             allItems.forEach(item => {
-                console.log('Processing item:', item); // Log each item being processed
-                
                 const allItem = document.createElement('div');
                 allItem.className = "food-item";
-                
-                // Set the category based on item type
-                if (item.food_name) {
-                    allItem.setAttribute('data-category', 'Silog');
-                } else if (item.drink_name) {
-                    allItem.setAttribute('data-category', 'Drinks');
-                }
-    
-                // Item image
+
+                const category = item.food_type || item.drink_type;
+                const categoryMapping = {
+                    'Iced': 'Coffee', 
+                    'Hot': 'Coffee', 
+                    'Iced/Hot': 'Coffee',
+                    'Misc': 'Misc Drinks'
+                };
+
+                allItem.setAttribute('data-category', categoryMapping[category] || category);
+
                 const allItemImage = document.createElement('img');
                 if (item.food_image) {
                     allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
@@ -81,16 +79,22 @@ document.addEventListener('DOMContentLoaded', async function () {
                     allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
                 }
                 allItemImage.className = 'all-item-image'; 
-    
-                // Item name
+
                 const allItemName = document.createElement('h3');
                 allItemName.className = "all-item-name"; 
-                allItemName.textContent = item.food_name || item.drink_name;
-    
-                // Item price
+                if (item.food_name) {
+                    allItemName.textContent = item.food_name;
+                } else if (item.drink_name) {
+                    allItemName.textContent = item.drink_name;
+                }
+
                 const allItemPrice = document.createElement('p');
                 allItemPrice.className = "all-item-price"; 
-                allItemPrice.textContent = '₱' + (item.food_price || item.drink_price);
+                if (item.food_price) {
+                    allItemPrice.textContent = item.food_price;
+                } else if (item.drink_price) {
+                    allItemPrice.textContent = item.drink_price;
+                }
     
                 // Create a container for dropdown and button
                 const bottomContainer = document.createElement('div');
@@ -100,7 +104,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                 if (item.variants && item.variants.length > 0) {
                     const variantSelect = document.createElement('select');
                     variantSelect.className = 'variant-select';
-                    variantSelect.innerHTML = `<option value="">Select variant</option>`;
+
+                    const originalName = item.food_name || item.drink_name;
+                    const originalPrice = item.food_price || item.drink_price;
+
+                    // Set the original name and price as the default option
+                    const originalOption = document.createElement('option');
+                    originalOption.value = '';
+                    originalOption.textContent = `${originalName} - ₱${originalPrice}`;
+                    originalOption.dataset.price = originalPrice;
+                    variantSelect.appendChild(originalOption);
                     
                     item.variants.forEach(variant => {
                         const option = document.createElement('option');
@@ -113,11 +126,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                     // Update the item name and price when variant changes
                     variantSelect.addEventListener('change', (event) => {
                         const selectedOption = event.target.selectedOptions[0];
-                        const variantPrice = parseFloat(selectedOption.dataset.price);
     
-                        // Update item name and price
-                        allItemName.textContent = `${item.food_name || item.drink_name} (${selectedOption.value})`;
-                        allItemPrice.textContent = `₱${variantPrice.toFixed(2)}`;
+                        if (!selectedOption.value) {
+                            allItemName.textContent = originalName;
+                            allItemPrice.textContent = `₱${parseFloat(originalPrice).toFixed(2)}`;
+                        } else {
+                            // Update item name and price for the selected variant
+                            const variantPrice = parseFloat(selectedOption.dataset.price);
+                            allItemName.textContent = `${selectedOption.value}`;
+                            allItemPrice.textContent = `₱${variantPrice.toFixed(2)}`;
+                        }
                     });
     
                     bottomContainer.appendChild(variantSelect); // Append the variant select to the bottom container
@@ -944,7 +962,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function displaySales () {
         const totalSales = await dailySales();
 
-        console.log(totalSales);
+        //console.log(totalSales);
         totalIncome.innerHTML = totalSales[0].Sales;
         totalOrders.innerHTML = totalSales[0].total_orders;
     }
