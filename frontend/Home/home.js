@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const changeAmountElement = document.querySelector('#change-amount');
     
         function calculateChange() {
-            const totalAmount = parseFloat(modalTotalAmountElement.textContent.replace('₱', '').trim());
+            const totalAmount = parseFloat(modalTotalAmountElement.textContent.replace('₱', '').replace(',','').trim());
             const receivedAmount = parseFloat(receivedAmountInput.value);
     
             if (!isNaN(totalAmount) && !isNaN(receivedAmount)) {
@@ -446,7 +446,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     confirmOrderButton.addEventListener('click', () => {
         const orderDetails = JSON.parse(localStorage.getItem('ManualOrderDetails'));
         const pendingTotalAmountElement = document.querySelector('#modal-total-amount');
-        const totalAmount = parseFloat(pendingTotalAmountElement.textContent.replace('₱', '').trim());
+        const totalAmount = parseFloat(pendingTotalAmountElement.textContent.replace('₱', '').replace(',','').trim());
         const receivedAmount = document.getElementById('received-amount').value;
         const orderStats = 'Ongoing';
 
