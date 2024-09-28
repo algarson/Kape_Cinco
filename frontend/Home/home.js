@@ -88,6 +88,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                     allItemName.textContent = item.drink_name;
                 }
 
+                const defaultServeCount = item.food_serve_count || item.drink_serve_count;
+
+                allItem.dataset.serveCount = defaultServeCount;
+
                 const allItemPrice = document.createElement('p');
                 allItemPrice.className = "all-item-price"; 
                 if (item.food_price) {
@@ -107,11 +111,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                     const originalName = item.food_name || item.drink_name;
                     const originalPrice = item.food_price || item.drink_price;
+                    const originalServeCount = item.food_serve_count || item.drink_serve_count;
 
                     // Set the original name and price as the default option
                     const originalOption = document.createElement('option');
                     originalOption.value = '';
                     originalOption.textContent = `${originalName} - ₱${originalPrice}`;
+                    originalOption.dataset.serveCount = originalServeCount;
                     originalOption.dataset.price = originalPrice;
                     variantSelect.appendChild(originalOption);
                     
@@ -120,6 +126,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                         option.value = variant.variant_name;
                         option.textContent = `${variant.variant_name} - ₱${variant.variant_price}`;
                         option.dataset.price = variant.variant_price;
+                        option.dataset.serveCount = variant.variant_serve_count;
+                        
+                        if (variant.variant_status === "Unavailable") {
+                            option.disabled = true; 
+                            option.textContent += ' (Unavailable)'; 
+                        }
+
                         variantSelect.appendChild(option);
                     });
     
@@ -130,11 +143,14 @@ document.addEventListener('DOMContentLoaded', async function () {
                         if (!selectedOption.value) {
                             allItemName.textContent = originalName;
                             allItemPrice.textContent = `₱${parseFloat(originalPrice).toFixed(2)}`;
+                            addToCart(originalName, parseFloat(originalPrice), originalServeCount);
                         } else {
                             // Update item name and price for the selected variant
                             const variantPrice = parseFloat(selectedOption.dataset.price);
+                            const variantServeCount = selectedOption.dataset.serveCount;
                             allItemName.textContent = `${selectedOption.value}`;
                             allItemPrice.textContent = `₱${variantPrice.toFixed(2)}`;
+                            addToCart(selectedOption.value, variantPrice, variantServeCount); 
                         }
                     });
     
@@ -174,10 +190,16 @@ document.addEventListener('DOMContentLoaded', async function () {
                     const foodPrice = parseFloat(foodItem.querySelector('p').textContent.replace('₱', '').replace(',', ''));
     
                     // Get the selected variant, if any
-                    const variant = foodItem.querySelector('.variant-select') ? foodItem.querySelector('.variant-select').value : null;
-    
-                    // Pass the variant to the addToCart function if it exists
-                    addToCart(foodName, foodPrice, variant);
+                    const variantSelect = foodItem.querySelector('.variant-select');
+                    let serveCount = parseInt(foodItem.dataset.serveCount);
+
+                    if (variantSelect) {
+                        const selectedVariant = variantSelect.selectedOptions[0]; // Get the selected option
+                        serveCount = selectedVariant.dataset.serveCount ? parseInt(selectedVariant.dataset.serveCount) : null;
+                    } 
+
+                    // Pass the foodName, foodPrice, and serveCount to the addToCart function
+                    addToCart(foodName, foodPrice, serveCount);
                     billsSection.style.display = 'block';
                 });
             });
@@ -300,10 +322,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             newTotal += price * quantity;
         });
         totalAmount = newTotal;
-        totalAmountElement.textContent = `${newTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        totalAmountElement.textContent = `₱${newTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
-    function addToCart(name, price) {
+    function addToCart(name, price, serveCount) {
         // Check if the item is already in the cart
         const existingCartItem = Array.from(cartItemsContainer.children).find(item => {
             return item.querySelector('.item-name').textContent === name;
@@ -312,8 +334,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (existingCartItem) {
             // Item already exists, increment quantity
             const quantityElement = existingCartItem.querySelector('.item-quantity');
-            const quantity = parseInt(quantityElement.textContent);
-            quantityElement.textContent = quantity + 1;
+            const quantity = parseInt(quantityElement.textContent); 
+            
+            if (!serveCount || quantity <= serveCount) {
+                quantityElement.textContent = quantity;
+                updateButtonStates(existingCartItem);
+            } else {
+                alert(`Sorry, you can't order more than ${serveCount} of this item.`);
+            }
         } else {
             // Item doesn't exist, add it to the cart
             const cartItem = document.createElement('div');
@@ -328,12 +356,22 @@ document.addEventListener('DOMContentLoaded', async function () {
                 </div>
             `;
 
+            cartItem.dataset.serveCount = serveCount;
+
             // Add event listeners for the new increment and decrement buttons
             cartItem.querySelector('.increment-quantity').addEventListener('click', () => {
                 const quantityElement = cartItem.querySelector('.item-quantity');
                 const quantity = parseInt(quantityElement.textContent);
-                quantityElement.textContent = quantity + 1;
-                updateTotal();
+                const maxServeCount = parseInt(cartItem.dataset.serveCount);
+
+                // Check if quantity is less than the serve count (if maxServeCount is provided)
+                if (!maxServeCount || quantity < maxServeCount) {
+                    quantityElement.textContent = quantity + 1;
+                    updateTotal();
+                    updateButtonStates(cartItem);
+                } else {
+                    updateButtonStates(cartItem);
+                }
             });
 
             cartItem.querySelector('.decrement-quantity').addEventListener('click', () => {
@@ -341,6 +379,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const quantity = parseInt(quantityElement.textContent);
                 if (quantity > 1) {
                     quantityElement.textContent = quantity - 1;
+                    updateButtonStates(cartItem);
                     updateTotal();
                 } else {
                     const price = parseFloat(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace(',', ''));
@@ -360,6 +399,25 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Update total amount
         totalAmount += price;
         totalAmountElement.textContent = `₱${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    }
+
+    // Utility function to update button states
+    function updateButtonStates(cartItem) {
+        const quantityElement = cartItem.querySelector('.item-quantity');
+        const quantity = parseInt(quantityElement.textContent);
+        const maxServeCount = parseInt(cartItem.dataset.serveCount);
+
+        const incrementButton = cartItem.querySelector('.increment-quantity');
+        const decrementButton = cartItem.querySelector('.decrement-quantity');
+
+        // Helper function to toggle button states and classes
+        const toggleButtonState = (button, isDisabled) => {
+            button.disabled = isDisabled;
+            button.classList.toggle('disabled', isDisabled);
+        };
+
+        toggleButtonState(incrementButton, maxServeCount && quantity >= maxServeCount);
+        toggleButtonState(decrementButton, quantity < 1);
     }
 
     /*------------------------------------- END OF ADD TO CART FUNCTIONS -------------------------------*/
@@ -475,6 +533,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                     alert('Order Confirmed');
                     clearAmountFields ()
                     fetchAndRenderOngoingOrder();
+                    paymentModal.style.display = 'none';
+                    billsSection.style.display = 'none';
                 } else if (data.error) {
                     alert(data.error);
                 }
@@ -482,10 +542,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             .catch(error => console.error('Error:', error));
 
             clearCart();
-            paymentModal.style.display = 'none';
-            billsSection.style.display = 'none';
         }
-        
     });
 
     window.addEventListener('click', (event) => {
@@ -508,7 +565,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const pendingOrderDetails = document.getElementById('pending-order-details');
         const modalTotalAmount = document.getElementById('pending-modal-total-amount');
         const modal = document.getElementById('pending-orders-modal');
-       
+        
         pendingOrdersContainer.innerHTML = ''; 
 
         const pendingOrders = orders.filter(order => order.order_status === 'Pending');

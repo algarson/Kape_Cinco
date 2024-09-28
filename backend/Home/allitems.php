@@ -3,7 +3,7 @@
 
     // Fetch all foods with their variants
     $foodSql = "
-        SELECT f.food_id, f.food_name, f.food_price, f.food_type, f.food_image, f.food_status, v.food_variant_name, v.food_variant_price 
+        SELECT f.food_id, f.food_name, f.food_price, f.food_type, f.food_image, f.food_serve_count, f.food_status, v.food_variant_name, v.food_variant_price, v.food_variant_serve_count, v.food_variant_status 
         FROM foods_table f
         LEFT JOIN foods_variant_table v ON f.food_id = v.food_id
     ";
@@ -23,6 +23,7 @@
                     'food_price' => $row['food_price'],
                     'food_type' => $row['food_type'],
                     'food_image' => $row['food_image'],
+                    'food_serve_count' => $row['food_serve_count'],
                     'food_status' => $row['food_status'],
                     'variants' => []
                 ];
@@ -32,14 +33,16 @@
             if (!empty($row['food_variant_name'])) {
                 $allFoods[$food_id]['variants'][] = [
                     'variant_name' => $row['food_variant_name'],
-                    'variant_price' => $row['food_variant_price']
+                    'variant_price' => $row['food_variant_price'],
+                    'variant_serve_count' => $row['food_variant_serve_count'],
+                    'variant_status' => $row['food_variant_status']
                 ];
             }
         }
     }
 
     $drinkSql = " 
-        SELECT d.drink_id, d.drink_name, d.drink_price, d.drink_type, d.drink_image, d.drink_status, dv.drink_variant_name, dv.drink_variant_price
+        SELECT d.drink_id, d.drink_name, d.drink_price, d.drink_type, d.drink_image, d.drink_serve_count, d.drink_status, dv.drink_variant_name, dv.drink_variant_price, dv.drink_variant_serve_count, dv.drink_variant_status
         FROM drinks_table d
         LEFT JOIN drinks_variant_table dv ON d.drink_id = dv.drink_id; ";
     $drinkResult = $conn->query($drinkSql);
@@ -58,6 +61,7 @@
                     'drink_price' => $row['drink_price'],
                     'drink_type' => $row['drink_type'],
                     'drink_image' => $row['drink_image'],
+                    'drink_serve_count' => $row['drink_serve_count'],
                     'drink_status' => $row['drink_status'],
                     'variants' => []  // Initialize the variants array for drinks
                 ];
@@ -67,7 +71,9 @@
             if (!empty($row['drink_variant_name'])) {
                 $allDrinks[$drink_id]['variants'][] = [
                     'variant_name' => $row['drink_variant_name'],
-                    'variant_price' => $row['drink_variant_price']
+                    'variant_price' => $row['drink_variant_price'],
+                    'variant_serve_count' => $row['drink_variant_serve_count'],
+                    'variant_status' => $row['drink_variant_status']
                 ];
             }
         }
