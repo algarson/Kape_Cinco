@@ -1,6 +1,3 @@
-
-
-
 document.addEventListener("DOMContentLoaded", async function () {
     const tableBody = document.getElementById('tableBody');
     const categoryButtons = document.querySelectorAll('.category-nav button');
@@ -18,6 +15,33 @@ document.addEventListener("DOMContentLoaded", async function () {
     const yesButton = document.querySelector('.yes-button');
     const noButton = document.querySelector('.no-button');
     const addButton = document.querySelector('.add-button'); // Add but
+
+    fetch('/Kape_Cinco/backend/Login/check_login.php')
+        .then(response => response.json())
+        .then(data => {
+            if (!data.loggedIn) {
+                window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+            } else {
+                document.body.classList.remove('hidden');
+                generateAllItems();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    
+    function logout() {
+        fetch('/Kape_Cinco/backend/Login/logout.php')
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+                } else {
+                    alert('Logout failed!');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    window.logout = logout;
     
     updateModal.style.display = 'none';
     addButton.addEventListener('click', openAddModal);
@@ -46,27 +70,81 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     function createTableRow(item) {
         const row = document.createElement('tr');
-        
+
+        // Category cell: either 'Silog' or 'Drinks'
         const categoryCell = document.createElement('td');
-        categoryCell.textContent = item.food_name ? 'Silog' : 'Drinks';
+        categoryCell.textContent = item.food_name ? 'Foods' : 'Drinks';
         row.appendChild(categoryCell);
 
+        // Name cell: either variant dropdown or the default food/drink name
         const nameCell = document.createElement('td');
-        nameCell.textContent = item.food_name || item.drink_name;
+
+        if (item.variants && item.variants.length > 0) {
+            // Create a dropdown if the item has variants
+            const variantSelect = document.createElement('select');
+            variantSelect.className = 'variant-select';
+
+            const originalName = item.food_name || item.drink_name;
+            const originalPrice = item.food_price || item.drink_price;
+            const originalServeCount = item.food_serve_count || item.drink_serve_count;
+            
+            // Default option with the original food/drink name and price
+            const originalOption = document.createElement('option');
+            originalOption.value = '';
+            originalOption.textContent = originalName;
+            originalOption.dataset.price = originalPrice;
+            originalOption.dataset.serveCount = originalServeCount;
+            variantSelect.appendChild(originalOption);
+
+            // Loop through variants and add them as options
+            item.variants.forEach(variant => {
+                const option = document.createElement('option');
+                option.value = variant.variant_name;
+                option.textContent = `${variant.variant_name}`;
+                option.dataset.price = variant.variant_price;
+                option.dataset.serveCount = variant.variant_serve_count;
+                
+                // If the variant is unavailable, disable the option
+                if (variant.variant_status === "Unavailable") {
+                    option.disabled = true;
+                    option.textContent += ' (Unavailable)';
+                }
+
+                variantSelect.appendChild(option);
+            });
+
+            // Add an event listener to update the price when the variant is selected
+            variantSelect.addEventListener('change', (event) => {
+                const selectedOption = event.target.selectedOptions[0];
+                const variantPrice = selectedOption.dataset.price || (item.food_price || item.drink_price);
+                const variantServeCount = selectedOption.dataset.serveCount || (item.food_serve_count || item.drink_serve_count);
+                serveCell.textContent = variantServeCount;
+                priceCell.textContent = `₱${parseFloat(variantPrice)}`;
+            });
+
+            nameCell.appendChild(variantSelect); // Add the variant dropdown to the nameCell
+        } else {
+            // If no variants, just display the default name
+            nameCell.textContent = item.food_name || item.drink_name;
+        }
+
         row.appendChild(nameCell);
 
         const typeCell = document.createElement('td');
-        typeCell.textContent = item.drink_type || '';
-        typeCell.classList.add('drink-type-cell');
+        typeCell.textContent = item.food_type || item.drink_type;
         row.appendChild(typeCell);
 
         const priceCell = document.createElement('td');
-        priceCell.textContent = item.food_price || item.drink_price;
+        priceCell.textContent = `₱${(item.food_price || item.drink_price)}`;
         row.appendChild(priceCell);
 
         const descCell = document.createElement('td');
         descCell.textContent = item.food_desc || '';
         row.appendChild(descCell);
+
+        const serveCell = document.createElement('td');
+        serveCell.textContent = item.food_serve_count || item.drink_serve_count;
+        row.appendChild(serveCell);
 
         const imageCell = document.createElement('td');
         const image = document.createElement('img') ;
@@ -129,9 +207,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                 row.style.display = itemCategory === 'Drinks' ? '' : 'none';
             } else {
-                drinkTypeHeader.style.display = 'none';
                 descriptionHeader.style.display = '';
-                cells[2].style.display = 'none'; 
                 cells[4].style.display = '';     
 
                 row.style.display = itemCategory === 'Foods' ? '' : 'none';
@@ -139,36 +215,77 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
-    fetch('/Kape_Cinco/backend/Login/check_login.php')
-        .then(response => response.json())
-        .then(data => {
-            if (!data.loggedIn) {
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html';
-            } else {
-                document.body.classList.remove('hidden');
-                generateAllItems();
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    
-    function logout() {
-        fetch('/Kape_Cinco/backend/Login/logout.php')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    window.location.href = '/Kape_Cinco/frontend/Login/login.html';
-                } else {
-                    alert('Logout failed!');
-                }
-            })
-            .catch(error => console.error('Error:', error));
-    }
-
-    window.logout = logout;
-
     function openUpdateModal(item) {
+        // Set the default values (for food or drink without variants)
         document.getElementById('item_id').value = item.food_id || item.drink_id;
         document.getElementById('item_type').value = item.food_id ? 'food' : 'drink';
+        document.getElementById('update_name').value = item.food_name || item.drink_name;
+        document.getElementById('update_price').value = item.food_price || item.drink_price;
+        document.getElementById('update_type').value = item.food_type || item.drink_type;
+        document.getElementById('update_serving').value = item.food_serve_count || item.drink_serve_count;
+        
+        // If the item has variants, create a dropdown to select variants
+        const variantSelect = document.getElementById('variant_select');
+        variantSelect.innerHTML = ''; // Clear previous options, if any
+
+        if (item.food_name) {
+            document.getElementById('update_description').style.display = 'block';
+            document.querySelector('label[for="update_description"]').style.display = 'block';
+            document.getElementById('update_description').value = item.food_desc;
+
+        } else {
+            document.getElementById('update_description').style.display = 'none';
+            document.querySelector('label[for="update_description"]').style.display = 'none';
+        }
+
+        if (item.variants && item.variants.length > 0) {
+
+            document.getElementById('variant_select').style.display = 'block';
+            document.querySelector('label[for="variant_select"]').style.display = 'block';
+
+            // Create a default option (no variant selected)
+            const defaultOption = document.createElement('option');
+            defaultOption.value = '';
+            defaultOption.textContent = `${item.food_name || item.drink_name}`;
+            variantSelect.appendChild(defaultOption);
+
+            // Loop through the variants and add them to the dropdown
+            item.variants.forEach(variant => {
+                const option = document.createElement('option');
+                option.value = variant.variant_name;
+                option.textContent = `${variant.variant_name}`;
+                option.dataset.price = variant.variant_price;
+                option.dataset.serveCount = variant.variant_serve_count;
+                variantSelect.appendChild(option);
+            });
+
+            // Add an event listener to update fields when a variant is selected
+            variantSelect.addEventListener('change', (event) => {
+                const selectedOption = event.target.selectedOptions[0];
+                if (selectedOption.value) {
+                    // Update the modal fields with the selected variant's data
+                    document.getElementById('update_name').value = selectedOption.value;
+                    document.getElementById('update_price').value = selectedOption.dataset.price;
+                    document.getElementById('update_serving').value = selectedOption.dataset.serveCount;
+
+                    document.getElementById('is_variant').value = 'true';
+                    document.getElementById('variant_name').value = selectedOption.value;
+                } else {
+                    // Reset to original item details if no variant is selected
+                    document.getElementById('update_name').value = item.food_name || item.drink_name;
+                    document.getElementById('update_price').value = item.food_price || item.drink_price;
+                    document.getElementById('update_type').value = item.food_type || item.drink_type;
+                    document.getElementById('update_serving').value = item.food_serve_count || item.drink_serve_count;
+
+                    document.getElementById('is_variant').value = '';
+                    document.getElementById('variant_name').value = '';
+                    
+                }
+            });
+        } else {
+            document.getElementById('variant_select').style.display = 'none';
+            document.querySelector('label[for="variant_select"]').style.display = 'none';
+        }
         updateModal.style.display = 'block';
     }
 

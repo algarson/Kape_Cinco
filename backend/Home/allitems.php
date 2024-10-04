@@ -3,7 +3,7 @@
 
     // Fetch all foods with their variants
     $foodSql = "
-        SELECT f.food_id, f.food_name, f.food_price, f.food_type, f.food_image, f.food_serve_count, f.food_status, v.food_variant_name, v.food_variant_price, v.food_variant_serve_count, v.food_variant_status 
+        SELECT f.food_id, f.food_name, f.food_price, f.food_desc, f.food_type, f.food_image, f.food_serve_count, f.food_status, v.food_variant_name, v.food_variant_price, v.food_variant_serve_count, v.food_variant_status 
         FROM foods_table f
         LEFT JOIN foods_variant_table v ON f.food_id = v.food_id
     ";
@@ -21,6 +21,7 @@
                     'food_id' => $row['food_id'],
                     'food_name' => $row['food_name'],
                     'food_price' => $row['food_price'],
+                    'food_desc' => $row['food_desc'],
                     'food_type' => $row['food_type'],
                     'food_image' => $row['food_image'],
                     'food_serve_count' => $row['food_serve_count'],

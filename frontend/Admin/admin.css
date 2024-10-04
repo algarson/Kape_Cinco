@@ -15,6 +15,10 @@ body {
     background-color: #f5e3d3;
 }
 
+.hidden {
+    display: none;
+}
+
 h1, nav, table {
     font-family: 'Arial', sans-serif;
 }
