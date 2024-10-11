@@ -1,9 +1,9 @@
 <?php
-include '/backend/server.php';
+include '../server.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['admin_username'];
-    $password = $_POST['admin_password'];
+    $username = filter_input(INPUT_POST, 'admin_username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $password = filter_input(INPUT_POST, 'admin_password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 
     $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
