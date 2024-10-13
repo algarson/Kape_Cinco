@@ -9,6 +9,38 @@ document.addEventListener('DOMContentLoaded', async function () {
     const logoutButton = document.getElementById('logout-button');
     const totalIncome = document.getElementById('total-income-amount');
     const totalOrders = document.getElementById('total-order-amount');
+    /*modal daily sales */
+    const rows = document.querySelectorAll('.order-row');
+    const modal = document.getElementById("orderModal");  // Modal ID stays the same
+    const span = document.querySelector(".close");
+    const orderDetails = document.getElementById("orderDetails");
+
+      // Function to display the modal with the selected order details
+      function showOrderDetails(orderNumber) {
+        orderDetails.textContent = `Details for Order Number: ${orderNumber}`;
+        modal.style.display = "flex";  // Show modal
+    }
+
+    // Add click event to each row
+    rows.forEach(row => {
+        row.addEventListener("click", function () {
+            const orderNumber = this.getAttribute("data-order");
+            showOrderDetails(orderNumber);
+        });
+    });
+
+    // Close the modal when the 'x' is clicked
+    span.addEventListener("click", function () {
+        modal.style.display = "none";  // Hide modal
+    });
+
+    // Close the modal when clicking outside the modal content
+    window.addEventListener("click", function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";  // Hide modal
+        }
+    });
+    /*end daily sales */
 
     let totalAmount = 0;
 
