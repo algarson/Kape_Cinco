@@ -86,19 +86,48 @@
             <div class="modal-content">
                 <span class="close-button">&times;</span>
                 <form id="addForm" enctype="multipart/form-data">
-                    <label for="add_category">Category:</label>
-                    <input type="text" id="add_category" name="add_category">
                     <label for="add_name">Name:</label>
                     <input type="text" id="add_name" name="add_name">
+                    <label for="add_category">Category:</label>
+                    <select id="add_category" name="add_category" required>
+                        <option value="food">Food</option>
+                        <option value="drink">Drink</option>
+                    </select>
                     <label for="add_type">Type:</label>
                     <input type="text" id="add_type" name="add_type">
                     <label for="add_price">Price:</label>
                     <input type="number" id="add_price" name="add_price">
-                    <label for="add_description">Description:</label>
-                    <textarea id="add_description" name="add_description"></textarea>
+
+                    <div id="description_container">
+                        <label for="add_description">Description:</label>
+                        <textarea id="add_description" name="add_description"></textarea>
+                    </div>
+                    
+                    <label for="add_serving">Serving:</label>
+                    <input type="number" id="add_serving" name="add_serving" min="1" required>
                     <label for="add_image">Select Image:</label>
                     <input type="file" id="add_image" name="add_image">
                     <button type="submit">Add</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="addVariantModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <form id="addVariantForm" enctype="multipart/form-data">
+                    <input type="hidden" name="item_id" id="variant_item_id">
+                    <input type="hidden" name="item_type" id="variant_item_type">
+                    <label id="item_name"></label>
+                    
+                    <label for="add_variant_name">Variant Name:</label>
+                    <input type="text" id="add_variant_name" name="add_variant_name">
+                    
+                    <label for="add_variant_price">Variant Price:</label>
+                    <input type="number" id="add_variant_price" name="add_variant_price">
+                    <label for="add_variant_serving">Variant Serving:</label>
+                    <input type="number" id="add_variant_serving" name="add_variant_serving" min="1" required>
+                    <button type="submit">Add Variant</button>
                 </form>
             </div>
         </div>

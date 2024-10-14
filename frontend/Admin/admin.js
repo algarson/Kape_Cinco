@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const updateModal = document.getElementById('updateModal');
     const addModal = document.getElementById('addModal');
     const deleteModal = document.getElementById('deleteModal');
+    const addVariantModal = document.getElementById('addVariantModal');
     const closeButton = document.querySelector('.close-button');
     const inventoryLink = document.getElementById('inventoryLink');
     const statisticsLink = document.getElementById('statisticsLink');
@@ -332,7 +333,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function openAddVariantModal(item){
-        //addVariantModal.style.display = 'block';
+        document.getElementById('variant_item_id').value = item.food_id || item.drink_id;
+        document.getElementById('variant_item_type').value = item.food_id ? 'food' : 'drink';
+        document.getElementById('item_name').textContent = item.food_name || item.drink_name;
+        addVariantModal.style.display = 'block';
     }
     
     noButton.addEventListener('click', function () {
@@ -357,7 +361,8 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const responseData = await response.json();
                 if (responseData.success) {
                     updateModal.style.display = 'none';
-                    generateAllItems();
+                    await generateAllItems();
+                    document.getElementById('updateForm').reset();
                 } else {
                     alert('Update failed!');
                 }
@@ -373,11 +378,13 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById('addForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        console.log('Add Form submitted');
-        for (const pair of formData.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
+        const serveCount = parseInt(formData.get('add_serving'), 10);
+    
+        if (serveCount < 1) {
+            alert('Serving count must be at least 1.');
+            return; 
         }
-
+    
         try {
             const response = await fetch('/Kape_Cinco/backend/Admin/add_item.php', {
                 method: 'POST',
@@ -388,12 +395,59 @@ document.addEventListener("DOMContentLoaded", async function () {
                 alert('Item added successfully');
                 addModal.style.display = 'none';
                 await generateAllItems();
+                document.getElementById('addForm').reset();
             } else {
                 alert('Add failed: ' + result.message);
             }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while adding the item.');
+        }
+    });
+
+    document.getElementById('addVariantForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        for (const pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+
+        const serveCount = parseInt(formData.get('add_variant_serving'), 10);
+    
+        if (serveCount < 1) {
+            alert('Serving count must be at least 1.');
+            return; 
+        }
+    
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Admin/add_variant_item.php', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Item added successfully');
+                addVariantModal.style.display = 'none';
+                await generateAllItems();
+                document.getElementById('addVariantForm').reset();
+            } else {
+                alert('Add failed: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while adding the item.');
+        }
+    });
+
+    document.getElementById('add_category').addEventListener('change', function() {
+        const descriptionContainer = document.getElementById('description_container');
+        const selectedCategory = this.value;
+    
+        // Hide the description field if category is 'drink'
+        if (selectedCategory === 'drink') {
+            descriptionContainer.style.display = 'none';
+        } else {
+            descriptionContainer.style.display = 'flex';
         }
     });
 
