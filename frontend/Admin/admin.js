@@ -55,6 +55,42 @@ document.addEventListener("DOMContentLoaded", async function () {
             return [];
         }
     }
+    
+    async function generateAllItems() {
+        const allItems = await fetchAllItems();
+        tableBody.innerHTML = '';
+
+        allItems.forEach(item => {
+            const row = createTableRow(item);
+            tableBody.appendChild(row);
+        });
+
+        filterItems('Foods');  
+    }
+
+    function filterItems(category) {
+        const descriptionHeader = document.querySelector('.description-header');
+        const drinkTypeHeader = document.querySelector('.drinktype-header');
+
+        document.querySelectorAll('tbody tr').forEach(row => {
+            const cells = row.cells;
+            const itemCategory = row.getAttribute('data-category');
+
+            if (category === 'Drinks') {
+                drinkTypeHeader.style.display = '';
+                descriptionHeader.style.display = 'none';
+                cells[4].style.display = 'none'; 
+                cells[2].style.display = '';     
+
+                row.style.display = itemCategory === 'Drinks' ? '' : 'none';
+            } else {
+                descriptionHeader.style.display = '';
+                cells[4].style.display = '';     
+
+                row.style.display = itemCategory === 'Foods' ? '' : 'none';
+            }
+        });
+    }
 
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -65,8 +101,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             filterItems(category);
         });
     });
-
-    
 
     function createTableRow(item) {
         const row = document.createElement('tr');
@@ -164,55 +198,30 @@ document.addEventListener("DOMContentLoaded", async function () {
         const updateCell = document.createElement('td');
         const updateButton = document.createElement('button');
         const deleteButton = document.createElement('button');
+        const addVariantButton = document.createElement('button');
         deleteButton.className = "deletebtn"
         deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
         updateButton.className = "updatebtn"
         updateButton.innerHTML = '<i class="fas fa-edit"></i> ';
+        addVariantButton.className = "addVariantbtn"
+        addVariantButton.innerHTML = '<i class="fa-solid fa-circle-plus"></i>';
+
         deleteButton.addEventListener('click', () => openDeleteModal(item));
         updateCell.appendChild(deleteButton);
         row.appendChild(updateCell);
         updateButton.addEventListener('click', () => openUpdateModal(item));
         updateCell.appendChild(updateButton);
         row.appendChild(updateCell);
+        addVariantButton.addEventListener('click', () => openAddVariantModal(item));
+        updateCell.appendChild(addVariantButton);
+        row.appendChild(updateCell);
         
         row.setAttribute('data-category', item.food_name ? 'Foods' : 'Drinks');
         return row;
     }
-
-    async function generateAllItems() {
-        const allItems = await fetchAllItems();
-        tableBody.innerHTML = '';
-
-        allItems.forEach(item => {
-            const row = createTableRow(item);
-            tableBody.appendChild(row);
-        });
-
-        filterItems('Foods');  
-    }
-
-    function filterItems(category) {
-        const descriptionHeader = document.querySelector('.description-header');
-        const drinkTypeHeader = document.querySelector('.drinktype-header');
-
-        document.querySelectorAll('tbody tr').forEach(row => {
-            const cells = row.cells;
-            const itemCategory = row.getAttribute('data-category');
-
-            if (category === 'Drinks') {
-                drinkTypeHeader.style.display = '';
-                descriptionHeader.style.display = 'none';
-                cells[4].style.display = 'none'; 
-                cells[2].style.display = '';     
-
-                row.style.display = itemCategory === 'Drinks' ? '' : 'none';
-            } else {
-                descriptionHeader.style.display = '';
-                cells[4].style.display = '';     
-
-                row.style.display = itemCategory === 'Foods' ? '' : 'none';
-            }
-        });
+    
+    function openAddModal() {   
+        addModal.style.display = 'block';
     }
 
     function openUpdateModal(item) {
@@ -289,15 +298,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         updateModal.style.display = 'block';
     }
 
-
-    function openAddModal() {   
-        addModal.style.display = 'block';
-    }
-
     function openDeleteModal(item) {
         document.getElementById('item_id').value = item.food_id || item.drink_id;
         document.getElementById('item_type').value = item.food_id ? 'food' : 'drink';
-        deleteModal.style.display = 'block';
 
         yesButton.onclick = async () => {
             try {
@@ -324,21 +327,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                 alert('An error occurred while deleting the item.');
             }
         };
+        
+        deleteModal.style.display = 'block';
+    }
+
+    function openAddVariantModal(item){
+        //addVariantModal.style.display = 'block';
     }
     
-    closeButton.addEventListener('click', function() {
-        updateModal.style.display = 'none';
-    });
-
-    closeButton.addEventListener('click', function() {
-        addModal.style.display = 'none';
-    });
-
-    closeButton.addEventListener('click', function() {
-        deleteModal.style.display = 'none';
-    });
-    
-
     noButton.addEventListener('click', function () {
         deleteModal.style.display = 'none';
     });
@@ -372,38 +368,42 @@ document.addEventListener("DOMContentLoaded", async function () {
             console.error('Error updating item:', error);
             alert('An error occurred during the update.');
         }
-        
-        document.getElementById('addForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-            const formData = new FormData(event.target);
-            console.log('Add Form submitted');
-            for (const pair of formData.entries()) {
-                console.log(pair[0] + ', ' + pair[1]);
-            }
-    
-            try {
-                const response = await fetch('/Kape_Cinco/backend/Admin/add_item.php', {
-                    method: 'POST',
-                    body: formData
-                });
-                const result = await response.json();
-                if (result.success) {
-                    alert('Item added successfully');
-                    addModal.style.display = 'none';
-                    await generateAllItems();
-                } else {
-                    alert('Add failed: ' + result.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while adding the item.');
-            }
-        });
-    
-        // Event listener for the "Add" button to open the addModal
-        
     });
 
+    document.getElementById('addForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        console.log('Add Form submitted');
+        for (const pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Admin/add_item.php', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Item added successfully');
+                addModal.style.display = 'none';
+                await generateAllItems();
+            } else {
+                alert('Add failed: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while adding the item.');
+        }
+    });
+
+    document.querySelectorAll('.close-button').forEach(button => {
+        button.addEventListener('click', function () {
+            button.parentElement.parentElement.style.display = 'none';
+        });
+    });
+    // Event listener for the "Add" button to open the addModal
+    
      // Add event listeners for navigation links
      inventoryLink.addEventListener('click', () => {
         inventoryLink.classList.add('active');
