@@ -651,11 +651,18 @@ th {
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
-.close {
+.daily-modal-content .close-button {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
+}
+
+.daily-modal-content .close-button:hover,
+.daily-modal-content .close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 /* Responsive layout for smaller screens for images on a foodlist*/

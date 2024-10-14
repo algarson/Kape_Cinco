@@ -9,38 +9,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     const logoutButton = document.getElementById('logout-button');
     const totalIncome = document.getElementById('total-income-amount');
     const totalOrders = document.getElementById('total-order-amount');
-    /*modal daily sales */
-    const rows = document.querySelectorAll('.order-row');
-    const modal = document.getElementById("orderModal");  // Modal ID stays the same
-    const span = document.querySelector(".close");
-    const orderDetails = document.getElementById("orderDetails");
-
-      // Function to display the modal with the selected order details
-      function showOrderDetails(orderNumber) {
-        orderDetails.textContent = `Details for Order Number: ${orderNumber}`;
-        modal.style.display = "flex";  // Show modal
-    }
-
-    // Add click event to each row
-    rows.forEach(row => {
-        row.addEventListener("click", function () {
-            const orderNumber = this.getAttribute("data-order");
-            showOrderDetails(orderNumber);
-        });
-    });
-
-    // Close the modal when the 'x' is clicked
-    span.addEventListener("click", function () {
-        modal.style.display = "none";  // Hide modal
-    });
-
-    // Close the modal when clicking outside the modal content
-    window.addEventListener("click", function (event) {
-        if (event.target == modal) {
-            modal.style.display = "none";  // Hide modal
-        }
-    });
-    /*end daily sales */
 
     let totalAmount = 0;
 
@@ -59,7 +27,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         })
         .catch(error => console.error('Error:', error));
-
+        
     async function fetchAllItems() {
         try {
             const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
@@ -82,6 +50,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    async function dailySales () {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Home/stats.php");
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    }
     
     async function generateAllItems() {
         try {
@@ -1000,6 +977,74 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     /* --------------------------- DAILY SALES ---------------------------- */
+    async function fetchandRenderDailySales() {
+        try {
+            const modalTotalAmount = document.getElementById('sales-completed-modal-total-amount');
+            const modalTotalReceived = document.getElementById('sales-completed-modal-received-amount');
+            const modalTotalChange = document.getElementById('sales-completed-modal-change-amount');
+            const SalesTableBody = document.getElementById('sales-table-body');
+            const orderDetails = document.getElementById("orderDetails");
+            const modal = document.getElementById("salesModal");  // Modal ID stays the same
+
+            const orders = await fetchAllOrders();
+            const today = new Date().toISOString().split('T')[0];
+    
+            // Filter for completed orders
+            const completedOrders = orders.filter(order => order.order_status === 'Completed');
+    
+            // Filter for orders that were completed today
+            const completedOrdersToday = completedOrders.filter(order => {
+                const orderDate = order.order_date.split(' ')[0];
+                return orderDate === today;
+            });
+
+            SalesTableBody.innerHTML = '';
+
+            completedOrdersToday.reverse().forEach(order => {
+                const row = document.createElement('tr');
+                row.className = "order-row";
+                row.setAttribute('data-sales-number', order.order_number); 
+                
+                // Build row content and store item names in a single pass
+                let rowContent = '';
+                let orderDetailsContent = '';
+                let totalquantity = 0;
+
+                order.cart.forEach(item => {
+                    totalquantity += Number(item.item_quantity);
+                    rowContent = `
+                        <td>${order.order_number}</td>
+                        <td>${totalquantity}</td>
+                        <td>${order.order_total_amount.toFixed(2)}</td>
+                    `;
+    
+                    orderDetailsContent += `
+                        <span>${item.item_name}</span>
+                        <span>x${item.item_quantity}</span>
+                        <br></br>
+                    `;
+                });
+    
+                row.innerHTML = rowContent;
+                
+                row.addEventListener("click", function () {
+                    modalTotalAmount.textContent = `₱${order.order_total_amount.toFixed(2)}`;
+                    modalTotalReceived.textContent = `₱${order.order_payment_received.toFixed(2)}`;
+
+                    const change = order.order_payment_received - order.order_total_amount;
+                    modalTotalChange.textContent = `₱${change.toFixed(2)}`;
+                    orderDetails.innerHTML = orderDetailsContent;
+                    modal.style.display = "block";
+                });
+
+                SalesTableBody.appendChild(row);
+            });
+        }catch (err) {
+            console.error('Error rendering daily sales:', err);
+        }
+    }
+
+    /*end daily sales */
     /*async function fetchandRenderDailySales() {
         try {
             const orders = await fetchAllOrders();
@@ -1038,16 +1083,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }*/
 
-    async function dailySales () {
-        try {
-            const res = await fetch("/Kape_Cinco/backend/Home/stats.php");
-            const data = await res.json();
-            return data;
-        } catch (err) {
-            console.error('Error fetching data:', err);
-        }
-    }
-
     async function displaySales () {
         const totalSales = await dailySales();
 
@@ -1056,15 +1091,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         totalOrders.innerHTML = totalSales[0].total_orders;
     }
     
-    
-    function InitializeDailySales(){
-        displaySales();
-        fetchandRenderDailySales();
-    }
-    
-    InitializeDailySales();
+    fetchandRenderDailySales();
+    displaySales();
 
-    //setInterval(fetchandRenderDailySales,3000);
+    setInterval(fetchandRenderDailySales,3000);
     setInterval(displaySales,3000);
     /*
     document.getElementById('nav-settings').addEventListener('click', () => {

@@ -122,37 +122,37 @@
                 <div class="accepted-orders-chart">
                      <h2>Sales List</h2>
                      <div class="row-parent" id="row-parent">
-                        <table class="sales-table">
-                            <tr >
-                              <th>Order Number</th>
-                              <th>Quantity</th>
-                              <th>Sales</th>
-                            </tr>
-                            <tr class="order-row" data-order="ORD-NUM-9743">
-                              <td>ORD-NUM-9743</td>
-                              <td>X5 SILOG</td>
-                              <td>750.00</td>
-                            </tr>
-                          </table>
+                        <table class="sales-table" id="sales-table">
+                            <thead>
+                                <tr >
+                                    <th>Order Number</th>
+                                    <th>Quantity</th>
+                                    <th>Sales</th>
+                                  </tr>
+                            </thead>
+                            <tbody id="sales-table-body">
+
+                            </tbody>
+                        </table>
                         <!-- daily sales -->
-                        <div id="orderModal" class="daily-sales-modal">
+                        <div id="salesModal" class="daily-sales-modal" style="display: none">
                             <div class="daily-modal-content">
-                                <span class="close">&times;</span>
+                                <span class="close-button">&times;</span>
                                 <h2>Order Details</h2>
                                 <hr class="total-hr">
                                 <div class="total">
                                     <span>Total Amount Received: </span>
-                                    <span id="completed-modal-received-amount"></span>
+                                    <span id="sales-completed-modal-received-amount"></span>
                                 </div>
                                 <div class="total">
                                     <span>Total: </span>
-                                    <span id="completed-modal-total-amount"></span>
+                                    <span id="sales-completed-modal-total-amount"></span>
                                 </div>
                                 <div class="total">
                                     <span>Change: </span>
-                                    <span id="completed-modal-change-amount"></span>
+                                    <span id="sales-completed-modal-change-amount"></span>
                                 </div>
-                                <p id="orderDetails"></p>
+                                <div id="orderDetails"></div>
                             </div>
                         </div>
                      </div>
