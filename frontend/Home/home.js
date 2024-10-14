@@ -60,6 +60,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
     
+    async function displaySales () {
+        const totalSales = await dailySales();
+
+        //console.log(totalSales);
+        totalIncome.innerHTML = totalSales[0].Sales;
+        totalOrders.innerHTML = totalSales[0].total_orders;
+    }
+
     async function generateAllItems() {
         try {
             const allItems = await fetchAllItems();
@@ -218,7 +226,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
     
     generateAllItems();
-    
+    displaySales();
 
     /* ------------------------- FOOD CATEGORIES ------------------------- */
     document.querySelectorAll('.categories button').forEach(button => {
@@ -976,6 +984,15 @@ document.addEventListener('DOMContentLoaded', async function () {
         billsSection.style.display = 'none';
     });
 
+     /*
+    document.getElementById('nav-settings').addEventListener('click', () => {
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('OrderNum-section').style.display = 'none';
+        document.getElementById('statistics-section').style.display = 'none';
+        document.getElementById('settings-section').style.display = 'block';
+        billsSection.style.display = 'none';
+    });*/ //wala naman to ah? comment ko muna - jedd 
+    
     /* --------------------------- DAILY SALES ---------------------------- */
     async function fetchandRenderDailySales() {
         try {
@@ -1043,69 +1060,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Error rendering daily sales:', err);
         }
     }
-
-    /*end daily sales */
-    /*async function fetchandRenderDailySales() {
-        try {
-            const orders = await fetchAllOrders();
-            console.log(orders);
-            const rowParent = document.getElementById('row-parent');
-            rowParent.innerHTML = '';
-
-            const today = new Date().toISOString().split('T')[0];
-    
-            // Filter for completed orders
-            const completedOrders = orders.filter(order => order.order_status === 'Completed');
-    
-            // Filter for orders that were completed today
-            const completedOrdersToday = completedOrders.filter(order => {
-                const orderDate = order.order_date.split(' ')[0];
-                return orderDate === today;
-            });
-    
-            // Loop through each completed order and create dynamic rows
-            completedOrdersToday.reverse().forEach(order => {
-                const orderHtml = document.createElement('div');
-                orderHtml.classList.add('row');
-                orderHtml.innerHTML = order.cart.map(item => `
-                        <div class="columns">
-                            <img src="${item.item_image ? '/Kape_Cinco/backend/images/' + item.item_image : '/Kape_Cinco/frontend/images/kape_cinco.jpg'}" alt="${item.item_name}">
-                            <strong>${item.item_name}</strong>
-                        </div>
-                        <div class="columns"><strong>Orders: ${item.item_quantity}</strong></div>
-                        <div class="columns"><strong>Total: ₱${item.item_total_price.toFixed(2)}</strong></div>
-                `).join('');
-    
-                rowParent.appendChild(orderHtml);
-            });
-        } catch (err) {
-            console.error('Error rendering daily sales:', err);
-        }
-    }*/
-
-    async function displaySales () {
-        const totalSales = await dailySales();
-
-        //console.log(totalSales);
-        totalIncome.innerHTML = totalSales[0].Sales;
-        totalOrders.innerHTML = totalSales[0].total_orders;
-    }
     
     fetchandRenderDailySales();
-    displaySales();
 
     setInterval(fetchandRenderDailySales,3000);
     setInterval(displaySales,3000);
-    /*
-    document.getElementById('nav-settings').addEventListener('click', () => {
-        document.getElementById('main-content').style.display = 'none';
-        document.getElementById('OrderNum-section').style.display = 'none';
-        document.getElementById('statistics-section').style.display = 'none';
-        document.getElementById('settings-section').style.display = 'block';
-        billsSection.style.display = 'none';
-    });*/ //wala naman to ah? comment ko muna - jedd 
 
  /* --------------------    End of Section Categories     --------------------*/
   
-
 });
