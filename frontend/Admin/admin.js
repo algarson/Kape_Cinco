@@ -510,59 +510,82 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Set default view on page load
     inventoryLink.click();
 
-    function generateStatisticsChart(timeframe = 'weekly') {
+    async function weeklySales () {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Admin/weeklyStats.php");
+            const weeklyData = await res.json();
+            return weeklyData;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    }
+
+    async function monthlySales () {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Admin/monthlyStats.php");
+            const monthlyData = await res.json();
+            return monthlyData;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    }
+
+    async function yearlySales () {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Admin/yearlyStats.php");
+            const yearlyData = await res.json();
+            return yearlyData;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    }
+
+    async function yearlySalesDate () {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Admin/yearlyStatsYears.php");
+            const yearlyDateData = await res.json();
+            return yearlyDateData;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    }
+
+
+
+    async function generateStatisticsChart(timeframe = 'weekly') {
         let chartData = {};
+        const weekly = await weeklySales();
+        const monthly = await monthlySales();
+        const yearly = await yearlySales();
+        const YD = await yearlySalesDate();
 
         switch (timeframe) {
             case 'weekly':
-                chartData = {
-                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                    datasets: [
-                        {
-                            label: 'Revenue',
-                            data: [1000, 1500, 2000, 2500],
-                            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Expenses',
-                            data: [400, 600, 800, 1000],
-                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Profit',
-                            data: [600, 900, 1200, 1500],
-                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                };
+                //for (i = 1; i>=4; i++){
+                    chartData = {
+                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                        datasets: [
+    
+                            {
+                                label: 'Sales',
+                                data: weekly,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }
+                        ]
+                    };
+                //}
                 break;
                 case 'monthly':
                     chartData = {
-                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                         datasets: [
+    
                             {
-                                label: 'Revenue',
-                                data: [1200, 1500, 1800, 1900, 2200, 2500, 2800, 3000, 2700, 2400, 2100, 1800],
-                                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                borderColor: 'rgba(75, 192, 192, 1)',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Expenses',
-                                data: [400, 500, 600, 700, 800, 900, 1000, 1100, 1000, 900, 800, 700],
-                                backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                borderColor: 'rgba(255, 99, 132, 1)',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Profit',
-                                data: [800, 1000, 1200, 1200, 1400, 1600, 1800, 1900, 1700, 1500, 1300, 1100],
+                                label: 'Sales',
+                                data: monthly,
                                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                                 borderColor: 'rgba(54, 162, 235, 1)',
                                 borderWidth: 1
@@ -573,25 +596,12 @@ document.addEventListener("DOMContentLoaded", async function () {
 
                     case 'yearly':
                         chartData = {
-                            labels: ['2020', '2021', '2022', '2023', '2024'],
+                            labels: YD,
                             datasets: [
+                               
                                 {
-                                    label: 'Revenue',
-                                    data: [15000, 18000, 20000, 22000, 25000],
-                                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                    borderColor: 'rgba(75, 192, 192, 1)',
-                                    borderWidth: 1
-                                },
-                                {
-                                    label: 'Expenses',
-                                    data: [6000, 7000, 8000, 9000, 10000],
-                                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                                    borderColor: 'rgba(255, 99, 132, 1)',
-                                    borderWidth: 1
-                                },
-                                {
-                                    label: 'Profit',
-                                    data: [9000, 11000, 12000, 13000, 15000],
+                                    label: 'Sales',
+                                    data: yearly,
                                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                                     borderColor: 'rgba(54, 162, 235, 1)',
                                     borderWidth: 1
