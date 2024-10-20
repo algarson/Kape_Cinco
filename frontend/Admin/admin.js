@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Admin/admin.html`;
             } else {
                 document.body.classList.remove('hidden');
                 generateAllItems();

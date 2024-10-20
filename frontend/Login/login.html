@@ -95,6 +95,11 @@
             formData.append('username', username);
             formData.append('password', password);
 
+             // Get the redirect parameter from the URL
+            const params = new URLSearchParams(window.location.search);
+            const redirectPage = params.get('redirect') || 'Home/home.html'; // Default to home page if no redirect
+
+
             fetch('/Kape_Cinco/backend/Login/login.php', {
                 method: 'POST',
                 body: formData
@@ -102,7 +107,7 @@
             .then(response => response.json())
             .then(data => {
                 if (data.adminExists) {
-                    window.location.href = '/Kape_Cinco/frontend/Home/home.html'; 
+                    window.location.href = `/Kape_Cinco/frontend/${redirectPage}`;
                 } else if (data.error) {
                     alert(data.error);
                 }
