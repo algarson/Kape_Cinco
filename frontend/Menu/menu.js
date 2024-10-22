@@ -88,15 +88,20 @@ document.addEventListener('DOMContentLoaded', async function () {
     
             if (item.food_status === 'Unavailable' || item.drink_status === 'Unavailable') {
                 allItemImage.style.opacity = '0.5';
+                viewButton.style.opacity = '0.7';
+                viewButton.textContent = 'Unavailable';
                 viewButton.disabled = true;
+                allItem.style.cursor = 'not-allowed';
                 viewButton.style.cursor = 'not-allowed';
             } else {
-                viewButton.addEventListener('click', () => {
+                allItem.addEventListener('click', () => {
                     const orderitems = {
                         image: item.food_image || item.drink_image || 'default_image',
                         name: item.food_name || item.drink_name,
                         desc: item.food_desc || '',
-                        price: item.food_price || item.drink_price
+                        serving: item.food_serve_count || item.drink_serve_count,
+                        price: item.food_price || item.drink_price,
+                        variants: item.variants || []
                     };
                     setItemDetails(orderitems);
                 });
@@ -152,30 +157,28 @@ document.addEventListener('DOMContentLoaded', async function () {
         const cartItemsContainer = document.querySelector('.cart-items');
         const cart = JSON.parse(localStorage.getItem('cart')) || [];
         const summaryContainer = document.querySelector('.summary');
-
-        cartItemsContainer.innerHTML = ''; 
+    
+        cartItemsContainer.innerHTML = '';
         summaryContainer.innerHTML = '';
+    
         if (cart.length === 0) {
             cartItemsContainer.innerHTML = `
                 <div class="summary-item">
                     <span>Food Cart is Empty</span>
                 </div>
             `;
-            return; 
+            return;
         }
-        //console.log(cart);
-        cart.forEach(item => {
+    
+        cart.forEach((item, index) => {
             const cartItem = document.createElement('div');
             cartItem.classList.add('cart-item');
-            cartItem.setAttribute('data-price', item.price);
-
-            let imagePath;
-            if (item.image === 'default_image' || !item.image) {
-                imagePath = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
-            } else {
-                imagePath = `/Kape_Cinco/backend/images/${item.image}`;
-            }
-            
+            cartItem.setAttribute('data-index', index); // Unique identifier
+    
+            let imagePath = item.image === 'default_image' || !item.image 
+                            ? '/Kape_Cinco/frontend/images/kape_cinco.jpg' 
+                            : `/Kape_Cinco/backend/images/${item.image}`;
+    
             cartItem.innerHTML = `
                 <div class="card-image-left">
                     <img src="${imagePath}" alt="${item.name}" id="foodID">
@@ -183,23 +186,23 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <div class="item-details-right">
                     <div class="top-text">
                         <h2>${item.name}</h2>
-                        <button class="remove-btn">Remove</button>
+                        <button class="remove-btn" data-index="${index}">Remove</button>
                     </div>
                     <p>${item.desc}</p>
                     <div class="Lower-text">
                         <div class="quantity-control">
-                            <button class="quantity-btn" data-action="decrease"><span class="material-icons-sharp">remove</span></button>
-                            <input type="number" value="${item.quantity}" class="quantity-input" readonly>
-                            <button class="quantity-btn" data-action="increase"><span class="material-icons-sharp">add</span></button>
+                            <button class="quantity-btn" id="decrement-quantity-${index}" data-action="decrease" data-index="${index}"><span class="material-icons-sharp">remove</span></button>
+                            <input type="number" id="item-quantity-${index}" value="${item.quantity}" class="quantity-input" readonly>
+                            <button class="quantity-btn" id="increment-quantity-${index}" data-action="increase" data-index="${index}"><span class="material-icons-sharp">add</span></button>
                         </div>
                         <div class="item-total">Total: ₱${item.total.toFixed(2)}</div>
                     </div>
                 </div>
             `;
-
+    
             cartItemsContainer.appendChild(cartItem);
         });
-
+    
         summaryContainer.innerHTML = `
             <div class="summary-item">
                 <span>Total items(items)</span>
@@ -215,115 +218,92 @@ document.addEventListener('DOMContentLoaded', async function () {
             </div>
             <button class="complete-order-btn">Review Order</button>
         `;
-
+    
         document.querySelector('.complete-order-btn').addEventListener('click', function() {
             window.location.href = '/Kape_Cinco/frontend/Menu/review.html';
         });
-
+    
         addEventListenersToCartItems();
         updateSummary();
     }
 
     function addEventListenersToCartItems() {
         const quantityButtons = document.querySelectorAll('.quantity-btn');
-        const removeButtons = document.querySelectorAll('.remove-btn');
+        const removeButtons = document.querySelectorAll('.remove-btn'); // Add remove buttons
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
     
         quantityButtons.forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function(event) {
+                event.stopPropagation();
+
                 const action = this.getAttribute('data-action');
-                const quantityInput = this.parentElement.querySelector('.quantity-input');
-                let currentValue = parseInt(quantityInput.value);
-                
+                const index = parseInt(this.getAttribute('data-index')); // Get the correct index
+                const quantityElement = document.getElementById(`item-quantity-${index}`);
+                let currentValue = parseInt(quantityElement.value);
+    
+                const serveCount = cart[index].serving; // Access the correct item's serving count
+    
                 if (action === 'increase') {
-                    currentValue++;
+                    if (!serveCount || currentValue < serveCount) {
+                        quantityElement.value = currentValue + 1;
+                        updateButtonStates(index, serveCount);
+                    } else {
+                        updateButtonStates(index, serveCount);
+                    }
                 } else if (action === 'decrease' && currentValue > 1) {
-                    currentValue--;
+                    quantityElement.value = currentValue - 1;
+                    updateButtonStates(index, serveCount);
                 }
     
-                quantityInput.value = currentValue;
-                updateCartItem(this.closest('.cart-item'), currentValue);
-                updateTotal(this.closest('.cart-item'));
+                // Update cart item quantity and total price
+                cart[index].quantity = parseInt(quantityElement.value);
+                cart[index].total = cart[index].price * cart[index].quantity;
+    
+                // Save updated cart to localStorage
+                localStorage.setItem('cart', JSON.stringify(cart));
+                
+                updateCartDisplay();
                 updateSummary();
             });
         });
     
-        removeButtons.forEach(button => {
+        removeButtons.forEach(button => { 
             button.addEventListener('click', function() {
-                const cartItem = this.closest('.cart-item');
-                removeCartItem(cartItem);
+                const index = parseInt(this.getAttribute('data-index'));
+                removeCartItem(index); 
                 updateCartDisplay(); 
             });
         });
     }
-    
-    function updateCartItem(cartItem, quantity) {
-        const name = cartItem.querySelector('.top-text h2').textContent;
+
+    function removeCartItem(index) {
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        
-        cart = cart.map(item => {
-            if (item.name === name) {
-                return { ...item, quantity: quantity };
-            }
-            return item;
-        });
+    
+        cart.splice(index, 1);
     
         localStorage.setItem('cart', JSON.stringify(cart));
-    }
     
-    function removeCartItem(cartItem) {
-        const name = cartItem.querySelector('.top-text h2').textContent;
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-        
-        cart = cart.filter(item => item.name !== name);
-
-        localStorage.setItem('cart', JSON.stringify(cart));
-
-        
         if (cart.length === 0) {
             const cartItemsContainer = document.querySelector('.cart-items');
             const summaryContainer = document.querySelector('.summary');
-            
+    
             cartItemsContainer.innerHTML = `
                 <div class="summary-item">
                     <span>Food Cart is Empty</span>
                 </div>
             `;
-            summaryContainer.innerHTML = ''; 
+            summaryContainer.innerHTML = '';
         }
-    }
-    
-    function updateTotal(cartItem) {
-        const quantityInput = cartItem.querySelector('.quantity-input');
-        const pricePerItem = parseInt(cartItem.getAttribute('data-price'), 10);
-        const quantityValue = parseInt(quantityInput.value, 10);
-    
-        if (isNaN(pricePerItem) || isNaN(quantityValue)) {
-            console.error('Invalid price or quantity value');
-            return;
-        }
-    
-        const totalPrice = quantityValue * pricePerItem;
-        const totalElement = cartItem.querySelector('.item-total');
-        totalElement.textContent = `Total: ₱${totalPrice.toFixed(2)}`;
     }
     
     function updateSummary() {
-        const quantityInputs = document.querySelectorAll('.quantity-input');
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let totalItems = 0;
         let totalPrice = 0;
     
-        quantityInputs.forEach(input => {
-            const cartItem = input.closest('.cart-item');
-            const pricePerItem = parseInt(cartItem.getAttribute('data-price'), 10);
-            const quantityValue = parseInt(input.value, 10);
-    
-            if (isNaN(pricePerItem) || isNaN(quantityValue)) {
-                console.error('Invalid price or quantity value');
-                return;
-            }
-            
-            totalItems += quantityValue;
-            totalPrice += quantityValue * pricePerItem;
+        cart.forEach(item => {
+            totalItems += item.quantity;
+            totalPrice += item.price * item.quantity;
         });
     
         const summaryItemsElement = document.querySelector('.summary-item span:first-child');
@@ -343,6 +323,25 @@ document.addEventListener('DOMContentLoaded', async function () {
         const modal = document.getElementById('myModal');
         modal.style.display = 'none';
     }
+
+    function updateButtonStates(index, serveCount) {
+        const quantityElement = document.getElementById(`item-quantity-${index}`);
+        const quantity = parseInt(quantityElement.value);
+        const maxServeCount = parseInt(serveCount);
+    
+        const incrementButton = document.getElementById(`increment-quantity-${index}`);
+        const decrementButton = document.getElementById(`decrement-quantity-${index}`);
+    
+        const toggleButtonState = (button, isDisabled) => {
+            button.disabled = isDisabled;
+            button.classList.toggle('disabled', isDisabled);
+            console.log(button.classList);
+        };
+    
+        toggleButtonState(incrementButton, maxServeCount && quantity >= maxServeCount);
+        toggleButtonState(decrementButton, quantity <= 1);
+    }
+    
 
     document.querySelector('.material-icons-sharp').addEventListener('click', showCartModal);
     document.querySelector('.close').addEventListener('click', closeCartModal);

@@ -16,6 +16,12 @@ body {
     background-color: #f5f5f5;
 }
 
+.disabled {
+    opacity: 0.5; 
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .parent-header {
     display: flex;
     flex-direction: column;
@@ -138,6 +144,7 @@ h1 {
     overflow: hidden;
     box-shadow: 0 10px 5px rgba(0, 0, 0, 0.1);
     position: relative;
+    cursor: pointer;
 }
 
 .menu-item img {
@@ -350,7 +357,6 @@ h1 {
     width: 30px;
     height: 30px;
     font-size: 18px;
-
 }
 
 .quantity-input {

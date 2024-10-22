@@ -8,15 +8,21 @@
     --color-success: #1B9C85;
 }
 
+.hidden {
+    display: none;
+}
+
+.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 body {
     font-family: Poppins;
     margin: 0;
     padding: 0;
     background-color: #f4ede4;
-}
-
-body.hidden {
-    display: none;
 }
 
 .container {

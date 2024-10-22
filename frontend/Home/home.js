@@ -1004,8 +1004,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             const modal = document.getElementById("salesModal");  // Modal ID stays the same
 
             const orders = await fetchAllOrders();
-            const today = new Date().toISOString().split('T')[0];
-    
+            const today = getPhilippineDate();
+
             // Filter for completed orders
             const completedOrders = orders.filter(order => order.order_status === 'Completed');
     
@@ -1016,7 +1016,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
 
             SalesTableBody.innerHTML = '';
-
+    
             completedOrdersToday.reverse().forEach(order => {
                 const row = document.createElement('tr');
                 row.className = "order-row";
@@ -1069,3 +1069,15 @@ document.addEventListener('DOMContentLoaded', async function () {
  /* --------------------    End of Section Categories     --------------------*/
   
 });
+
+function getPhilippineDate() {
+    const today = new Date();
+    const offset = today.getTimezoneOffset(); 
+    const philippinesOffset = 8 * 60; // Philippines is UTC+8
+
+    const timezoneOffset = philippinesOffset - offset;
+
+    const localToday = new Date(today.getTime() + timezoneOffset * 60 * 1000);
+    
+    return localToday.toISOString().split('T')[0]; 
+}
