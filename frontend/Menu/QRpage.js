@@ -51,5 +51,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 1000); 
 
     document.body.classList.remove('hidden');
-    //localStorage.removeItem(orderToken)
+    localStorage.removeItem(orderToken)
 });

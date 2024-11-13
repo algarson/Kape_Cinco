@@ -582,6 +582,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const pendingOrderDetails = document.getElementById('pending-order-details');
         const modalTotalAmount = document.getElementById('pending-modal-total-amount');
         const modal = document.getElementById('pending-orders-modal');
+        const pendingBtn = document.getElementById('confirm-pending-order');
         
         pendingOrdersContainer.innerHTML = ''; 
 
@@ -595,6 +596,34 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <li class="order-number-item"><span id="order-number">${order.order_number}</span></li>
             `;
             pendingOrdersContainer.appendChild(orderItem);
+
+            const countdownElement = document.getElementById('countdown-timer');
+            const countdownDuration = 20 * 1000; // 20 minutes in milliseconds
+            const orderDate = new Date(order.order_date);
+            const endTime = orderDate.getTime() + countdownDuration;
+
+            // Countdown timer
+            const countdownInterval = setInterval(async function() {
+                const now = new Date().getTime();
+                const remainingTime = endTime - now;
+
+                if (remainingTime <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownElement.textContent = "Order Canceled";
+                    pendingBtn.disabled = true;
+                    modal.style.display = 'none';
+                    await cancelOrderAutomatically(order.order_number);
+                    fetchAndRenderPendingOrder(); 
+                    fetchAndRenderCancelOrder();
+                    return;
+                }
+
+                const remainingSeconds = Math.floor(remainingTime / 1000);
+                const minutes = Math.floor(remainingSeconds / 60);
+                const seconds = remainingSeconds % 60;
+                const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                countdownElement.textContent = `Time remaining: ${formattedTime}`;
+            }, 1000);
 
             orderItem.addEventListener('click', function() {
                 pendingOrderNumber.textContent = order.order_number;
@@ -1069,6 +1098,31 @@ document.addEventListener('DOMContentLoaded', async function () {
  /* --------------------    End of Section Categories     --------------------*/
   
 });
+
+async function cancelOrderAutomatically(orderNumber) {
+    const formData = new FormData();
+    formData.append('order-number', orderNumber);
+    formData.append('received-amount', 0); // Assuming no payment received on auto-cancel
+    formData.append('order-stats', 'Canceled');
+
+    try {
+        const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            if (!responseData.success) {
+                console.warn(`Failed to auto-cancel order ${orderNumber}`);
+            }
+        } else {
+            console.error(`Failed to send auto-cancel request for order ${orderNumber}`);
+        }
+    } catch (error) {
+        console.error('Error auto-canceling order:', error);
+    }
+}
 
 function getPhilippineDate() {
     const today = new Date();
