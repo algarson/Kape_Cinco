@@ -153,14 +153,18 @@ th {
 #updateForm, #addForm, #addForm div, #addVariantForm {
     display: flex;
     flex-direction: column;
+
 }
 
 .updatebtn, .deletebtn, .addVariantbtn{
-   margin: 4px; 
-   padding: 5px;
-   border: none;
-   color: #4e342e;
-   background: none;
+    background-color: none;
+    color: #4e342e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 3px;
+    padding: 3px;
+
 }
 
 .updatebtn:hover, .deletebtn:hover, .addVariantbtn:hover{
@@ -242,7 +246,7 @@ body.inventory-active .category-nav {
     display: flex;
 }
 
-.add-button {
+.add-button{
     background-color: #8d6e63;
     position: absolute;
     right: 40px;
@@ -257,3 +261,22 @@ body.inventory-active .category-nav {
     background-color: #4e342e;
 }
 
+
+.modal-content{
+    background-color:#f5e3d3;
+}
+
+.update-form-btn, .add-btn-form, .variant-btn-form{
+    background-color: #8d6e63;
+    color: white;
+    position: relative;
+    top: 5px;
+}
+
+.yes-button, .no-button{
+    background-color: #8d6e63;
+    color: white;
+    padding: 5px 5px;
+    border-radius: 10px;
+
+}
