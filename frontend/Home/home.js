@@ -598,7 +598,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             pendingOrdersContainer.appendChild(orderItem);
 
             const countdownElement = document.getElementById('countdown-timer');
-            const countdownDuration = 20 * 1000; // 20 minutes in milliseconds
+            const countdownDuration = 1200 * 1000; // 20 minutes in milliseconds
             const orderDate = new Date(order.order_date);
             const endTime = orderDate.getTime() + countdownDuration;
 
@@ -1043,7 +1043,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const orderDate = order.order_date.split(' ')[0];
                 return orderDate === today;
             });
-
+            console.log(today);
             SalesTableBody.innerHTML = '';
     
             completedOrdersToday.reverse().forEach(order => {
@@ -1125,13 +1125,12 @@ async function cancelOrderAutomatically(orderNumber) {
 }
 
 function getPhilippineDate() {
-    const today = new Date();
-    const offset = today.getTimezoneOffset(); 
-    const philippinesOffset = 8 * 60; // Philippines is UTC+8
-
-    const timezoneOffset = philippinesOffset - offset;
-
-    const localToday = new Date(today.getTime() + timezoneOffset * 60 * 1000);
+    const options = { timeZone: 'Asia/Manila', year: 'numeric', month: '2-digit', day: '2-digit' };
+    const formatter = new Intl.DateTimeFormat('en-CA', options); // en-CA for ISO-like format (YYYY-MM-DD)
+    const parts = formatter.formatToParts(new Date());
+    const year = parts.find(part => part.type === 'year').value;
+    const month = parts.find(part => part.type === 'month').value;
+    const day = parts.find(part => part.type === 'day').value;
     
-    return localToday.toISOString().split('T')[0]; 
+    return `${year}-${month}-${day}`;
 }
