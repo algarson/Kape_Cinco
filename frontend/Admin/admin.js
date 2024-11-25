@@ -8,14 +8,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     const closeButton = document.querySelector('.close-button');
     const inventoryLink = document.getElementById('inventoryLink');
     const statisticsLink = document.getElementById('statisticsLink');
+    const logsLink = document.getElementById('logsLink');
     const mainContent = document.getElementById('mainContent');
     const inventorySection = document.getElementById('inventorySection');
     const statisticsSection = document.getElementById('statisticsSection');
+    const logSection = document.getElementById('logSection');
     const statisticsChartElement = document.getElementById('statisticsChart').getContext('2d');
     let statisticsChart; // Variable to hold the chart instance
     const yesButton = document.querySelector('.yes-button');
     const noButton = document.querySelector('.no-button');
     const addButton = document.querySelector('.add-button'); // Add but
+    
 
     fetch('/Kape_Cinco/backend/Login/check_login.php')
         .then(response => response.json())
@@ -462,8 +465,10 @@ document.addEventListener("DOMContentLoaded", async function () {
      inventoryLink.addEventListener('click', () => {
         inventoryLink.classList.add('active');
         statisticsLink.classList.remove('active');
+        logsLink.classList.remove('active');
         inventorySection.style.display = '';
         statisticsSection.style.display = 'none';
+        logSection.style.display = 'none';
         document.body.classList.add('inventory-active');
         filterItems('Foods');  // Set default category to Foods on inventory section load
     });
@@ -471,10 +476,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     statisticsLink.addEventListener('click', () => {
         inventoryLink.classList.remove('active');
         statisticsLink.classList.add('active');
+        logsLink.classList.remove('active');
         inventorySection.style.display = 'none';
         statisticsSection.style.display = '';
+        logSection.style.display = 'none';
         document.body.classList.remove('inventory-active');
     });
+
+
+    
 
 
     inventoryLink.addEventListener('click', () => {
@@ -490,6 +500,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         inventorySection.style.display = 'none';
         statisticsSection.style.display = '';
         generateStatisticsChart('weekly'); // Default to weekly view
+    });
+
+    // Event listener for Logs navigation
+    logsLink.addEventListener('click', () => {
+        inventoryLink.classList.remove('active');
+        statisticsLink.classList.remove('active');
+        logsLink.classList.add('active');
+        inventorySection.style.display = 'none'; // Hide Inventory section
+        statisticsSection.style.display = 'none'; // Hide Statistics section
+        logSection.style.display = ''; // Show Log section
     });
 
      // Event listener for weekly button
@@ -637,3 +657,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Set default view on page load
     inventoryLink.click();
 });
+
+// Function to open the Summary Log Modal
+function openSummaryLogModal() {
+    const modal = document.getElementById("summaryLogModal");
+    modal.style.display = "block"; // Show the modal
+}
+
+// Function to close the Summary Log Modal
+function closeSummaryLogModal() {
+    const modal = document.getElementById("summaryLogModal");
+    modal.style.display = "none"; // Hide the modal
+}
+
+// Add event listener to the close button
+document.querySelector(".summarylog-button").addEventListener("click", openSummaryLogModal);
+document.querySelector("#summaryLogModal .close-button").addEventListener("click", closeSummaryLogModal);

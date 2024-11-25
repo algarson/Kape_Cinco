@@ -14,16 +14,21 @@
         <nav class="navbar">
             <a href="#" id="inventoryLink" class="active">Inventory</a>
             <a href="#" id="statisticsLink">Statistics</a>
+            <a href="#" id="logsLink">Logs</a>
         </nav>
         <button onclick="logout()" class="logout">Logout</button>
     </header>
-    <nav class="category-nav">
-        <button class="active" data-category="Foods">Foods</button>
-        <button data-category="Drinks">Drinks</button>
-    </nav>
+  
     <main id="mainContent">
-        <div class="table-container" id="inventorySection">
+       
+        <div class="inventoryheadernav" id="inventorySection">
+            <nav class="category-nav">
+                <button class="active" data-category="Foods">Foods</button>
+                <button data-category="Drinks">Drinks</button>
+            </nav>
+        <div class="table-container">
             <button class="add-button" onclick="openAddModal()">+ Add</button>
+           
             <table id="inventoryTable">
                 <thead>
                     <tr>
@@ -131,6 +136,8 @@
                 </form>
             </div>
         </div>
+    </div>
+
 
         <div id="statisticsSection" style="display: none;">
             <div class="chart-options">
@@ -140,12 +147,58 @@
             </div>
             <canvas id="statisticsChart"></canvas>
         </div>
+
+
+
+        <div id="logSection" style="display: none;">
+            <button class="summarylog-button" onclick="openSummaryLogModal()">Summary Logs</button>
+
+                <div class="logSection-container">
+                    <table id="inventoryTable">
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Time in</th>
+                                <th>Time out</th>
+                            </tr>
+                            <tr>
+                                <td>User 1</td>
+                                <td>10:00 AM</td>
+                                <td>12:00 PM</td>
+                            </tr>
+                            <tr>
+                                <td>User 2</td>
+                                <td>10:00 AM</td>
+                                <td>12:00 PM</td>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Items will be dynamically generated here -->
+                        </tbody>
+                    </table>
+        
+                </div>
+        </div>
+
+        <div id="summaryLogModal" class="modal" style="display: none;">
+            <div class="summaryLogModal-content">
+                <span class="close-button">&times;</span>
+                <h2>Summary Logs</h2>
+                <div id="summaryLogContent">
+                    <!-- The content for the summary logs will be dynamically populated here -->
+                </div>
+            </div>
+        </div>
+        
+          
+        
+        
+        
     </main>
 
     <script src="admin.js"></script>
-    <script>
-        // Your JavaScript code can be included here if necessary
-    </script>
+  
 </body>
 </html>
-s
+ 
