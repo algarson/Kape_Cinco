@@ -209,10 +209,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 <span>₱0.00</span>
             </div>
             <div class="summary-item">
-                <span>Delivery Fee</span>
-                <span>₱0.00</span>
-            </div>
-            <div class="summary-item">
                 <span>Discount</span>
                 <span>₱0.00</span>
             </div>

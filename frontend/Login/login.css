@@ -17,7 +17,7 @@ body {
 }
 
 .login-box {
-    padding: 100px;
+    padding:  60px 30px 60px 60px;
 }
 
 h2 {
@@ -62,7 +62,7 @@ button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 50px;
+    padding: 60px 60px 60px 30px;
     background-color: #f8eee9;
 }
 

@@ -300,7 +300,8 @@ h1 {
     background-color: var(--color-scent-color);
     border-radius: 8px;
     margin-bottom: 10px;
-    height: 10rem;
+    height: auto;
+    overflow: auto;
 }
 .card-image-left{
     height: 100%;

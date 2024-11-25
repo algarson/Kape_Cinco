@@ -44,7 +44,7 @@ body {
 }
 
 .sidebar nav ul li {
-    margin: 20px 0;
+    margin: 30px 0;
    
     
 }
@@ -60,7 +60,7 @@ body {
 .sidebar .profile span {
     width: 26px;
     height: 26px;
-    margin-top: 18rem;
+    margin-top: 23rem;
 }
 
 .sidebar .logout span{
@@ -361,7 +361,56 @@ body {
     border-top: 1px dashed #ccc;
 
 }
+#user-profile-modal{
+    padding-top: 0;
+}
 
+#user-profile-modal .modal-content{
+    width: 500px;
+    bottom: 30px;
+
+}
+.user-profile-div{
+    display: flex;
+    justify-content: center;
+
+}
+
+.user-profile-div, #edit-user-profile{
+    font-size: 50px;
+
+}
+
+.profile-info{
+  display: inline;
+}
+
+.profile-info1{
+    padding: 5px;
+    background: #D9CBBD;
+    border-radius: 20px;
+}
+
+.modal-content .remit-section{
+    display: flex;
+    margin: 15px;
+    font-weight: bold;
+    justify-content: space-between;
+}
+
+#confirm-remit-amount{
+    padding: 5px 10px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+#remit-amount{
+    justify-content: space-between
+}
 
 @keyframes fadeIn {
     from {opacity: 0;}

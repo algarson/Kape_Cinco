@@ -56,7 +56,8 @@ h1 {
     background-color: var(--color-scent-color);
     border-radius: 8px;
     margin-bottom: 10px;
-    height: 7.7rem;
+    overflow: auto;
+    height: auto;
 }
 .card-image-left{
     height: 100%;

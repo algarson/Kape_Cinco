@@ -51,6 +51,8 @@ body {
 .image-container img {
     width: 100%;
     border-bottom: 2px solid #ccc;
+    max-height: 50vh;
+    object-fit:cover;
 }
 
 .details {
