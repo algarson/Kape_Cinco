@@ -306,12 +306,12 @@ body.inventory-active .category-nav {
     position: relative;
 }
 
-#inventoryTable tr{
+#LogTable tr{
     background-color: #ffffff;
     transition: background-color 0.3s ease-in-out;
 }
 
-#inventoryTable tr:hover{
+#LogTable tr:hover{
     background-color: rgb(211, 211, 211);
 }
 
@@ -354,17 +354,19 @@ body.inventory-active .category-nav {
 
 .summaryLogModal-content {
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 9% auto;
     padding: 20px;
-    height: 300px;
+    height: 400px;
     border: 1px solid #888;
     max-width: 600px;
+    border-radius: 10px;
 }
+
 
 .close-button {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 20px;
     font-weight: bold;
 }
 
@@ -374,3 +376,28 @@ body.inventory-active .category-nav {
     text-decoration: none;
     cursor: pointer;
 }
+
+#Summary-Table tr{
+    background-color: #ffffff;
+    transition: background-color 0.3s ease-in-out;
+}
+
+#Summary-Table tr:hover{
+    background-color: rgb(211, 211, 211);
+}
+
+.Print-Button{
+    background-color: #54c95d;
+    position: relative;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5em;
+    left: 220px;
+    top: 80px;
+}
+
+.Print-Button:hover{
+    background-color: #07a013;
+}
+

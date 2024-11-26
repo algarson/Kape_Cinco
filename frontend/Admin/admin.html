@@ -137,8 +137,6 @@
             </div>
         </div>
     </div>
-
-
         <div id="statisticsSection" style="display: none;">
             <div class="chart-options">
                 <button id="weeklyBtn">Weekly</button>
@@ -148,38 +146,64 @@
             <canvas id="statisticsChart"></canvas>
         </div>
 
-
-
         <div id="logSection" style="display: none;">
             <button class="summarylog-button" onclick="openSummaryLogModal()">Summary Logs</button>
 
-                <div class="logSection-container">
-                    <table id="inventoryTable">
-
+            <div class="logSection-container">
+                <table id="LogTable">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Date</th>
+                            <th>Time in</th>
+                            <th>Time out</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr data-name="User 1" data-timein="10:00 AM" data-timeout="12:00 PM">
+                            <td>Johny Sins</td>
+                            <td>11/24/24</td>
+                            <td>10:00 AM</td>
+                            <td>12:00 PM</td>
+                        </tr>
+                        <tr data-name="User 2" data-timein="11:00 AM" data-timeout="1:00 PM">
+                            <td>Lexi Lore</td>
+                            <td>11/25/24</td>
+                            <td>11:00 AM</td>
+                            <td>1:00 PM</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Modal -->
+            <div id="myModal" class="modal">
+                <div class="modal-content">
+                    <span class="close-button">&times;</span>
+                    <h3>Details</h3>
+                    <p><strong>Date: 11/24/24</strong> <span id="modalDate"></span></p>
+                    <table id="LogTable">
                         <thead>
                             <tr>
-                                <th>Name</th>
-                                <th>Time in</th>
-                                <th>Time out</th>
-                            </tr>
-                            <tr>
-                                <td>User 1</td>
-                                <td>10:00 AM</td>
-                                <td>12:00 PM</td>
-                            </tr>
-                            <tr>
-                                <td>User 2</td>
-                                <td>10:00 AM</td>
-                                <td>12:00 PM</td>
+                                <th>Employee Name</th>
+                                <th>Sales Revenue</th>
+                                <th>Transaction</th>
+                                <th>Discrepancies</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody">
-                            <!-- Items will be dynamically generated here -->
+                        <tbody>
+                            <tr data-name="User 1" data-timein="10:00 AM" data-timeout="12:00 PM">
+                                <td>Johny Sins</td>
+                                <td>5000</td>
+                                <td>15</td>
+                                <td>0</td>
+                            </tr>
                         </tbody>
                     </table>
-        
                 </div>
+            </div>  
         </div>
+
 
         <div id="summaryLogModal" class="modal" style="display: none;">
             <div class="summaryLogModal-content">
@@ -187,6 +211,47 @@
                 <h2>Summary Logs</h2>
                 <div id="summaryLogContent">
                     <!-- The content for the summary logs will be dynamically populated here -->
+                     <div class="summaryLog-Container">
+                        <table id="Summary-Table">
+                            <thead>
+                                <tr>
+                                    <th>Sales Summary</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>Total Sales</td>
+                                    <td>10,000</td>
+                                </tr>
+                                <tr>
+                                    <td>Total Discount</td>
+                                    <td>128</td>
+
+                                </tr>
+                                <tr>
+                                    <td>Total Deducted Sales</td>
+                                    <td>9872</td>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th>Sales Performance</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>Total Transaction</td>
+                                    <td>25</td>
+                                </tr>
+                                <tr>
+                                    <td>Top Selling Products</td>
+                                    <td>Tapsilog</td>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBody">
+                                <!-- Items will be dynamically generated here -->
+                            </tbody>
+                        </table>    
+                     </div>
+                     <button class="Print-Button">Print Report</button>
                 </div>
             </div>
         </div>
