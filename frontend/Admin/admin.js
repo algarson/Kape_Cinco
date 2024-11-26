@@ -25,6 +25,9 @@ document.addEventListener("DOMContentLoaded", async function () {
         .then(data => {
             if (!data.loggedIn) {
                 window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Admin/admin.html`;
+            } else if (data.role !== 'Admin') {
+                alert('Access denied: Only admins can access this page.');
+                window.location.href = '/Kape_Cinco/frontend/Home/home.html';
             } else {
                 document.body.classList.remove('hidden');
                 generateAllItems();
@@ -52,11 +55,18 @@ document.addEventListener("DOMContentLoaded", async function () {
     async function fetchAllItems() {
         try {
             const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+
+            if (res.status === 403) {
+                alert('Access denied: You do not have permission to view this content.');
+                window.location.href = '/Kape_Cinco/frontend/Login/login.html'; 
+                return []; 
+            }
+    
             const data = await res.json();
             return data;
         } catch (err) {
             console.error('Error fetching data:', err);
-            return [];
+            return []; 
         }
     }
     

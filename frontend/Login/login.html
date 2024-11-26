@@ -109,7 +109,7 @@
 
              // Get the redirect parameter from the URL
             const params = new URLSearchParams(window.location.search);
-            const redirectPage = params.get('redirect') || 'Home/home.html'; // Default to home page if no redirect
+            const redirectPage = params.get('redirect') || 'Login/home.php'; // Default to home page if no redirect
 
 
             fetch('/Kape_Cinco/backend/Login/login.php', {
@@ -118,10 +118,16 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data.adminExists) {
-                    window.location.href = `/Kape_Cinco/frontend/${redirectPage}`;
-                } else if (data.error) {
-                    alert(data.error);
+                if (data.role === 'Admin') {
+                    // Allow admin to go to any requested page
+                    window.location.href = `/Kape_Cinco/backend/${redirectPage}`;
+                } else if (data.role === 'Cashier') {
+                    if (redirectPage.includes('Admin/admin.html')) {
+                        alert('Access denied: Cashiers cannot access admin page.');
+                        window.location.href = '/Kape_Cinco/backend/Login/home.php';
+                    } else {
+                        window.location.href = `/Kape_Cinco/backend/${redirectPage}`;
+                    }
                 }
             })
             .catch(error => console.error('Error:', error));

@@ -1,11 +1,4 @@
 <?php
-    session_start();
-
-    if (!isset($_SESSION['role']) || ($_SESSION['role'] !== 'Admin' && $_SESSION['role'] !== 'Cashier')) {
-        http_response_code(403); // Forbidden
-        exit('Access denied.');
-    }
-    
     include '../server.php';
 
     // Fetch all foods with their variants

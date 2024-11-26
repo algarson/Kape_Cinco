@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function fetchAllItems() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+            const res = await fetch("/Kape_Cinco/backend/Home/Menuallitems.php");
             const data = await res.json();
             return data;
         } catch (err) {

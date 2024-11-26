@@ -12,6 +12,13 @@
         while ($row = $res->fetch_assoc()) {
             $allData[] = $row;
         }
+    } else {
+       
+        $allData[] = [
+            "total_orders" => 0,
+            "today" => date('d'),
+            "Sales" => 0
+        ];
     }
 
     echo json_encode($allData);

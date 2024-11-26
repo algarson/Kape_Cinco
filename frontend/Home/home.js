@@ -21,22 +21,29 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
-                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Home/home.html`;
+                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php`;
             } else {
                 document.body.classList.remove('hidden');
             }
         })
-        .catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error));
         
     async function fetchAllItems() {
-        try {
-            const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
-            const data = await res.json();
-            return data;
-        } catch (err) {
-            console.error('Error fetching data:', err);
-            return [];
-        }
+            try {
+                const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+    
+                if (res.status === 403) {
+                    alert('Access denied: You do not have permission to view this content.');
+                    window.location.href = '/Kape_Cinco/frontend/Login/login.html'; 
+                    return []; 
+                }
+                
+                const data = await res.json();
+                return data;
+            } catch (err) {
+                console.error('Error fetching data:', err);
+                return []; 
+            }
     }
     
     async function fetchAllOrders() {
@@ -63,9 +70,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     async function displaySales () {
         const totalSales = await dailySales();
 
-        //console.log(totalSales);
-        totalIncome.innerHTML = totalSales[0].Sales;
-        totalOrders.innerHTML = totalSales[0].total_orders;
+        if (totalSales.length > 0) {
+            totalIncome.innerHTML = totalSales[0].Sales || 0; 
+            totalOrders.innerHTML = totalSales[0].total_orders || 0; 
+        } else {
+            totalIncome.innerHTML = 0;
+            totalOrders.innerHTML = 0;
+        }
     }
 
     async function generateAllItems() {
@@ -284,7 +295,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/Kape_Cinco/frontend/Home/home.html';
+                    window.location.href = '/Kape_Cinco/frontend/Login/login.html';
                 } else {
                     alert('Logout failed!');
                 }
@@ -1043,7 +1054,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 const orderDate = order.order_date.split(' ')[0];
                 return orderDate === today;
             });
-            console.log(today);
+            
             SalesTableBody.innerHTML = '';
     
             completedOrdersToday.reverse().forEach(order => {
