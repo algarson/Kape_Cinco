@@ -5,7 +5,7 @@
     
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $orderNumber = $_POST['order-number'];
-        $orderDate =  date('YmdHis');
+        $orderDate =  date('Y-m-d H:i:s');
         $orderTotalAmount = $_POST['total-amount'];
         $orderAmountReceived = $_POST['received-amount'];
         $orderStatus = $_POST['order-stats'];

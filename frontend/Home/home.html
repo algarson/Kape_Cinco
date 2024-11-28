@@ -20,8 +20,8 @@
                     <li><a href="#" id="nav-statistics"><span class="material-icons-sharp" alt="Statistics">equalizer</span></a></li>
                 </ul>
             </nav>
-            <div class="profile">
-            <span class="material-icons-sharp">account_circle</span>
+            <div class="profile" id="profile-button">
+                <img id="profile-button-image" src="Kape_Cinco/frontend/images/kape_cinco.jpg" alt="User Profile" />
             </div>
             <div class="logout" id="logout-button">
                 <span class="material-icons-sharp">logout</span>
@@ -273,14 +273,26 @@
     <div id="user-profile-modal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close-button">&times;</span>
-        <div  class="user-profile-div">
-            <span class="material-icons-sharp" id="edit-user-profile">account_circle</span>
+        <div class="user-profile-div" id="user-update-button">
+            <img id="user-profile-image"  src="Kape_Cinco/frontend/images/kape_cinco.jpg" alt="User Profile" />
         </div>
         <div class="profile-info">
-            <h2 class="profile-info1">Your Profile</h2>
-            <h2 class="profile-info1">Allen Luis Alvarez</h2>
-            <h2 class="profile-info1">Allen</h2>    
+            <h2 class="profile-info1" id="user-role">User Role</h2>
+            <h2 class="profile-info1" id="user-name">User Name</h2>
+            <h2 class="profile-info1" id="user-current-time">Shift</h2>    
         </div>
+        </div>
+    </div>
+
+    <!--Modal for Updating Image-->
+    <div id="user-update-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <form id="updateForm" enctype="multipart/form-data">
+                <label for="item_image">Select Image:</label>
+                <input type="file" name="item_image" id="item_image">
+                <button type="submit" class="update-form-btn">Update</button>
+            </form>
         </div>
     </div>
 

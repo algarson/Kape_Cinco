@@ -1,12 +1,19 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const allItemsContainer = document.getElementById('AllItemsContainer');
     const cartItemsContainer = document.querySelector('.cart-items');
-    const totalAmountElement = document.getElementById('total-amount');
     const billsSection = document.querySelector('.bills-section');
+
     const paymentModal = document.getElementById('payment-modal');
+    const userProfileModal = document.getElementById('user-profile-modal');
+    const userUpdateModal = document.getElementById('user-update-modal');
+
     const closeButton = document.querySelector('.close-button');
     const confirmOrderButton = document.getElementById('confirm-order');
+    const profileButton = document.getElementById('profile-button');
+    const profileUpdateButton = document.getElementById('user-update-button')
     const logoutButton = document.getElementById('logout-button');
+    
+    const totalAmountElement = document.getElementById('total-amount');
     const totalIncome = document.getElementById('total-income-amount');
     const totalOrders = document.getElementById('total-order-amount');
 
@@ -27,7 +34,50 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         })
     .catch(error => console.error('Error:', error));
-        
+    
+    let intervalId;
+    // Fetch user session details
+    fetch('/Kape_Cinco/backend/Login/get_user.php')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('user-role').textContent = `${data.role}`;
+            document.getElementById('user-name').textContent = `${data.name}`;
+            const userProfileImage = document.getElementById('user-profile-image');
+            const profileButtonImage = document.getElementById('profile-button-image');
+            userProfileImage.src = data.user_image;
+            profileButtonImage.src = data.user_image;
+
+            // If time_in exists, calculate and display work shift duration
+        if (data.time_in) {
+            const timeIn = new Date(data.time_in); // Convert time_in to a Date object
+            
+            // Function to update work shift duration
+            function updateWorkShiftDuration() {
+                const currentTime = new Date(); // Get the current time
+                const diffInMilliseconds = currentTime - timeIn; // Time difference in milliseconds
+
+                // Convert milliseconds to hours, minutes, and seconds
+                const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+                const hours = Math.floor(diffInSeconds / 3600);
+                const minutes = Math.floor((diffInSeconds % 3600) / 60);
+                const seconds = diffInSeconds % 60;
+
+                // Format the result (e.g., 00:02:15)
+                const workShiftDuration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+                // Display the work shift duration
+                document.getElementById('user-current-time').textContent = `Work Shift Duration: ${workShiftDuration}`;
+            }
+
+            // Initial update
+            updateWorkShiftDuration();
+            intervalId = setInterval(updateWorkShiftDuration, 1000);
+        } else {
+            document.getElementById('user-current-time').textContent = `Work Shift Duration: 00:00:00`;
+        }
+    });
+
+
     async function fetchAllItems() {
             try {
                 const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
@@ -295,6 +345,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    clearInterval(intervalId);
                     window.location.href = '/Kape_Cinco/frontend/Login/login.html';
                 } else {
                     alert('Logout failed!');
@@ -307,6 +358,52 @@ document.addEventListener('DOMContentLoaded', async function () {
         logout();
         document.body.classList.remove('hidden');
     });
+
+    profileButton.addEventListener('click', () => {
+        userProfileModal.style.display = 'flex';
+    });
+
+    profileUpdateButton.addEventListener('click', ()  => {
+        userUpdateModal.style.display = 'block';
+    })
+
+    document.getElementById('updateForm').addEventListener('submit', async (event) => {
+        event.preventDefault(); // Prevent the default form submission
+    
+        // Create FormData to send the image
+        const formData = new FormData();
+        const fileInput = document.getElementById('item_image');
+    
+        if (fileInput.files.length === 0) {
+            alert('Please select an image to upload.');
+            return;
+        }
+    
+        formData.append('item_image', fileInput.files[0]);
+    
+        // Send the FormData to the backend using fetch
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Home/update_user.php', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+    
+            // Handle the result from the backend
+            if (result.success) {
+                alert(result.message); // Show success message
+                fileInput.value = "";
+                userUpdateModal.style.display = 'none';
+                userProfileModal.style.display = 'none';
+            } else {
+                alert(result.error); // Show error message
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('There was an error updating the image.');
+        }
+    });
+    
 
     /* ------------------------- CLEAR FUNCTIONS ----------------------------*/
     
@@ -577,6 +674,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (event.target === paymentModal) {
             clearAmountFields ()
             paymentModal.style.display = 'none';
+        }
+
+        if (event.target === userProfileModal) {
+            userProfileModal.style.display = 'none';
         }
     });
 

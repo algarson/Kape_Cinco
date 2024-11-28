@@ -61,6 +61,7 @@ body {
     width: 26px;
     height: 26px;
     margin-top: 23rem;
+    cursor: pointer;
 }
 
 .sidebar .logout span{
@@ -370,15 +371,24 @@ body {
     bottom: 30px;
 
 }
+
 .user-profile-div{
     display: flex;
     justify-content: center;
-
 }
 
-.user-profile-div, #edit-user-profile{
-    font-size: 50px;
+/* Styling for the profile image */
+#user-profile-image {
+    width: 80px; /* Adjust width to make image smaller */
+    height: 80px; /* Adjust height to make image smaller */
+    object-fit: cover; /* Ensures the image fits well inside the container */
+    border-radius: 50%; /* Makes the image circular */
+}
 
+#profile-button-image {
+    width: 40px; /* Adjust width to make image smaller */
+    height: 40px; /* Adjust height to make image smaller */
+    border-radius: 50%; /* Makes the image circular */
 }
 
 .profile-info{
