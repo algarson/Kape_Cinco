@@ -34,19 +34,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         })
     .catch(error => console.error('Error:', error));
-
-    setInterval(() => {
-        fetch('/Kape_Cinco/backend/Login/check_login.php')
-            .then(response => response.json())
-            .then(data => {
-                if (!data.loggedIn) {
-                    window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php`;
-                } else {
-                    document.body.classList.remove('hidden');
-                }
-            })
-        .catch(error => console.error('Error:', error));
-    }, 300000);
     
     let intervalId;
     // Fetch user session details
