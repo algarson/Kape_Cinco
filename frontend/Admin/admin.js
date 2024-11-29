@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
-                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Admin/admin.html`;
+                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php`;
             } else if (data.role !== 'Admin') {
                 alert('Access denied: Only admins can access this page.');
                 window.location.href = '/Kape_Cinco/frontend/Home/home.html';

@@ -34,49 +34,65 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
         })
     .catch(error => console.error('Error:', error));
+
+    setInterval(() => {
+        fetch('/Kape_Cinco/backend/Login/check_login.php')
+            .then(response => response.json())
+            .then(data => {
+                if (!data.loggedIn) {
+                    window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php`;
+                } else {
+                    document.body.classList.remove('hidden');
+                }
+            })
+        .catch(error => console.error('Error:', error));
+    }, 300000);
     
     let intervalId;
     // Fetch user session details
     fetch('/Kape_Cinco/backend/Login/get_user.php')
         .then(response => response.json())
         .then(data => {
-            document.getElementById('user-role').textContent = `${data.role}`;
-            document.getElementById('user-name').textContent = `${data.name}`;
-            const userProfileImage = document.getElementById('user-profile-image');
-            const profileButtonImage = document.getElementById('profile-button-image');
-            userProfileImage.src = data.user_image;
-            profileButtonImage.src = data.user_image;
+            if (data.error){
+                window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+            } else {
+                document.getElementById('user-role').textContent = `${data.role}`;
+                document.getElementById('user-name').textContent = `${data.name}`;
+                const userProfileImage = document.getElementById('user-profile-image');
+                const profileButtonImage = document.getElementById('profile-button-image');
+                userProfileImage.src = data.user_image;
+                profileButtonImage.src = data.user_image;
 
-            // If time_in exists, calculate and display work shift duration
-        if (data.time_in) {
-            const timeIn = new Date(data.time_in); // Convert time_in to a Date object
-            
-            // Function to update work shift duration
-            function updateWorkShiftDuration() {
-                const currentTime = new Date(); // Get the current time
-                const diffInMilliseconds = currentTime - timeIn; // Time difference in milliseconds
+                // If time_in exists, calculate and display work shift duration
+                if (data.time_in) {
+                    const timeIn = new Date(data.time_in); // Convert time_in to a Date object
+                    
+                    // Function to update work shift duration
+                    function updateWorkShiftDuration() {
+                        const currentTime = new Date(); // Get the current time
+                        const diffInMilliseconds = currentTime - timeIn; // Time difference in milliseconds
 
-                // Convert milliseconds to hours, minutes, and seconds
-                const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
-                const hours = Math.floor(diffInSeconds / 3600);
-                const minutes = Math.floor((diffInSeconds % 3600) / 60);
-                const seconds = diffInSeconds % 60;
+                        // Convert milliseconds to hours, minutes, and seconds
+                        const diffInSeconds = Math.floor(diffInMilliseconds / 1000);
+                        const hours = Math.floor(diffInSeconds / 3600);
+                        const minutes = Math.floor((diffInSeconds % 3600) / 60);
+                        const seconds = diffInSeconds % 60;
 
-                // Format the result (e.g., 00:02:15)
-                const workShiftDuration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                        // Format the result (e.g., 00:02:15)
+                        const workShiftDuration = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-                // Display the work shift duration
-                document.getElementById('user-current-time').textContent = `Work Shift Duration: ${workShiftDuration}`;
+                        // Display the work shift duration
+                        document.getElementById('user-current-time').textContent = `Work Shift Duration: ${workShiftDuration}`;
+                    }
+
+                    // Initial update
+                    updateWorkShiftDuration();
+                    intervalId = setInterval(updateWorkShiftDuration, 1000);
+                } else {
+                    document.getElementById('user-current-time').textContent = `Work Shift Duration: 00:00:00`;
+                }
             }
-
-            // Initial update
-            updateWorkShiftDuration();
-            intervalId = setInterval(updateWorkShiftDuration, 1000);
-        } else {
-            document.getElementById('user-current-time').textContent = `Work Shift Duration: 00:00:00`;
-        }
-    });
-
+        });
 
     async function fetchAllItems() {
             try {

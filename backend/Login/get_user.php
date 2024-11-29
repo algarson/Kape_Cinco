@@ -2,7 +2,7 @@
     include '../server.php'; 
 
     session_start();
-    if (!isset($_SESSION['user']['id'])) {
+    if (!isset($_SESSION['user'])) {
         http_response_code(401); // Unauthorized
         echo json_encode(['error' => 'Not logged in']);
         exit();
