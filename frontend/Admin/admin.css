@@ -132,19 +132,18 @@ th {
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
-    overflow: auto;
+    height: 100vh;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
 }
 
 .modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
+    background-color:#f5e3d3;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
     max-width: 500px;
+    margin: 120px auto;
     border-radius: 8px;
 }
 
@@ -293,8 +292,13 @@ body.inventory-active .category-nav {
 
 
 
-.modal-content{
-    background-color:#f5e3d3;
+
+.modal-content input{
+    height: 20px;
+}
+
+.modal-content label{
+    margin: 10px 0;
 }
 
 .update-form-btn, .add-btn-form, .variant-btn-form{
@@ -302,6 +306,21 @@ body.inventory-active .category-nav {
     color: white;
     position: relative;
     top: 5px;
+}
+
+.add-btn-form{
+    border: none;
+    margin-top: 50px;
+    cursor: pointer;
+    width: 20%;
+    height: 30px;
+    border-radius: 10px;
+    margin: auto;
+}
+
+.add-btn-form:hover{
+    background-color: #4b3a33;
+
 }
 
 .yes-button, .no-button{
