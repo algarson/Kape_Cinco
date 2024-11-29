@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const tableBody = document.getElementById('tableBody');
+    const logsTableBody = document.getElementById('logsTableBody');
+
     const categoryButtons = document.querySelectorAll('.category-nav button');
     const updateModal = document.getElementById('updateModal');
     const addModal = document.getElementById('addModal');
@@ -54,10 +56,31 @@ document.addEventListener("DOMContentLoaded", async function () {
             } else {
                 document.body.classList.remove('hidden');
                 generateAllItems();
+                generateAllLogs();
             }
         })
         .catch(error => console.error('Error:', error));
     
+    function formatDateTime(dateTimeString) {
+        const date = new Date(dateTimeString);
+
+        // Format date as MM/DD/YYYY
+        const formattedDate = date.toLocaleDateString('en-US', {
+            month: '2-digit',
+            day: '2-digit',
+            year: 'numeric',
+        });
+
+        // Format time as HH:MM AM/PM
+        const formattedTime = date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+        });
+
+        return { formattedDate, formattedTime };
+    }
+
     function logout() {
         fetch('/Kape_Cinco/backend/Login/logout.php')
             .then(response => response.json())
@@ -93,17 +116,45 @@ document.addEventListener("DOMContentLoaded", async function () {
             return []; 
         }
     }
+
+    async function fetchAllLogs() {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Admin/logs.php");
+
+            if (res.status === 403) {
+                alert('Access denied: You do not have permission to view this content.');
+                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php'; 
+                return []; 
+            }
+    
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            return []; 
+        }
+    }
     
     async function generateAllItems() {
         const allItems = await fetchAllItems();
         tableBody.innerHTML = '';
 
         allItems.forEach(item => {
-            const row = createTableRow(item);
+            const row = createInventoryTableRow(item);
             tableBody.appendChild(row);
         });
 
         filterItems('Foods');  
+    }
+
+    async function generateAllLogs() {
+        const allLogs = await fetchAllLogs();
+        logsTableBody.innerHTML = '';
+
+        allLogs.forEach(item => {
+            const row = createLogsTableRow(item);
+            logsTableBody.appendChild(row);
+        });
     }
 
     function filterItems(category) {
@@ -140,7 +191,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     });
 
-    function createTableRow(item) {
+    function createInventoryTableRow(item) {
         const row = document.createElement('tr');
 
         // Category cell: either 'Silog' or 'Drinks'
@@ -258,6 +309,46 @@ document.addEventListener("DOMContentLoaded", async function () {
         return row;
     }
     
+    function createLogsTableRow(item) {
+        const row = document.createElement('tr');
+    
+        // Name cell
+        const nameCell = document.createElement('td');
+        nameCell.textContent = `${item.user_firstname} ${item.user_lastname}`;
+        row.appendChild(nameCell);
+    
+        // Extract formatted date and time
+        const timeInFormatted = formatDateTime(item.time_in);
+        const timeOutFormatted = formatDateTime(item.time_out);
+    
+        // Date cell (from time_in)
+        const dateCell = document.createElement('td');
+        dateCell.textContent = timeInFormatted.formattedDate;
+        row.appendChild(dateCell);
+    
+        // Time In cell
+        const timeInCell = document.createElement('td');
+        timeInCell.textContent = timeInFormatted.formattedTime;
+        row.appendChild(timeInCell);
+    
+        // Time Out cell
+        const timeOutCell = document.createElement('td');
+        if (item.time_out) {
+            const timeOutFormatted = formatDateTime(item.time_out);
+            timeOutCell.textContent = timeOutFormatted.formattedTime;
+        } else {
+            timeOutCell.textContent = "Currently Working"; 
+        }
+        row.appendChild(timeOutCell);
+    
+        // Total Shift cell
+        const totalShiftCell = document.createElement('td');
+        totalShiftCell.textContent = item.total_shift_duration; 
+        row.appendChild(totalShiftCell);
+    
+        return row;
+    }
+
     function openAddModal() {   
         addModal.style.display = 'block';
     }
