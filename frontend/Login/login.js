@@ -4,10 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(response => response.json())
         .then(data => {
             if (data.loggedIn) {
-                window.location.href = '/Kape_Cinco/backend/Login/home.php';
+                if (data.role === 'Admin') {
+                    window.location.href = '/Kape_Cinco/backend/Login/admin.php';
+                } else if (data.role === 'Cashier') {
+                    window.location.href = '/Kape_Cinco/backend/Login/home.php';
+                } 
             } else {
                 document.body.classList.remove('hidden'); // Show login form
-                document.cookie = 'PHPSESSID=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
             }
         })
         .catch(error => console.error('Error:', error));
@@ -39,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const role = data.role;
 
                 if (redirectPage) {
-                    if (redirectPage.includes('Admin/admin.html') && role === 'Cashier') {
+                    if (redirectPage.includes('Login/admin.php') && role === 'Cashier') {
                         alert('Access denied: Cashiers cannot access admin page.');
                         window.location.href = '/Kape_Cinco/backend/Login/home.php';
                     } else {

@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(response => response.json())
         .then(data => {
             if (data.error){
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php';
             } else {
                 document.getElementById('user-role').textContent = `${data.role}`;
                 document.getElementById('user-name').textContent = `${data.name}`;
@@ -82,21 +82,21 @@ document.addEventListener('DOMContentLoaded', async function () {
         });
 
     async function fetchAllItems() {
-            try {
-                const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
-    
-                if (res.status === 403) {
-                    alert('Access denied: You do not have permission to view this content.');
-                    window.location.href = '/Kape_Cinco/frontend/Login/login.html'; 
-                    return []; 
-                }
-                
-                const data = await res.json();
-                return data;
-            } catch (err) {
-                console.error('Error fetching data:', err);
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+
+            if (res.status === 403) {
+                alert('Access denied: You do not have permission to view this content.');
+                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php'; 
                 return []; 
             }
+            
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+            return []; 
+        }   
     }
     
     async function fetchAllOrders() {
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     const foodItem = event.target.closest('.food-item');
                     const foodName = foodItem.querySelector('h3').textContent;
                     const foodPrice = parseFloat(foodItem.querySelector('p').textContent.replace('₱', '').replace(',', ''));
-    
+
                     // Get the selected variant, if any
                     const variantSelect = foodItem.querySelector('.variant-select');
                     let serveCount = parseInt(foodItem.dataset.serveCount);
@@ -394,7 +394,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     
             // Handle the result from the backend
             if (result.success) {
-                alert(result.message); // Show success message
+                alert(result.message); // Show success messag
+                window.location.reload();
                 fileInput.value = "";
                 userUpdateModal.style.display = 'none';
                 userProfileModal.style.display = 'none';
@@ -453,25 +454,32 @@ document.addEventListener('DOMContentLoaded', async function () {
         totalAmountElement.textContent = `₱${newTotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     }
 
-    function addToCart(name, price, serveCount) {
+    function addToCart(name, price, serveCount) { 
         // Check if the item is already in the cart
         const existingCartItem = Array.from(cartItemsContainer.children).find(item => {
             return item.querySelector('.item-name').textContent === name;
         });
-
+    
         if (existingCartItem) {
             // Item already exists, increment quantity
             const quantityElement = existingCartItem.querySelector('.item-quantity');
             const quantity = parseInt(quantityElement.textContent); 
-            
-            if (!serveCount || quantity <= serveCount) {
-                quantityElement.textContent = quantity;
+            if (!serveCount || quantity < serveCount) {
+                // Increment quantity if within serve count limit
+                quantityElement.textContent = quantity + 1;
                 updateButtonStates(existingCartItem);
+                updateTotal();
             } else {
+                // Alert and do not add to the total
                 alert(`Sorry, you can't order more than ${serveCount} of this item.`);
             }
         } else {
             // Item doesn't exist, add it to the cart
+            if (serveCount && serveCount < 1) {
+                alert(`Sorry, this item is out of stock.`);
+                return;
+            }
+    
             const cartItem = document.createElement('div');
             cartItem.classList.add('cart-item');
             cartItem.innerHTML = `
@@ -483,25 +491,26 @@ document.addEventListener('DOMContentLoaded', async function () {
                     <button class="increment-quantity">+</button> 
                 </div>
             `;
-
+    
             cartItem.dataset.serveCount = serveCount;
-
+    
             // Add event listeners for the new increment and decrement buttons
             cartItem.querySelector('.increment-quantity').addEventListener('click', () => {
                 const quantityElement = cartItem.querySelector('.item-quantity');
                 const quantity = parseInt(quantityElement.textContent);
                 const maxServeCount = parseInt(cartItem.dataset.serveCount);
-
+    
                 // Check if quantity is less than the serve count (if maxServeCount is provided)
                 if (!maxServeCount || quantity < maxServeCount) {
                     quantityElement.textContent = quantity + 1;
                     updateTotal();
                     updateButtonStates(cartItem);
                 } else {
+                    alert(`Sorry, you can't order more than ${maxServeCount} of this item.`);
                     updateButtonStates(cartItem);
                 }
             });
-
+    
             cartItem.querySelector('.decrement-quantity').addEventListener('click', () => {
                 const quantityElement = cartItem.querySelector('.item-quantity');
                 const quantity = parseInt(quantityElement.textContent);
@@ -510,7 +519,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     updateButtonStates(cartItem);
                     updateTotal();
                 } else {
-                    const price = parseFloat(cartItem.querySelector('.item-price').textContent.replace('Rp ', '').replace(',', ''));
+                    const price = parseFloat(cartItem.querySelector('.item-price').textContent.replace('₱', '').replace(',', ''));
                     totalAmount -= price;
                     totalAmountElement.textContent = `${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
                     cartItem.remove();
@@ -520,14 +529,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                     updateTotal();
                 }
             });
-
+    
             cartItemsContainer.appendChild(cartItem);
         }
-
-        // Update total amount
-        totalAmount += price;
-        totalAmountElement.textContent = `₱${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    
+        // Update total amount if within the serve count limit
+        if (!existingCartItem || parseInt(existingCartItem.querySelector('.item-quantity').textContent <= serveCount)) {
+            totalAmount += price;
+            totalAmountElement.textContent = `₱${totalAmount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        }
     }
+    
 
     // Utility function to update button states
     function updateButtonStates(cartItem) {
@@ -563,7 +575,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const modalTotalAmountElement = document.querySelector('#modal-total-amount');
         const totalAmountElement = document.querySelector('#total-amount'); 
         const orderNumberElement = document.querySelector('#manual-order-number');
-
+        
         orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;
         const orderNumber = orderNumberElement.textContent.replace('Order Number:', '').trim();
 
@@ -575,24 +587,29 @@ document.addEventListener('DOMContentLoaded', async function () {
             const itemName = cartItem.querySelector('.item-name').textContent;
             const itemPrice = cartItem.querySelector('.item-price').textContent;
             const itemQuantity = cartItem.querySelector('.item-quantity').textContent;
-    
+        
+            // Remove '₱' and commas, then parse to a float
+            const parsedPrice = parseFloat(itemPrice.replace('₱', '').replace(/,/g, '').trim());
+            const parsedQuantity = parseInt(itemQuantity.trim());
+        
             const orderDetailItem = document.createElement('div');
             orderDetailItem.classList.add('order-detail-item');
             orderDetailItem.innerHTML = `
-                <span class="order-item-name>${itemName}</span>
+                <span class="order-item-name">${itemName}</span>
                 <span class="order-item-quantity">x${itemQuantity}</span>
                 <span class="order-item-price">₱${itemPrice}</span>
             `;
-    
+        
             orderDetailsElement.appendChild(orderDetailItem);
-
+        
             cartItems.push({
                 name: itemName,
-                price: parseFloat(itemPrice.replace('₱', '').trim()),
-                quantity: parseInt(itemQuantity.trim())
+                price: parsedPrice,
+                quantity: parsedQuantity
             });
         });
-
+        
+        // Correct total price computation
         const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
         const ManualOrderDetails = {
@@ -1041,6 +1058,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     alert("Ongoing Order Completed");
                     fetchAndRenderOngoingOrder();
                     fetchAndRenderCompleteOrder();
+                    await generateAllItems();
                     document.getElementById('ongoing-orders-modal').style.display = 'none';
                 } else {
                     alert('Update failed!');

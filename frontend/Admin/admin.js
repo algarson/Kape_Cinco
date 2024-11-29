@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const addModal = document.getElementById('addModal');
     const deleteModal = document.getElementById('deleteModal');
     const addVariantModal = document.getElementById('addVariantModal');
+
     const closeButton = document.querySelector('.close-button');
     const inventoryLink = document.getElementById('inventoryLink');
     const statisticsLink = document.getElementById('statisticsLink');
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const logSection = document.getElementById('logSection');
     const usersSection = document.getElementById('usersSection');
     const statisticsChartElement = document.getElementById('statisticsChart').getContext('2d');
+
     let statisticsChart; // Variable to hold the chart instance
     const yesButton = document.querySelector('.yes-button');
     const noButton = document.querySelector('.no-button');
@@ -35,18 +37,16 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     // Close modal if clicking outside the modal content
     window.addEventListener('click', (event) => {
-    if (event.target === addUserModalElement) {
-        closeAddUserModal();
-    }
-         });
-
-    
-    
+        if (event.target === addUserModalElement) {
+            closeAddUserModal();
+        }
+    });
 
     fetch('/Kape_Cinco/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
+                alert('Access denied: You do not have permission to view this content.');
                 window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php`;
             } else if (data.role !== 'Admin') {
                 alert('Access denied: Only admins can access this page.');
@@ -75,13 +75,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     
     updateModal.style.display = 'none';
     addButton.addEventListener('click', openAddModal);
+    
     async function fetchAllItems() {
         try {
             const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html'; 
+                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php'; 
                 return []; 
             }
     
