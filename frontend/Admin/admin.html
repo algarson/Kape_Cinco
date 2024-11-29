@@ -15,6 +15,7 @@
             <a href="#" id="inventoryLink" class="active">Inventory</a>
             <a href="#" id="statisticsLink">Statistics</a>
             <a href="#" id="logsLink">Logs</a>
+            <a href="#" id="usersLink">Users</a>
         </nav>
         <button onclick="logout()" class="logout">Logout</button>
     </header>
@@ -257,6 +258,74 @@
         </div>
         
           
+
+        <div class="usersheadernav" id="usersSection">
+            <button class="addusers-button" onclick="openAddModal()">+ Add Users</button>
+            <div class="usersSection-container">
+            
+                <table id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Role</th>
+                            <th>Image</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td>Davisar</td>
+                            <td>Perez</td>
+                            <td>Entertainer</td>
+                            <td>
+                                <img src="#" alt="User Image">
+                            </td>
+                            <td class="users_btn">
+                                <button>Update</button>
+                                <button>Delete</button>
+                            </td>
+                        </tr>
+                        <tr>    
+                            <td>Jedd</td>
+                            <td>Rasco</td>
+                            <td>Entertainer</td>
+                            <td>
+                                <img src="#" alt="User Image">
+                            </td>
+                            <td class="users_btn">
+                                <button>Update</button>
+                                <button>Delete</button>
+                            </td>
+                        </tr>
+                        <tr>    
+                            <td>John Paul</td>
+                            <td>Marfil</td>
+                            <td>Entertainer</td>
+                            <td>
+                                <img src="#" alt="User Image">
+                            </td>
+                            <td class="users_btn">
+                                <button>Update</button>
+                                <button>Delete</button>
+                            </td>
+                        </tr>
+                        <tr>    
+                            <td>Allen Luis</td>
+                            <td>Alvarez</td>
+                            <td>Macho Dancer</td>
+                            <td>
+                                <img src="#" alt="User Image">
+                            </td>
+                            <td class="users_btn">
+                                <button class="users_updatebtn">Update</button>
+                                <button class="users_deletebtn">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         
         
         

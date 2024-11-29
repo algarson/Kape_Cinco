@@ -272,7 +272,25 @@ body.inventory-active .category-nav {
 
 .add-button:hover{
     background-color: #4e342e;
+    cursor: pointer;
 }
+
+.addusers-button{
+    background-color: #8d6e63;
+    position: fixed;
+    right: 40px;
+    top: 80px;
+    color: white;
+    border: none;
+    padding: 10px 30px;
+    border-radius: 5em;
+}
+
+.addusers-button:hover{
+    background-color: #4e342e;
+    cursor: pointer;
+}
+
 
 
 .modal-content{
@@ -313,6 +331,8 @@ body.inventory-active .category-nav {
 
 #LogTable tr:hover{
     background-color: rgb(211, 211, 211);
+    cursor: pointer;
+
 }
 
 .logSection-container{
@@ -401,3 +421,37 @@ body.inventory-active .category-nav {
     background-color: #07a013;
 }
 
+
+#usersSection {
+    background-color: #f3eae2;
+    width: 90%;
+    height: 70vh;
+    border-radius: 20px;
+    margin-top: 5rem;
+    position: relative;
+}
+
+.usersSection-container{
+    width: auto;
+    border-top-right-radius: 8px;
+    border-top-left-radius: 8px;
+    overflow-y: auto; /* Enable vertical scrolling */
+
+}
+
+
+.usersSection-container table tbody tr{
+    background-color: #ffffff;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+.usersSection-container table tbody tr:hover{
+    background-color: #c3c3c3;
+    cursor: pointer;
+}
+
+
+.users_btn{
+    display: flex;
+}

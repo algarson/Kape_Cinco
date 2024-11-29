@@ -9,10 +9,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     const inventoryLink = document.getElementById('inventoryLink');
     const statisticsLink = document.getElementById('statisticsLink');
     const logsLink = document.getElementById('logsLink');
+    const usersLink = document.getElementById('usersLink');
     const mainContent = document.getElementById('mainContent');
     const inventorySection = document.getElementById('inventorySection');
     const statisticsSection = document.getElementById('statisticsSection');
     const logSection = document.getElementById('logSection');
+    const usersSection = document.getElementById('usersSection');
     const statisticsChartElement = document.getElementById('statisticsChart').getContext('2d');
     let statisticsChart; // Variable to hold the chart instance
     const yesButton = document.querySelector('.yes-button');
@@ -471,14 +473,17 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
     // Event listener for the "Add" button to open the addModal
     
-     // Add event listeners for navigation links
-     inventoryLink.addEventListener('click', () => {
+
+    // Add event listeners for navigation links
+    inventoryLink.addEventListener('click', () => {
         inventoryLink.classList.add('active');
         statisticsLink.classList.remove('active');
         logsLink.classList.remove('active');
+        usersLink.classList.remove('active');  // Ensure 'Users' link is not active
         inventorySection.style.display = '';
         statisticsSection.style.display = 'none';
         logSection.style.display = 'none';
+        usersSection.style.display = 'none'; // Hide Users section
         document.body.classList.add('inventory-active');
         filterItems('Foods');  // Set default category to Foods on inventory section load
     });
@@ -487,40 +492,37 @@ document.addEventListener("DOMContentLoaded", async function () {
         inventoryLink.classList.remove('active');
         statisticsLink.classList.add('active');
         logsLink.classList.remove('active');
+        usersLink.classList.remove('active');  // Ensure 'Users' link is not active
         inventorySection.style.display = 'none';
         statisticsSection.style.display = '';
         logSection.style.display = 'none';
-        document.body.classList.remove('inventory-active');
-    });
-
-
-    
-
-
-    inventoryLink.addEventListener('click', () => {
-        inventoryLink.classList.add('active');
-        statisticsLink.classList.remove('active');
-        inventorySection.style.display = '';
-        statisticsSection.style.display = 'none';
-    });
-
-    statisticsLink.addEventListener('click', () => {
-        inventoryLink.classList.remove('active');
-        statisticsLink.classList.add('active');
-        inventorySection.style.display = 'none';
-        statisticsSection.style.display = '';
+        usersSection.style.display = 'none'; // Hide Users section
         generateStatisticsChart('weekly'); // Default to weekly view
     });
 
-    // Event listener for Logs navigation
     logsLink.addEventListener('click', () => {
         inventoryLink.classList.remove('active');
         statisticsLink.classList.remove('active');
         logsLink.classList.add('active');
+        usersLink.classList.remove('active');  // Ensure 'Users' link is not active
         inventorySection.style.display = 'none'; // Hide Inventory section
         statisticsSection.style.display = 'none'; // Hide Statistics section
         logSection.style.display = ''; // Show Log section
+        usersSection.style.display = 'none'; // Hide Users section
     });
+
+    // Event listener for Users navigation
+    usersLink.addEventListener('click', () => {
+        inventoryLink.classList.remove('active');
+        statisticsLink.classList.remove('active');
+        logsLink.classList.remove('active');
+        usersLink.classList.add('active');  // Activate Users link
+        inventorySection.style.display = 'none'; // Hide Inventory section
+        statisticsSection.style.display = 'none'; // Hide Statistics section
+        logSection.style.display = 'none'; // Hide Log section
+        usersSection.style.display = ''; // Show Users section
+    });
+
 
      // Event listener for weekly button
      document.getElementById('weeklyBtn').addEventListener('click', () => {
@@ -727,3 +729,6 @@ document.addEventListener("DOMContentLoaded", function () {
         modalOverlay.style.display = "none";
     });
 });
+
+
+
