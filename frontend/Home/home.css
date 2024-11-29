@@ -70,6 +70,11 @@ body {
     margin-top: 1rem;
     cursor: pointer;
 }
+
+.proflog{
+    margin-top: 20rem;
+}
+
 .main-content {
     flex-grow: 1;
     padding: 20px;
@@ -724,6 +729,8 @@ th {
     text-decoration: none;
     cursor: pointer;
 }
+
+
 
 /* Responsive layout for smaller screens for images on a foodlist*/
 @media (max-width: 1024px) {

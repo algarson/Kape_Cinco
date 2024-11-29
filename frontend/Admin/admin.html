@@ -257,10 +257,33 @@
             </div>
         </div>
         
-          
+        <div id="addUserModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <form id="addForm" enctype="multipart/form-data">
+                    <label for="add_fname">First Name:</label>
+                    <input type="text" id="add_fname" name="add_fname">
+                    <label for="add_lname">Last Name:</label>
+                    <input type="text" id="add_lname" name="add_lname">
+                    <label for="add_role">Role:</label>
+                    <select id="add_role" name="add_role" required>
+                        <option value="Cashier">Cashier</option>
+                        <option value="Admin">Adnin</option>
+                    </select>
+                    <label for="add_username">Username:</label>
+                    <input type="text" id="add_username" name="add_username">
+                    <label for="add_userpass">Password:</label>
+                    <input type="password" id="add_userpass" name="add_userpass">
+
+                    <label for="add_userimage">Select Image:</label>
+                    <input type="file" id="add_userimage" name="add_userimage">
+                    <button type="submit" class="add-btn-form">Add</button>
+                </form>
+            </div>
+        </div>
 
         <div class="usersheadernav" id="usersSection">
-            <button class="addusers-button" onclick="openAddModal()">+ Add Users</button>
+            <button class="addusers-button" onclick="addUserModal()">+ Add Users</button>
             <div class="usersSection-container">
             
                 <table id="inventoryTable">
@@ -282,8 +305,8 @@
                                 <img src="#" alt="User Image">
                             </td>
                             <td class="users_btn">
-                                <button>Update</button>
-                                <button>Delete</button>
+                                <i id="updateUsers" class="fas fa-edit"></i>
+                                <i id="deleteUsers"class="fas fa-trash-alt"></i>
                             </td>
                         </tr>
                         <tr>    
@@ -294,8 +317,8 @@
                                 <img src="#" alt="User Image">
                             </td>
                             <td class="users_btn">
-                                <button>Update</button>
-                                <button>Delete</button>
+                                <i id="updateUsers" class="fas fa-edit"></i>
+                                <i id="deleteUsers"class="fas fa-trash-alt"></i>
                             </td>
                         </tr>
                         <tr>    
@@ -306,8 +329,8 @@
                                 <img src="#" alt="User Image">
                             </td>
                             <td class="users_btn">
-                                <button>Update</button>
-                                <button>Delete</button>
+                                <i id="updateUsers" class="fas fa-edit"></i>
+                                <i id="deleteUsers"class="fas fa-trash-alt"></i>
                             </td>
                         </tr>
                         <tr>    
@@ -318,15 +341,16 @@
                                 <img src="#" alt="User Image">
                             </td>
                             <td class="users_btn">
-                                <button class="users_updatebtn">Update</button>
-                                <button class="users_deletebtn">Delete</button>
+                                <i id="updateUsers" class="fas fa-edit"></i>
+                                <i id="deleteUsers"class="fas fa-trash-alt"></i>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        
+
+      
         
         
     </main>

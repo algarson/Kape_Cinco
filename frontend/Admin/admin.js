@@ -20,6 +20,27 @@ document.addEventListener("DOMContentLoaded", async function () {
     const yesButton = document.querySelector('.yes-button');
     const noButton = document.querySelector('.no-button');
     const addButton = document.querySelector('.add-button'); // Add but
+    const addUserModalElement = document.getElementById('addUserModal');
+    const openModalButton = document.querySelector('.addusers-button'); 
+
+    
+    // Function to open the modal
+    function openAddUserModal() {
+        addUserModalElement.style.display = 'block';
+    }
+
+
+    // Attach event listeners
+    openModalButton.addEventListener('click', openAddUserModal); // Open modal on button click
+
+    // Close modal if clicking outside the modal content
+    window.addEventListener('click', (event) => {
+    if (event.target === addUserModalElement) {
+        closeAddUserModal();
+    }
+         });
+
+    
     
 
     fetch('/Kape_Cinco/backend/Login/check_login.php')

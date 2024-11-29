@@ -128,7 +128,7 @@ th {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     left: 0;
     top: 0;
     width: 100%;
@@ -472,5 +472,16 @@ body.inventory-active .category-nav {
 
 
 .users_btn{
-    display: flex;
+    color: #4e342e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#updateUsers{
+    margin-right: 10px;
+}
+
+#deleteUsers{
+    margin-left: 10px;
 }
