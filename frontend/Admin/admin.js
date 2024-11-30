@@ -1,12 +1,17 @@
 document.addEventListener("DOMContentLoaded", async function () {
-    const tableBody = document.getElementById('tableBody');
+    const inventoryTableBody = document.getElementById('inventoryTableBody');
     const logsTableBody = document.getElementById('logsTableBody');
+    const usersTableBody = document.getElementById('usersTableBody');
 
     const categoryButtons = document.querySelectorAll('.category-nav button');
     const updateModal = document.getElementById('updateModal');
     const addModal = document.getElementById('addModal');
     const deleteModal = document.getElementById('deleteModal');
     const addVariantModal = document.getElementById('addVariantModal');
+    const deleteUserModal = document.getElementById('deleteUserModal');
+    
+    const addUserModalElement = document.getElementById('addUserModal');
+    const updateUserModal = document.getElementById('updateUserModal');
 
     const closeButton = document.querySelector('.close-button');
     const inventoryLink = document.getElementById('inventoryLink');
@@ -24,25 +29,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     const yesButton = document.querySelector('.yes-button');
     const noButton = document.querySelector('.no-button');
     const addButton = document.querySelector('.add-button'); // Add but
-    const addUserModalElement = document.getElementById('addUserModal');
-    const openModalButton = document.querySelector('.addusers-button'); 
-
     
-    // Function to open the modal
-    function openAddUserModal() {
-        addUserModalElement.style.display = 'block';
-    }
-
-
-    // Attach event listeners
-    openModalButton.addEventListener('click', openAddUserModal); // Open modal on button click
-
-    // Close modal if clicking outside the modal content
-    window.addEventListener('click', (event) => {
-        if (event.target === addUserModalElement) {
-            closeAddUserModal();
-        }
-    });
+    const userYesButton = document.getElementById('userYesButton');
+    const userNoButton = document.getElementById('userNoButton');
+    const openModalButton = document.querySelector('.addusers-button'); 
 
     fetch('/Kape_Cinco/backend/Login/check_login.php')
         .then(response => response.json())
@@ -57,9 +47,10 @@ document.addEventListener("DOMContentLoaded", async function () {
                 document.body.classList.remove('hidden');
                 generateAllItems();
                 generateAllLogs();
+                generateAllUsers();
             }
         })
-        .catch(error => console.error('Error:', error));
+    .catch(error => console.error('Error:', error));
     
     function formatDateTime(dateTimeString) {
         const date = new Date(dateTimeString);
@@ -97,8 +88,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     window.logout = logout;
     
     updateModal.style.display = 'none';
-    addButton.addEventListener('click', openAddModal);
-    
+
     async function fetchAllItems() {
         try {
             const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
@@ -134,19 +124,31 @@ document.addEventListener("DOMContentLoaded", async function () {
             return []; 
         }
     }
+
+    async function fetchAllUsers() {
+        try {
+            const res = await fetch("/Kape_Cinco/backend/Admin/users.php");
+
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    }
     
     async function generateAllItems() {
         const allItems = await fetchAllItems();
-        tableBody.innerHTML = '';
+        inventoryTableBody.innerHTML = '';
 
         allItems.forEach(item => {
             const row = createInventoryTableRow(item);
-            tableBody.appendChild(row);
+            inventoryTableBody.appendChild(row);
         });
 
         filterItems('Foods');  
     }
 
+    // --------------------- GENERATE DATA --------------------- //
     async function generateAllLogs() {
         const allLogs = await fetchAllLogs();
         logsTableBody.innerHTML = '';
@@ -157,6 +159,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
+    async function generateAllUsers() {
+        const allUsers = await fetchAllUsers();
+        usersTableBody.innerHTML = '';
+
+        allUsers.forEach(item => {
+            const row = createUsersTableRow(item);
+            usersTableBody.appendChild(row);
+        });
+    }
+
     function filterItems(category) {
         const descriptionHeader = document.querySelector('.description-header');
         const drinkTypeHeader = document.querySelector('.drinktype-header');
@@ -164,6 +176,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.querySelectorAll('tbody tr').forEach(row => {
             const cells = row.cells;
             const itemCategory = row.getAttribute('data-category');
+
+            // Check if the row has enough cells
+            if (!cells[2] || !cells[4]) {
+                // Skip rows that don't have the required cells
+                return;
+            }
 
             if (category === 'Drinks') {
                 drinkTypeHeader.style.display = '';
@@ -349,8 +367,60 @@ document.addEventListener("DOMContentLoaded", async function () {
         return row;
     }
 
+    function createUsersTableRow(item) {
+        const row = document.createElement('tr');
+    
+        // Name cell
+        const firstNameCell = document.createElement('td');
+        firstNameCell.textContent = item.user_firstname;
+        row.appendChild(firstNameCell);
+
+        const lastNameCell = document.createElement('td');
+        lastNameCell.textContent = item.user_lastname;
+        row.appendChild(lastNameCell);
+    
+        // Time In cell
+        const roleCell = document.createElement('td');
+        roleCell.textContent = item.user_role;
+        row.appendChild(roleCell);
+    
+        const imageCell = document.createElement('td');
+        const image = document.createElement('img') ;
+        image.className = "image_item";
+        image.src = item.user_image
+                    ? `/Kape_Cinco/backend/User/${item.user_image}`
+                    : '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+        imageCell.appendChild(image);
+        row.appendChild(imageCell);
+
+        const updateCell = document.createElement('td');
+        const updateButton = document.createElement('button');
+        const deleteButton = document.createElement('button');
+        deleteButton.className = "deletebtn"
+        deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+        updateButton.className = "updatebtn"
+        updateButton.innerHTML = '<i class="fas fa-edit"></i> ';
+
+        deleteButton.addEventListener('click', () => openDeleteUserModal(item));
+        updateCell.appendChild(deleteButton);
+        row.appendChild(updateCell);
+        updateButton.addEventListener('click', () => openUpdateUserModal(item));
+        updateCell.appendChild(updateButton);
+        row.appendChild(updateCell);
+    
+        return row;
+    }
+
+    // ------------------------------ OPEN MODAL FUNCTIONS ----------------------------- //
+   
+    // function to open add item modal
     function openAddModal() {   
         addModal.style.display = 'block';
+    }
+
+    // Function to open add user modal
+    function openAddUserModal() {
+        addUserModalElement.style.display = 'block';
     }
 
     function openUpdateModal(item) {
@@ -427,6 +497,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         updateModal.style.display = 'block';
     }
 
+    function openUpdateUserModal(item) {
+        document.getElementById('user_id').value = item.user_id;
+        document.getElementById('update_fname').value = item.user_firstname;
+        document.getElementById('update_lname').value = item.user_lastname;
+        document.getElementById('update_role').value = item.user_role;
+
+        updateUserModal.style.display = 'block';
+    }
+
     function openDeleteModal(item) {
         document.getElementById('item_id').value = item.food_id || item.drink_id;
         document.getElementById('item_type').value = item.food_id ? 'food' : 'drink';
@@ -452,13 +531,62 @@ document.addEventListener("DOMContentLoaded", async function () {
                     alert('Delete failed: ' + result.message);
                 }
             } catch (error) {
-                console.error('Error:', error);
+                console.error('error:', error);
                 alert('An error occurred while deleting the item.');
             }
         };
         
         deleteModal.style.display = 'block';
     }
+
+    function openDeleteUserModal(item) {
+
+        // Ensure valid user_id
+        if (!item.user_id) {
+            alert('Invalid user ID');
+            return;
+        }
+
+        // Assign new click handler
+        userYesButton.onclick = async () => {
+            userYesButton.disabled = true;
+            try {
+                const response = await fetch('/Kape_Cinco/backend/Admin/delete_user.php', {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        id: item.user_id
+                    }),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+    
+                // Check HTTP status
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+    
+                // Parse JSON response
+                const result = await response.json();
+    
+                if (result.success) {
+                    alert('User deleted successfully');
+                    deleteUserModal.style.display = 'none';
+                    await generateAllUsers();
+                } else {
+                    alert('Delete failed: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while deleting the user.');
+            } finally {
+                userYesButton.disabled = false;
+            }
+        };
+    
+        // Show the modal
+        deleteUserModal.style.display = 'block';
+    }    
 
     function openAddVariantModal(item){
         document.getElementById('variant_item_id').value = item.food_id || item.drink_id;
@@ -467,14 +595,34 @@ document.addEventListener("DOMContentLoaded", async function () {
         addVariantModal.style.display = 'block';
     }
     
+    
+    // ------------------------------- MODAL EVENTLISTENER ----------------
+   
     noButton.addEventListener('click', function () {
         deleteModal.style.display = 'none';
     });
+    
+    userNoButton.addEventListener('click', function () {
+        deleteUserModal.style.display = 'none';
+    });
+
+    // Attach event listeners
+    addButton.addEventListener('click', openAddModal); // Open add item modal on button click
+    openModalButton.addEventListener('click', openAddUserModal); // Open add user modal on button click
+
+    // Close modal if clicking outside the modal content
+    window.addEventListener('click', (event) => {
+        if (event.target === addUserModalElement) {
+            closeAddUserModal();
+        }
+    });
+
+    //-------------------- DOCUMENT EVENT LISTENERS ----------------------//
 
     document.getElementById('updateForm').addEventListener('submit', async (event) => {
         event.preventDefault();
         const formData = new FormData(event.target);
-        console.log('Form submitted');
+
         for (const pair of formData.entries()) {
             console.log(pair[0] + ', ' + pair[1]);
         }
@@ -491,6 +639,38 @@ document.addEventListener("DOMContentLoaded", async function () {
                     updateModal.style.display = 'none';
                     await generateAllItems();
                     document.getElementById('updateForm').reset();
+                } else {
+                    alert('Update failed!');
+                }
+            } else {
+                alert('Update request failed!');
+            }
+        } catch (error) {
+            console.error('Error updating item:', error);
+            alert('An error occurred during the update.');
+        }
+    });
+
+    document.getElementById('updateUserForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(event.target);
+        console.log('Form submitted');
+        for (const pair of formData.entries()) {
+            console.log(pair[0] + ', ' + pair[1]);
+        }
+
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Admin/update_userinfo.php', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const responseData = await response.json();
+                if (responseData.success) {
+                    updateUserModal.style.display = 'none';
+                    await generateAllUsers();
+                    document.getElementById('updateUserForm').reset();
                 } else {
                     alert('Update failed!');
                 }
@@ -528,7 +708,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 alert('Add failed: ' + result.message);
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('error:', error);
             alert('An error occurred while adding the item.');
         }
     });
@@ -563,7 +743,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('An error occurred while adding the item.');
+            //alert('An error occurred while adding the item.');
         }
     });
 
@@ -584,9 +764,33 @@ document.addEventListener("DOMContentLoaded", async function () {
             button.parentElement.parentElement.style.display = 'none';
         });
     });
-    // Event listener for the "Add" button to open the addModal
-    
 
+    document.getElementById('addUserForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        
+        const formData = new FormData(event.target);
+        
+        try {
+            const response = await fetch('/Kape_Cinco/backend/Admin/add_user.php', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+                alert('User added successfully');
+                addUserModalElement.style.display = 'none';
+                await generateAllUsers();
+                document.getElementById('addUserForm').reset();
+            } else {
+                alert('Add failed: ' + result.message);
+            }
+        } catch (error) {
+            console.error('error:', error);
+            alert('An error occurred while adding the item.');
+        }
+    });
+    
     // Add event listeners for navigation links
     inventoryLink.addEventListener('click', () => {
         inventoryLink.classList.add('active');
@@ -622,6 +826,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         statisticsSection.style.display = 'none'; // Hide Statistics section
         logSection.style.display = ''; // Show Log section
         usersSection.style.display = 'none'; // Hide Users section
+        generateAllLogs();
     });
 
     // Event listener for Users navigation
@@ -634,6 +839,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         statisticsSection.style.display = 'none'; // Hide Statistics section
         logSection.style.display = 'none'; // Hide Log section
         usersSection.style.display = ''; // Show Users section
+        generateAllUsers();
     });
 
 
@@ -835,12 +1041,12 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.style.display = "none";
         modalOverlay.style.display = "none";
     });
-
+    /*
     // Close the modal when clicking on the overlay (optional)
     modalOverlay.addEventListener("click", function () {
         modal.style.display = "none";
         modalOverlay.style.display = "none";
-    });
+    });*/
 });
 
 

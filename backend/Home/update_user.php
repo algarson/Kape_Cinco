@@ -17,6 +17,7 @@
 
             // Define the upload directory
             $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Kape_Cinco/backend/User/';
+            $currentDate = date('Ymd_His');
 
             // Check if the user already has an image
             $sql = "SELECT user_image FROM user_table WHERE user_id = ?";
@@ -32,12 +33,12 @@
                     unlink($uploadDir . $currentImage); // Delete the existing image
                 }
             }
-
+            
             // Proceed with new image upload
             $fileTmpPath = $_FILES['item_image']['tmp_name'];
             $fileExtension = pathinfo($_FILES['item_image']['name'], PATHINFO_EXTENSION);
-            $currentDate = date('Ymd_His'); // Date format: YYYYMMDD_HHMMSS
-            $fileName = $userId . '_' . $currentDate . '.' . $fileExtension; // Image name format: userID_timestamp.extension
+            $fileNamePrefix = $currentDate . '_';
+            $fileName = $fileNamePrefix . 'userimage.' . $fileExtension; // Image name format: userID_timestamp.extension
             $fileDest = $uploadDir . $fileName;
 
             // Move the uploaded file to the target directory

@@ -161,7 +161,7 @@ th {
     cursor: pointer;
 }
 
-#updateForm, #addForm, #addForm div, #addVariantForm {
+#updateForm, #addForm, #addForm div, #addVariantForm, #addUserForm, #updateUserForm{
     display: flex;
     flex-direction: column;
 

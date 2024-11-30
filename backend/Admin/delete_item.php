@@ -1,6 +1,16 @@
 <?php
-    include '../server.php'; 
+    session_start();
+    
+    // Check if user has the proper role
+    if (!isset($_SESSION['user']['role']) || 
+        ($_SESSION['user']['role'] !== 'Admin' && $_SESSION['user']['role'] !== 'Cashier')) {
+        http_response_code(403); // Forbidden
+        exit(json_encode(['error' => 'Access denied']));
+    }
 
+    include '../server.php'; 
+    header('Content-Type: application/json');
+    
     $response = ['success' => false, 'message' => ''];
     
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
