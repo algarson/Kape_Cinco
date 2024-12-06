@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Sharp"
+      rel="stylesheet">
+    <title>Food Order</title>
+    <link rel="stylesheet" href="view.css">
+</head>
+<body class="hidden">
+    <div class="container">
+        <div class="back-button" onclick="goBack()"><span class="material-icons-sharp">arrow_back_ios</span></div>
+        <div class="image-container">
+            <img id="item-image" src="" alt="Item Image">
+        </div>
+        <div id="item-details" class="details">
+            <h1 id="item-name"></h1>
+            <div class="description"><p id="item-desc"></p></div>
+            <div class="quantity-control">
+                <button id="decrement-quantity" class="quantity-btn" onclick="decreaseQuantity()"><span class="material-icons-sharp">remove</span></button>
+                <span class="quantity" id="item-quantity">1</span>
+                <button id="increment-quantity" class="quantity-btn" onclick="increaseQuantity()"><span class="material-icons-sharp">add</span></button>                
+            </div>
+            <div class="total">
+                <p id="item-total"></p>
+            </div>
+            <button class="order-btn" onclick="addToOrder()" id="add-order-button"></button>
+        </div>
+    </div>
+
+    <script src="view.js"></script>
+</body>
+</html>

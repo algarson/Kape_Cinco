@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="hidden">
+    <div class="container">
+        <div class="login-box">
+            <form id="login-form" method="POST">
+                <h2>Log in</h2>
+                <div class="input-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i>
+                    </label>
+                    <input type="text" id="username" name="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                    </label>
+                    <input type="password" id="password" name="password" placeholder="Password" required>
+                </div>
+                <button type="submit">Log in</button>
+            </form>
+             <!--  <button type="button" onclick="showRegisterForm()">Register</button> -->
+
+    <!-- <form id="register-form" style="display: none;" method="POST" onsubmit="validateRegistrationForm(event)">
+                <h2>Register</h2>
+                <div class="input-group">
+                    <label for="admin_Fname">
+                        <i class="fas fa-user"></i>
+                    </label>
+                    <input type="text" id="admin_fname" name="admin_fname" placeholder="First Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="admin_Lname">
+                        <i class="fas fa-user"></i>
+                    </label>
+                    <input type="text" id="admin_Lname" name="admin_Lname" placeholder="Last Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="admin_username">
+                        <i class="fas fa-user"></i>
+                    </label>
+                    <input type="text" id="admin_username" name="admin_username" placeholder="User Name" required>
+                </div>
+                <div class="input-group">
+                    <label for="admin_password">
+                        <i class="fas fa-lock"></i>
+                    </label>
+                    <input type="password" id="admin_password" name="admin_password" placeholder="Password" required>
+                </div>
+                <div class="input-group">
+                    <label for="confirm_password">
+                        <i class="fas fa-lock"></i>
+                    </label>
+                    <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                </div>
+                <div>
+                    <button type="submit">Register</button>
+                </div>
+                <div>
+                    <button type="button" onclick="hideRegisterForm()">Cancel</button>
+                </div>
+            </form> --> 
+            <div id="message"></div>
+        </div>
+        <div class="logo">
+            <img src="/Kape_Cinco/frontend/images/kape_cinco.jpg" alt="Kape Cinco">
+        </div>
+
+    </div> 
+
+    <script src="login.js"> </script>
+
+</body>
+</html>
