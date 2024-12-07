@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Check if the user is already logged in
-    fetch('/backend/Login/check_login.php')
+    fetch('/kapecinco/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
             if (data.loggedIn) {
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const redirectPage = params.get('redirect');
 
-        fetch('/backend/Login/login.php', {
+        fetch('/kapecinco/backend/Login/login.php', {
             method: 'POST',
             body: formData
         })
@@ -42,11 +42,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 const role = data.role;
 
                 if (redirectPage) {
-                    if (redirectPage.includes('/backend/Login/admin.php') && role === 'Cashier') {
+                    if (redirectPage.includes('/kapecinco/backend/Login/admin.php') && role === 'Cashier') {
                         alert('Access denied: Cashiers cannot access admin page.');
-                        window.location.href = '/backend/Login/home.php';
+                        window.location.href = '/kapecinco/backend/Login/home.php';
                     } else {
-                        window.location.href = `/backend/${redirectPage}`;
+                        window.location.href = `/kapecinco/backend/${redirectPage}`;
                     }
                 } else {
                     if (role === 'Admin') {
