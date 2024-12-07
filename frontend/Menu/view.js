@@ -4,7 +4,7 @@ function goBack() {
 }
 
 function redirectToMenu() {
-    window.location.href = '/Kape_Cinco/frontend/Menu/menu.html';
+    window.location.href = '/frontend/Menu/menu.html';
 }
 
 document.addEventListener('DOMContentLoaded', async function () {
@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         let imagePath;
     
         if (item.image === 'default_image') {
-            imagePath = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+            imagePath = '/frontend/images/kape_cinco.jpg';
         } else {
-            imagePath = `/Kape_Cinco/backend/images/${item.image}`;
+            imagePath = `/backend/images/${item.image}`;
         }
         
         const itemDetailsContainer = document.getElementById('item-details');
