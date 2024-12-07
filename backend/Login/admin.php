@@ -1,6 +1,6 @@
 <<?php
     session_start();
-
+    include '/backend/server.php';
     // Check if the user is logged in
     if (!isset($_SESSION['user']['role'])) {
         header('Location: /frontend/Login/login.html?redirect=Login/admin.php');
