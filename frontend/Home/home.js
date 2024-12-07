@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
-                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php`;
+                window.location.href = `/frontend/Login/login.html?redirect=Login/home.php`;
             } else {
                 document.body.classList.remove('hidden');
             }
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(response => response.json())
         .then(data => {
             if (data.error){
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php';
+                window.location.href = '/frontend/Login/login.html?redirect=Login/home.php';
             } else {
                 document.getElementById('user-role').textContent = `${data.role}`;
                 document.getElementById('user-name').textContent = `${data.name}`;
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php'; 
+                window.location.href = '/frontend/Login/login.html?redirect=Login/home.php'; 
                 return []; 
             }
             
@@ -153,11 +153,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 const allItemImage = document.createElement('img');
                 if (item.food_image) {
-                    allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
+                    allItemImage.src = '/backend/images/' + item.food_image;
                 } else if (item.drink_image) {
-                    allItemImage.src = '/Kape_Cinco/backend/images/' + item.drink_image;
+                    allItemImage.src = '/backend/images/' + item.drink_image;
                 } else {
-                    allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+                    allItemImage.src = '/frontend/images/kape_cinco.jpg';
                 }
                 allItemImage.className = 'all-item-image'; 
 
@@ -349,7 +349,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             .then(data => {
                 if (data.success) {
                     clearInterval(intervalId);
-                    window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+                    window.location.href = '/frontend/Login/login.html';
                 } else {
                     alert('Logout failed!');
                 }

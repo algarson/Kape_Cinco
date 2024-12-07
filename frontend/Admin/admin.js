@@ -39,10 +39,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         .then(data => {
             if (!data.loggedIn) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php`;
+                window.location.href = `/frontend/Login/login.html?redirect=Login/admin.php`;
             } else if (data.role !== 'Admin') {
                 alert('Access denied: Only admins can access this page.');
-                window.location.href = '/Kape_Cinco/frontend/Home/home.html';
+                window.location.href = '/frontend/Home/home.html';
             } else {
                 document.body.classList.remove('hidden');
                 generateAllItems();
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+                    window.location.href = '/frontend/Login/login.html';
                 } else {
                     alert('Logout failed!');
                 }
@@ -91,11 +91,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllItems() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+            const res = await fetch("/backend/Home/allitems.php");
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php'; 
+                window.location.href = '/frontend/Login/login.html?redirect=Login/admin.php'; 
                 return []; 
             }
     
@@ -109,11 +109,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllLogs() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Admin/logs.php");
+            const res = await fetch("/backend/Admin/logs.php");
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php'; 
+                window.location.href = '/frontend/Login/login.html?redirect=Login/admin.php'; 
                 return []; 
             }
     
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllUsers() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Admin/users.php");
+            const res = await fetch("/backend/Admin/users.php");
 
             const data = await res.json();
             return data;
@@ -291,10 +291,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         const image = document.createElement('img') ;
         image.className = "image_item";
         image.src = item.food_image 
-                    ? `/Kape_Cinco/backend/images/${item.food_image}`
+                    ? `/backend/images/${item.food_image}`
                     : item.drink_image
-                    ? `/Kape_Cinco/backend/images/${item.drink_image}`
-                    : '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+                    ? `/backend/images/${item.drink_image}`
+                    : '/frontend/images/kape_cinco.jpg';
         imageCell.appendChild(image);
         row.appendChild(imageCell);
 
@@ -388,8 +388,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         const image = document.createElement('img') ;
         image.className = "image_item";
         image.src = item.user_image
-                    ? `/Kape_Cinco/backend/User/${item.user_image}`
-                    : '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+                    ? `/backend/User/${item.user_image}`
+                    : '/frontend/images/kape_cinco.jpg';
         imageCell.appendChild(image);
         row.appendChild(imageCell);
 
