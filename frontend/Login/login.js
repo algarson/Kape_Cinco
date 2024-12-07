@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Check if the user is already logged in
-    fetch('/backend/Login/check_login.php')
+    fetch('/../backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
             if (data.loggedIn) {
