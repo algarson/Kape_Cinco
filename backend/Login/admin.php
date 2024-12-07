@@ -1,4 +1,4 @@
-<<?php
+<?php
     session_start();
     include '/backend/server.php';
     // Check if the user is logged in

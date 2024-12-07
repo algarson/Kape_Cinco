@@ -15,7 +15,8 @@
         echo "Connected successfully to the database: " . $dbname;
     }
     
-    // Close the connection
-    $conn->close();
+    $sql = "SELECT * FROM user_table WHERE";
+
+    echo $sql;
 
 ?>
