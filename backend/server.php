@@ -19,6 +19,13 @@
 
     $result = $conn -> query($sql);
 
-    echo $result;
+    if ($result->num_rows > 0) {
+        // Output data of each row
+        while($row = $result->fetch_assoc()) {
+            echo "ID: " . $row["id"]. " - Name: " . $row["name"]. " - Email: " . $row["email"]. "<br>";
+        }
+    } else {
+        echo "0 results";
+    }
 
 ?>
