@@ -10,9 +10,6 @@
     if ($conn->connect_error) {
         // If connection fails, display the error message
         die("Connection failed: " . $conn->connect_error);
-    } else {
-        // If connection is successful, display success message
-        echo "Connected successfully to the database: " . $dbname;
     }
 
 ?>
