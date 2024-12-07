@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (redirectPage) {
                     if (redirectPage.includes('/backend/Login/admin.php') && role === 'Cashier') {
                         alert('Access denied: Cashiers cannot access admin page.');
-                        window.location.href = '/kapecinco/backend/Login/home.php';
+                        window.location.href = '/backend/Login/home.php';
                     } else {
                         window.location.href = `/backend/${redirectPage}`;
                     }
