@@ -23,7 +23,7 @@
 
         // Handle the file upload (if an image is provided)
         $fileName = null;
-        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Kape_Cinco/backend/User/';
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/backend/User/';
         $currentDate = date('YmdHis');
 
         if (isset($_FILES['add_userimage']) && $_FILES['add_userimage']['error'] === UPLOAD_ERR_OK) {

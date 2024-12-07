@@ -1,6 +1,6 @@
 <?php
 
-    include "../server.php";
+include '/backend/server.php';
 
     $statSql = $statSql = "SELECT 
                                 COUNT(order_number) AS total_orders, 

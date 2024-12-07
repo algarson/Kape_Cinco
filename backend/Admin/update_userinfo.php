@@ -79,7 +79,7 @@
         // Handle image upload
         if (isset($_FILES['update_user_image']) && $_FILES['update_user_image']['error'] === UPLOAD_ERR_OK) {
             // Define the upload directory
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Kape_Cinco/backend/User/';
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/backend/User/';
             $currentDate = date('Ymd_His');
 
             // Remove the existing image if it exists

@@ -1,5 +1,5 @@
 <?php
-include '../server.php';
+    include '/backend/server.php';
 
 date_default_timezone_set('Asia/Manila');
 

@@ -14,7 +14,7 @@
         $update_serving = $_POST['update_serving'];
         $update_description = $_POST['update_description'] ?? null; // In case of food
         
-        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Kape_Cinco/backend/images/';
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/backend/images/';
         $currentDate = date('YmdHis');
 
         if ($is_variant) {
