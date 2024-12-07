@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Check if the user is already logged in
-    fetch('/kapecinco/backend/Login/check_login.php')
+    fetch('/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
             if (data.loggedIn) {
                 if (data.role === 'Admin') {
-                    window.location.href = '/kapecinco/backend/Login/admin.php';
+                    window.location.href = '/backend/Login/admin.php';
                 } else if (data.role === 'Cashier') {
-                    window.location.href = '/kapecinco/backend/Login/home.php';
+                    window.location.href = '/backend/Login/home.php';
                 } 
             } else {
                 document.body.classList.remove('hidden'); // Show login form
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const redirectPage = params.get('redirect');
 
-        fetch('/kapecinco/backend/Login/login.php', {
+        fetch('/backend/Login/login.php', {
             method: 'POST',
             body: formData
         })
