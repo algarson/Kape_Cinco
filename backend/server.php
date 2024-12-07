@@ -17,6 +17,8 @@
     
     $sql = "SELECT * FROM user_table WHERE";
 
-    echo $sql;
+    $result = $conn -> query($sql);
+
+    echo $result;
 
 ?>
