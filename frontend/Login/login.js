@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const role = data.role;
 
                 if (redirectPage) {
-                    if (redirectPage.includes('Login/admin.php') && role === 'Cashier') {
+                    if (redirectPage.includes('/backend/Login/admin.php') && role === 'Cashier') {
                         alert('Access denied: Cashiers cannot access admin page.');
                         window.location.href = '/backend/Login/home.php';
                     } else {
