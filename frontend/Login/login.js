@@ -5,9 +5,9 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             if (data.loggedIn) {
                 if (data.role === 'Admin') {
-                    window.location.href = '/backend/Login/admin.php';
+                    window.location.href = '/kapecinco/backend/Login/admin.php';
                 } else if (data.role === 'Cashier') {
-                    window.location.href = '/backend/Login/home.php';
+                    window.location.href = '/kapecinco/backend/Login/home.php';
                 } 
             } else {
                 document.body.classList.remove('hidden'); // Show login form
