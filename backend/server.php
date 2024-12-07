@@ -14,18 +14,5 @@
         // If connection is successful, display success message
         echo "Connected successfully to the database: " . $dbname;
     }
-    
-    $sql = "SELECT * FROM user_table WHERE";
-
-    $result = $conn -> query($sql);
-
-    if ($result->num_rows > 0) {
-        // Output data of each row
-        while($row = $result->fetch_assoc()) {
-            echo "ID: " . $row["id"]. " - Name: " . $row["name"]. " - Email: " . $row["email"]. "<br>";
-        }
-    } else {
-        echo "0 results";
-    }
 
 ?>
