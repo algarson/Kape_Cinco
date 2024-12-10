@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const userNoButton = document.getElementById('userNoButton');
     const openModalButton = document.querySelector('.addusers-button'); 
 
-    fetch('/backend/Login/check_login.php')
+    fetch(`/backend/Login/check_login.php`)
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function logout() {
-        fetch('/backend/Login/logout.php')
+        fetch(`/backend/Login/logout.php`)
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
