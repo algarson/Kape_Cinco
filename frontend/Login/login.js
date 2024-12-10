@@ -19,9 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', validateLogin);
 
-    console.log(document.getElementById('username').value);
-    console.log(document.getElementById('password').value);
-
     function validateLogin(event) {
         event.preventDefault();
 
