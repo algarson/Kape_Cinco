@@ -26,8 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
 
         const formData = new FormData();
-        formData.append('username', username);
-        formData.append('password', password);
 
         const params = new URLSearchParams(window.location.search);
         const redirectPage = params.get('redirect');

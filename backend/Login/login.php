@@ -3,13 +3,13 @@
     date_default_timezone_set('Asia/Manila');
 
 
-    if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Sanitize inputs
         $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // Check user existence
-        $sql = "SELECT * FROM `user_table` WHERE `user_username` = 'Allen' ";
+        $sql = "SELECT * FROM `user_table` WHERE `user_username` = ? ";
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param('s', $username);
             $stmt->execute();
