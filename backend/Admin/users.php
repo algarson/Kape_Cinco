@@ -14,15 +14,15 @@
     // Query to fetch shift logs with user details
     $logsql = "
         SELECT 
-            user_id,
-            user_firstname,
-            user_lastname,
-            user_role,
-            user_image
+            `user_id`,
+            `user_firstname`,
+            `user_lastname`,
+            `user_role`,
+            `user_image`
         FROM 
-            user_table
+            `user_table`
         WHERE
-            user_status = 'Active'
+            `user_status` = 'Active'
     ";
 
     $result = $conn->query($logsql);
