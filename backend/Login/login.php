@@ -8,7 +8,7 @@
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // Check user existence
-        $sql = "SELECT * FROM user_table WHERE user_username = ?";
+        $sql = "SELECT * FROM `user_table` WHERE `user_username` = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -18,7 +18,7 @@
             $user = $result->fetch_assoc();
 
             // Verify password
-            if (password_verify($password, $user['user_password'])) {
+            if (password_verify($password, $user[`user_password`])) {
                 // Start session and store user info
                 session_start();
                 session_regenerate_id(true);
@@ -28,20 +28,20 @@
 
                 // Organize session data in an array
                 $_SESSION['user'] = [
-                    'id' => $user['user_id'],
-                    'role' => $user['user_role'],
-                    'name' => $user['user_firstname'] . ' ' . $user['user_lastname'],
+                    'id' => $user[`user_id`],
+                    'role' => $user[`user_role`],
+                    'name' => $user[`user_firstname`] . ' ' . $user[`user_lastname`],
                     'time_in' => $timeIn
                 ];
 
-                $shiftSql = "INSERT INTO user_shifts (user_id, time_in) VALUES (?, ?)";
+                $shiftSql = "INSERT INTO `user_shifts` (user_id, time_in) VALUES (?, ?)";
                 $shiftStmt = $conn->prepare($shiftSql);
-                $shiftStmt->bind_param("is", $user['user_id'], $timeIn);
+                $shiftStmt->bind_param("is", $user[`user_id`], $timeIn);
                 $shiftStmt->execute();
                 $shiftStmt->close();
 
                 // Respond with success
-                echo json_encode(['userExists' => true, 'role' => $user['user_role']]);
+                echo json_encode(['userExists' => true, 'role' => $user[`user_role`]]);
             } else {
                 // Invalid password
                 echo json_encode(['userExists' => false, 'error' => 'Invalid password.']);
