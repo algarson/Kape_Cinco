@@ -1,6 +1,10 @@
 <?php
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 // Assuming you already have a MySQLi connection in $conn
 include('/backend/server.php');
+
 
 $sql = "SELECT * FROM `user_table`";
 if ($stmt = $conn->prepare($sql)) {
@@ -21,7 +25,7 @@ if ($stmt = $conn->prepare($sql)) {
         echo "<td>" . $row['user_firstname'] . "</td>";
         echo "<td>" . $row['user_lastname'] . "</td>";
         echo "<td>" . $row['user_username'] . "</td>";
-        echo "<td>" . $row['user_paswword'] . "</td>";
+        echo "<td>" . $row['user_password'] . "</td>";
         echo "<td>" . $row['user_role'] . "</td>";
         echo "</tr>";
     }
