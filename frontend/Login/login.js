@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Check if the user is already logged in
-    fetch(`/backend/Login/check_login.php`)
+    fetch('/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
             if (data.loggedIn) {
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const redirectPage = params.get('redirect');
 
-        fetch(`/backend/Login/login.php`, {
+        fetch('/backend/Login/login.php', {
             method: 'POST',
             body: formData
         })
@@ -42,17 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 const role = data.role;
 
                 if (redirectPage) {
-                    if (redirectPage.includes(`Login/admin.php`) && role === 'Cashier') {
+                    if (redirectPage.includes('Login/admin.php') && role === 'Cashier') {
                         alert('Access denied: Cashiers cannot access admin page.');
-                        window.location.href = `/backend/Login/home.php`;
+                        window.location.href = '/backend/Login/home.php';
                     } else {
                         window.location.href = `/backend/${redirectPage}`;
                     }
                 } else {
                     if (role === 'Admin') {
-                        window.location.href = `/backend/Login/admin.php`;
+                        window.location.href = '/backend/Login/admin.php';
                     } else if (role === 'Cashier') {
-                        window.location.href = `/backend/Login/home.php`;
+                        window.location.href = '/backend/Login/home.php';
                     } else {
                         alert('Invalid role detected.');
                     }
@@ -61,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert('Login failed: ' + (data.error || 'Invalid credentials.'));
             }
         })
-        .catch(error => console.error('Error:', error));
     }
     /*
     // Add event listeners for registration form show/hide
