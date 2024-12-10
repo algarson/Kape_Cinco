@@ -19,18 +19,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', validateLogin);
 
+    console.log(document.getElementById('username').value);
+    console.log(document.getElementById('password').value);
+
     function validateLogin(event) {
         event.preventDefault();
 
-        const username = document.getElementById(`username`).value;
-        const password = document.getElementById(`password`).value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
         const formData = new FormData();
-        formData.append(`username`, username);
-        formData.append(`password`, password);
+        formData.append('username', username);
+        formData.append('password', password);
 
         const params = new URLSearchParams(window.location.search);
-        const redirectPage = params.get(`redirect`);
+        const redirectPage = params.get('redirect');
 
         fetch(`/backend/Login/login.php`, {
             method: 'POST',
