@@ -25,9 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function validateLogin(event) {
         event.preventDefault();
 
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
         const formData = new FormData();
         formData.append('username', username);
         formData.append('password', password);
