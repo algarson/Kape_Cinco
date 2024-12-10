@@ -3,7 +3,7 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 // Assuming you already have a MySQLi connection in $conn
-include('/backend/server.php');
+include('../server.php');
 
 
 $sql = "SELECT * FROM `user_table`";
