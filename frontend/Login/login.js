@@ -28,9 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = new FormData();
 
         const params = new URLSearchParams(window.location.search);
-        const redirectPage = params.get('redirect');
-
-        
+        const redirectPage = params.get('redirect');        
 
         fetch(`/backend/Login/login.php`, {
             method: 'POST',
