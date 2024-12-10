@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add event listener for login form submission
     const loginForm = document.getElementById('login-form');
+    const username = document.getElementById('username');
+    const password = document.getElementById('password')
     loginForm.addEventListener('submit', validateLogin);
 
     function validateLogin(event) {
