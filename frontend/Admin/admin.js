@@ -42,7 +42,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 window.location.href = `/frontend/Login/login.html?redirect=Login/admin.php`;
             } else if (data.role !== 'Admin') {
                 alert('Access denied: Only admins can access this page.');
-                window.location.href = '/frontend/Home/home.html';
+                window.location.href = `/frontend/Home/home.html`;
             } else {
                 document.body.classList.remove('hidden');
                 generateAllItems();
@@ -77,7 +77,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/frontend/Login/login.html';
+                    window.location.href = `/frontend/Login/login.html`;
                 } else {
                     alert('Logout failed!');
                 }
@@ -91,11 +91,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllItems() {
         try {
-            const res = await fetch("/backend/Home/allitems.php");
+            const res = await fetch(`/backend/Home/allitems.php`);
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/frontend/Login/login.html?redirect=Login/admin.php'; 
+                window.location.href = `/frontend/Login/login.html?redirect=Login/admin.php`; 
                 return []; 
             }
     
@@ -113,7 +113,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/frontend/Login/login.html?redirect=Login/admin.php'; 
+                window.location.href = `/frontend/Login/login.html?redirect=Login/admin.php`; 
                 return []; 
             }
     
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllUsers() {
         try {
-            const res = await fetch("/backend/Admin/users.php");
+            const res = await fetch(`/backend/Admin/users.php`);
 
             const data = await res.json();
             return data;
