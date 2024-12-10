@@ -1,13 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     // Check if the user is already logged in
-    fetch(`/backend/Login/check_login.php`)
+    fetch('/Kape_Cinco/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
             if (data.loggedIn) {
                 if (data.role === 'Admin') {
-                    window.location.href = `/backend/Login/admin.php`;
+                    window.location.href = '/Kape_Cinco/backend/Login/admin.php';
                 } else if (data.role === 'Cashier') {
-                    window.location.href = `/backend/Login/home.php`;
+                    window.location.href = '/Kape_Cinco/backend/Login/home.php';
                 } 
             } else {
                 document.body.classList.remove('hidden'); // Show login form
@@ -17,12 +17,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add event listener for login form submission
     const loginForm = document.getElementById('login-form');
-    const username = document.getElementById('username');
-    const password = document.getElementById('password')
     loginForm.addEventListener('submit', validateLogin);
 
     function validateLogin(event) {
         event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
 
         const formData = new FormData();
         formData.append('username', username);
@@ -31,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const params = new URLSearchParams(window.location.search);
         const redirectPage = params.get('redirect');
 
-        fetch(`/backend/Login/login.php`, {
+        fetch('/Kape_Cinco/backend/Login/login.php', {
             method: 'POST',
             body: formData
         })
@@ -41,17 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
                 const role = data.role;
 
                 if (redirectPage) {
-                    if (redirectPage.includes(`/backend/Login/admin.php`) && role === 'Cashier') {
+                    if (redirectPage.includes('Login/admin.php') && role === 'Cashier') {
                         alert('Access denied: Cashiers cannot access admin page.');
-                        window.location.href = `/backend/Login/home.php`;
+                        window.location.href = '/Kape_Cinco/backend/Login/home.php';
                     } else {
-                        window.location.href = `/backend/${redirectPage}`;
+                        window.location.href = `/Kape_Cinco/backend/${redirectPage}`;
                     }
                 } else {
                     if (role === 'Admin') {
-                        window.location.href = `/backend/Login/admin.php`;
+                        window.location.href = '/Kape_Cinco/backend/Login/admin.php';
                     } else if (role === 'Cashier') {
-                        window.location.href = `/backend/Login/home.php`;
+                        window.location.href = '/Kape_Cinco/backend/Login/home.php';
                     } else {
                         alert('Invalid role detected.');
                     }
@@ -83,4 +84,3 @@ document.addEventListener("DOMContentLoaded", () => {
         loginForm.style.display = 'block';
     }*/
 });
-
