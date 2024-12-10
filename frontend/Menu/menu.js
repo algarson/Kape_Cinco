@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function fetchAllItems() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Home/Menuallitems.php");
+            const res = await fetch("/backend/Home/Menuallitems.php");
             const data = await res.json();
             return data;
         } catch (err) {
@@ -45,11 +45,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             
             const allItemImage = document.createElement('img');
             if (item.food_image) {
-                allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
+                allItemImage.src = '/backend/images/' + item.food_image;
             } else if (item.drink_image) {
-                allItemImage.src = '/Kape_Cinco/backend/images/' + item.drink_image;
+                allItemImage.src = '/backend/images/' + item.drink_image;
             } else {
-                allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+                allItemImage.src = '/frontend/images/kape_cinco.jpg';
             }
             allItemImage.className = 'all-item-image';
             
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function setItemDetails(orderitems) {
         localStorage.setItem('itemDetails', JSON.stringify(orderitems));
-        window.location.href = '/Kape_Cinco/frontend/Menu/view.html';
+        window.location.href = '/frontend/Menu/view.html';
     }
 
     generateAllItems();
@@ -176,8 +176,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             cartItem.setAttribute('data-index', index); // Unique identifier
     
             let imagePath = item.image === 'default_image' || !item.image 
-                            ? '/Kape_Cinco/frontend/images/kape_cinco.jpg' 
-                            : `/Kape_Cinco/backend/images/${item.image}`;
+                            ? '/frontend/images/kape_cinco.jpg' 
+                            : `/backend/images/${item.image}`;
     
             cartItem.innerHTML = `
                 <div class="card-image-left">
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         `;
     
         document.querySelector('.complete-order-btn').addEventListener('click', function() {
-            window.location.href = '/Kape_Cinco/frontend/Menu/review.html';
+            window.location.href = '/frontend/Menu/review.html';
         });
     
         addEventListenersToCartItems();

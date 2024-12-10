@@ -24,11 +24,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     paymentModal.style.display = 'none';
 
     // Check login status
-    fetch('/Kape_Cinco/backend/Login/check_login.php')
+    fetch('/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
-                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php`;
+                window.location.href = `/frontend/Login/login.html?redirect=Login/home.php`;
             } else {
                 document.body.classList.remove('hidden');
             }
@@ -37,11 +37,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     let intervalId;
     // Fetch user session details
-    fetch('/Kape_Cinco/backend/Login/get_user.php')
+    fetch('/backend/Login/get_user.php')
         .then(response => response.json())
         .then(data => {
             if (data.error){
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php';
+                window.location.href = '/frontend/Login/login.html?redirect=Login/home.php';
             } else {
                 document.getElementById('user-role').textContent = `${data.role}`;
                 document.getElementById('user-name').textContent = `${data.name}`;
@@ -83,11 +83,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function fetchAllItems() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+            const res = await fetch("/backend/Home/allitems.php");
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/home.php'; 
+                window.location.href = '/frontend/Login/login.html?redirect=Login/home.php'; 
                 return []; 
             }
             
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     async function fetchAllOrders() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Home/allorders.php");
+            const res = await fetch("/backend/Home/allorders.php");
             const data = await res.json();
             return data;
         } catch (err) {
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function dailySales () {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Home/stats.php");
+            const res = await fetch("/backend/Home/stats.php");
             const data = await res.json();
             return data;
         } catch (err) {
@@ -153,11 +153,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 const allItemImage = document.createElement('img');
                 if (item.food_image) {
-                    allItemImage.src = '/Kape_Cinco/backend/images/' + item.food_image;
+                    allItemImage.src = '/backend/images/' + item.food_image;
                 } else if (item.drink_image) {
-                    allItemImage.src = '/Kape_Cinco/backend/images/' + item.drink_image;
+                    allItemImage.src = '/backend/images/' + item.drink_image;
                 } else {
-                    allItemImage.src = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+                    allItemImage.src = '/frontend/images/kape_cinco.jpg';
                 }
                 allItemImage.className = 'all-item-image'; 
 
@@ -344,12 +344,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
 
     function logout() {
-        fetch('/Kape_Cinco/backend/Login/logout.php')
+        fetch('/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     clearInterval(intervalId);
-                    window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+                    window.location.href = '/frontend/Login/login.html';
                 } else {
                     alert('Logout failed!');
                 }
@@ -386,7 +386,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     
         // Send the FormData to the backend using fetch
         try {
-            const response = await fetch('/Kape_Cinco/backend/Home/update_user.php', {
+            const response = await fetch('/backend/Home/update_user.php', {
                 method: 'POST',
                 body: formData
             });
@@ -668,7 +668,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             formData.append('order-stats', orderStats);
             formData.append('order-details', JSON.stringify(orderDetails.cart));
 
-            fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
+            fetch('/backend/Home/confirm_order.php', {
                 method: 'POST',
                 body: formData
             })
@@ -967,7 +967,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             formData.append('order-stats',orderStatus);
         
             try {
-                const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+                const response = await fetch('/backend/Home/update_status.php', {
                     method: 'POST',
                     body: formData
                 });
@@ -1011,7 +1011,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('order-stats',orderStatus);
        
         try {
-            const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+            const response = await fetch('/backend/Home/update_status.php', {
                 method: 'POST',
                 body: formData
             });
@@ -1047,7 +1047,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('order-stats',orderStatus);
        
         try {
-            const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+            const response = await fetch('/backend/Home/update_status.php', {
                 method: 'POST',
                 body: formData
             });
@@ -1084,7 +1084,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('order-stats',orderStatus);
        
         try {
-            const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+            const response = await fetch('/backend/Home/update_status.php', {
                 method: 'POST',
                 body: formData
             });
@@ -1239,7 +1239,7 @@ async function cancelOrderAutomatically(orderNumber) {
     formData.append('order-stats', 'Canceled');
 
     try {
-        const response = await fetch('/Kape_Cinco/backend/Home/update_status.php', {
+        const response = await fetch('/backend/Home/update_status.php', {
             method: 'POST',
             body: formData
         });

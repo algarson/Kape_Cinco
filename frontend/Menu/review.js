@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const summaryContainer = document.getElementById('summary');
 
     if (cart.length === 0) {
-        window.location.href = '/Kape_Cinco/frontend/Menu/menu.html';
+        window.location.href = '/frontend/Menu/menu.html';
         return;
     }
 
@@ -20,9 +20,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         let imagePath;
         if (item.image === 'default_image' || !item.image) {
-            imagePath = '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+            imagePath = '/frontend/images/kape_cinco.jpg';
         } else {
-            imagePath = `/Kape_Cinco/backend/images/${item.image}`;
+            imagePath = `/backend/images/${item.image}`;
         }
 
         const orderItem = document.createElement('div');
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('order-stats', orderStats);
         formData.append('order-details', JSON.stringify(cart));
 
-        fetch('/Kape_Cinco/backend/Home/confirm_order.php', {
+        fetch('/backend/Home/confirm_order.php', {
             method: 'POST',
             body: formData
         })
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 alert('Order Confirmed');
                 localStorage.removeItem('cart');
                 console.log(cart);
-                window.location.href = `/Kape_Cinco/frontend/Menu/QRpage.html?order=${orderToken}`;
+                window.location.href = `/frontend/Menu/QRpage.html?order=${orderToken}`;
             } else if (data.error) {
                 alert(data.error);
             }

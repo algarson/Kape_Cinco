@@ -34,15 +34,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     const userNoButton = document.getElementById('userNoButton');
     const openModalButton = document.querySelector('.addusers-button'); 
 
-    fetch('/Kape_Cinco/backend/Login/check_login.php')
+    fetch('/backend/Login/check_login.php')
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = `/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php`;
+                window.location.href = `/frontend/Login/login.html?redirect=Login/admin.php`;
             } else if (data.role !== 'Admin') {
                 alert('Access denied: Only admins can access this page.');
-                window.location.href = '/Kape_Cinco/frontend/Home/home.html';
+                window.location.href = '/frontend/Home/home.html';
             } else {
                 document.body.classList.remove('hidden');
                 generateAllItems();
@@ -73,11 +73,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function logout() {
-        fetch('/Kape_Cinco/backend/Login/logout.php')
+        fetch('/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    window.location.href = '/Kape_Cinco/frontend/Login/login.html';
+                    window.location.href = '/frontend/Login/login.html';
                 } else {
                     alert('Logout failed!');
                 }
@@ -91,11 +91,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllItems() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Home/allitems.php");
+            const res = await fetch("/backend/Home/allitems.php");
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php'; 
+                window.location.href = '/frontend/Login/login.html?redirect=Login/admin.php'; 
                 return []; 
             }
     
@@ -109,11 +109,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllLogs() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Admin/logs.php");
+            const res = await fetch("/backend/Admin/logs.php");
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/Kape_Cinco/frontend/Login/login.html?redirect=Login/admin.php'; 
+                window.location.href = '/frontend/Login/login.html?redirect=Login/admin.php'; 
                 return []; 
             }
     
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllUsers() {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Admin/users.php");
+            const res = await fetch("/backend/Admin/users.php");
 
             const data = await res.json();
             return data;
@@ -291,10 +291,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         const image = document.createElement('img') ;
         image.className = "image_item";
         image.src = item.food_image 
-                    ? `/Kape_Cinco/backend/images/${item.food_image}`
+                    ? `/backend/images/${item.food_image}`
                     : item.drink_image
-                    ? `/Kape_Cinco/backend/images/${item.drink_image}`
-                    : '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+                    ? `/backend/images/${item.drink_image}`
+                    : '/frontend/images/kape_cinco.jpg';
         imageCell.appendChild(image);
         row.appendChild(imageCell);
 
@@ -388,8 +388,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         const image = document.createElement('img') ;
         image.className = "image_item";
         image.src = item.user_image
-                    ? `/Kape_Cinco/backend/User/${item.user_image}`
-                    : '/Kape_Cinco/frontend/images/kape_cinco.jpg';
+                    ? `/backend/User/${item.user_image}`
+                    : '/frontend/images/kape_cinco.jpg';
         imageCell.appendChild(image);
         row.appendChild(imageCell);
 
@@ -512,7 +512,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         yesButton.onclick = async () => {
             try {
-                const response = await fetch('/Kape_Cinco/backend/Admin/delete_item.php', {
+                const response = await fetch('/backend/Admin/delete_item.php', {
                     method: 'POST',
                     body: JSON.stringify({
                         id: item.food_id || item.drink_id,
@@ -551,7 +551,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         userYesButton.onclick = async () => {
             userYesButton.disabled = true;
             try {
-                const response = await fetch('/Kape_Cinco/backend/Admin/delete_user.php', {
+                const response = await fetch('/backend/Admin/delete_user.php', {
                     method: 'POST',
                     body: JSON.stringify({
                         id: item.user_id
@@ -628,7 +628,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         try {
-            const response = await fetch('/Kape_Cinco/backend/Admin/update_item.php', {
+            const response = await fetch('/backend/Admin/update_item.php', {
                 method: 'POST',
                 body: formData
             });
@@ -660,7 +660,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
 
         try {
-            const response = await fetch('/Kape_Cinco/backend/Admin/update_userinfo.php', {
+            const response = await fetch('/backend/Admin/update_userinfo.php', {
                 method: 'POST',
                 body: formData
             });
@@ -694,7 +694,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     
         try {
-            const response = await fetch('/Kape_Cinco/backend/Admin/add_item.php', {
+            const response = await fetch('/backend/Admin/add_item.php', {
                 method: 'POST',
                 body: formData
             });
@@ -728,7 +728,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     
         try {
-            const response = await fetch('/Kape_Cinco/backend/Admin/add_variant_item.php', {
+            const response = await fetch('/backend/Admin/add_variant_item.php', {
                 method: 'POST',
                 body: formData
             });
@@ -771,7 +771,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const formData = new FormData(event.target);
         
         try {
-            const response = await fetch('/Kape_Cinco/backend/Admin/add_user.php', {
+            const response = await fetch('/backend/Admin/add_user.php', {
                 method: 'POST',
                 body: formData
             });
@@ -863,7 +863,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function weeklySales () {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Admin/weeklyStats.php");
+            const res = await fetch("/backend/Admin/weeklyStats.php");
             const weeklyData = await res.json();
             return weeklyData;
         } catch (err) {
@@ -873,7 +873,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function monthlySales () {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Admin/monthlyStats.php");
+            const res = await fetch("/backend/Admin/monthlyStats.php");
             const monthlyData = await res.json();
             return monthlyData;
         } catch (err) {
@@ -883,7 +883,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function yearlySales () {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Admin/yearlyStats.php");
+            const res = await fetch("/backend/Admin/yearlyStats.php");
             const yearlyData = await res.json();
             return yearlyData;
         } catch (err) {
@@ -893,7 +893,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function yearlySalesDate () {
         try {
-            const res = await fetch("/Kape_Cinco/backend/Admin/yearlyStatsYears.php");
+            const res = await fetch("/backend/Admin/yearlyStatsYears.php");
             const yearlyDateData = await res.json();
             return yearlyDateData;
         } catch (err) {

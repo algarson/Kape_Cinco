@@ -32,7 +32,7 @@
 
         // Handle the file upload (if an image is provided)
         $fileName = null;
-        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Kape_Cinco/backend/images/';
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/backend/images/';
         $currentDate = date('YmdHis');
 
         if (isset($_FILES['add_image']) && $_FILES['add_image']['error'] === UPLOAD_ERR_OK) {

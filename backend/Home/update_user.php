@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include '../server.php'; 
+    include '/backend/server.php';
 
     // Check if the request method is POST
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {

@@ -7,13 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const orderToken = getQueryParam('order');
     if (!orderToken) {
-        window.location.href = '/Kape_Cinco/frontend/Menu/menu.html';
+        window.location.href = '/frontend/Menu/menu.html';
         return;
     }
 
     const orderDetails = JSON.parse(localStorage.getItem(orderToken));
     if (!orderDetails) {
-        window.location.href = '/Kape_Cinco/frontend/Menu/menu.html';
+        window.location.href = '/frontend/Menu/menu.html';
         return;
     }
 
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function() {
             clearInterval(countdownInterval);
             localStorage.removeItem(orderToken);
             alert('Your order has been removed due to timeout.');
-            window.location.href = '/Kape_Cinco/frontend/Menu/menu.html';
+            window.location.href = '/frontend/Menu/menu.html';
             return;
         }
 
