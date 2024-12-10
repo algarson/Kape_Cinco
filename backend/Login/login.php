@@ -2,6 +2,11 @@
     include '/backend/server.php';
     date_default_timezone_set('Asia/Manila');
 
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+
+
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Sanitize inputs
         $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -55,6 +60,9 @@
         } else {
             // Failed to prepare the statement
             echo json_encode(['error' => 'Failed to prepare SQL statement.']);
+            echo json_encode(['error' => 'Failed to prepare the SQL query.']);
+            echo "Error: " . $conn->error;  // To see the actual error from the database
+            exit;
         }
     }
 
