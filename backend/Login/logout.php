@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include '/backend/server.php';
+    include '../server.php';
     date_default_timezone_set('Asia/Manila');
 
     if (isset($_SESSION['user'])) {
@@ -10,11 +10,11 @@
         $currentTime = date('Y-m-d H:i:s');
 
         // Update `time_out` and calculate `total_shift_duration` for the user's most recent shift
-        $updateSql = "UPDATE user_shifts 
-                    SET time_out = ?, 
-                        total_shift_duration = TIMEDIFF(?, time_in) 
-                    WHERE user_id = ? AND time_out IS NULL 
-                    ORDER BY time_in DESC LIMIT 1";
+        $updateSql = "UPDATE `user_shifts` 
+                    SET `time_out` = ?, 
+                        `total_shift_duration` = TIMEDIFF(?, time_in) 
+                    WHERE `user_id` = ? AND `time_out` IS NULL 
+                    ORDER BY `time_in` DESC LIMIT 1";
 
         $stmt = $conn->prepare($updateSql);
         $stmt->bind_param("ssi", $currentTime, $currentTime, $userId);
