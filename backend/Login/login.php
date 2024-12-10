@@ -1,5 +1,6 @@
 <?php
 // Assuming you already have a MySQLi connection in $conn
+include('/backend/server.php');
 
 $sql = "SELECT * FROM `user_table`";
 if ($stmt = $conn->prepare($sql)) {
