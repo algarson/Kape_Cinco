@@ -19,6 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', validateLogin);
 
+    console.log(document.getElementById('username').value);
+    console.log(document.getElementById('password').value);
+
     function validateLogin(event) {
         event.preventDefault();
 
@@ -31,9 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const params = new URLSearchParams(window.location.search);
         const redirectPage = params.get('redirect');
-
-        console.log(username);
-        console.log(password);
 
         fetch(`/backend/Login/login.php`, {
             method: 'POST',
