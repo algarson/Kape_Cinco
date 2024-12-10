@@ -32,10 +32,11 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append('username', username);
         formData.append('password', password);
 
+        console.log(formData);
         const params = new URLSearchParams(window.location.search);
         const redirectPage = params.get('redirect');
 
-        console.log(formData);
+        
 
         fetch(`/backend/Login/login.php`, {
             method: 'POST',
