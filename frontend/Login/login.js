@@ -50,9 +50,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 } else {
                     if (role === 'Admin') {
-                        window.location.href = '/backend/Login/admin.php';
+                        window.location.href = `/backend/Login/admin.php`;
                     } else if (role === 'Cashier') {
-                        window.location.href = '/backend/Login/home.php';
+                        window.location.href = `/backend/Login/home.php`;
                     } else {
                         alert('Invalid role detected.');
                     }
