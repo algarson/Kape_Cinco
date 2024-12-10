@@ -1,59 +1,60 @@
 <?php
-    include '/backend/server.php';
-    date_default_timezone_set('Asia/Manila');
+include '/backend/server.php';
+date_default_timezone_set('Asia/Manila');
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Sanitize inputs
-        $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-        $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+// Enable error reporting for debugging
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
-        // Check user existence
-        $sql = "SELECT * FROM `user_table` WHERE `user_username` = ?";
-        $stmt = $conn->prepare($sql);
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $result = $stmt->get_result();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    header('Content-Type: application/json');
 
-        if ($result->num_rows > 0) {
-            $user = $result->fetch_assoc();
+    // Sanitize inputs
+    $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+    $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            // Verify password
-            if (password_verify($password, $user[`user_password`])) {
-                // Start session and store user info
-                session_start();
-                session_regenerate_id(true);
+    // Check user existence
+    $sql = "SELECT * FROM `user_table` WHERE `user_username` = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-                // Insert time_in into the `user_shifts` table
-                $timeIn = date('Y-m-d H:i:s');
+    if ($result->num_rows > 0) {
+        $user = $result->fetch_assoc();
 
-                // Organize session data in an array
-                $_SESSION['user'] = [
-                    'id' => $user[`user_id`],
-                    'role' => $user[`user_role`],
-                    'name' => $user[`user_firstname`] . ' ' . $user[`user_lastname`],
-                    'time_in' => $timeIn
-                ];
+        // Verify password
+        if (password_verify($password, $user['user_password'])) {
+            // Start session and store user info
+            session_start();
+            session_regenerate_id(true);
 
-                $shiftSql = "INSERT INTO `user_shifts` (user_id, time_in) VALUES (?, ?)";
-                $shiftStmt = $conn->prepare($shiftSql);
-                $shiftStmt->bind_param("is", $user[`user_id`], $timeIn);
-                $shiftStmt->execute();
-                $shiftStmt->close();
+            $timeIn = date('Y-m-d H:i:s');
 
-                // Respond with success
-                echo json_encode(['userExists' => true, 'role' => $user[`user_role`]]);
-            } else {
-                // Invalid password
-                echo json_encode(['userExists' => false, 'error' => 'Invalid password.']);
-            }
+            $_SESSION['user'] = [
+                'id' => $user['user_id'],
+                'role' => $user['user_role'],
+                'name' => $user['user_firstname'] . ' ' . $user['user_lastname'],
+                'time_in' => $timeIn
+            ];
+
+            $shiftSql = "INSERT INTO `user_shifts` (user_id, time_in) VALUES (?, ?)";
+            $shiftStmt = $conn->prepare($shiftSql);
+            $shiftStmt->bind_param("is", $user['user_id'], $timeIn);
+            $shiftStmt->execute();
+            $shiftStmt->close();
+
+            echo json_encode(['userExists' => true, 'role' => $user['user_role']]);
         } else {
-            // User not found
-            echo json_encode(['userExists' => false, 'error' => 'User not found.']);
+            echo json_encode(['userExists' => false, 'error' => 'Invalid password.']);
         }
-
-        $stmt->close();
+    } else {
+        echo json_encode(['userExists' => false, 'error' => 'User not found.']);
     }
 
-    $conn->close();
-?>
+    $stmt->close();
+}
 
+$conn->close();
+?>
