@@ -5,10 +5,10 @@
     $yearlyStats = "SELECT 
        YEAR(order_date) AS yearly,
        SUM(order_total_amount) AS yearly_sales 
-       FROM order_number_table 
-       WHERE order_status = 'Completed' 
-       GROUP BY yearly
-       ORDER BY yearly ASC";
+       FROM `order_number_table` 
+       WHERE `order_status` = 'Completed' 
+       GROUP BY `yearly`
+       ORDER BY `yearly` ASC";
 
     $res = $conn->query($yearlyStats);
 

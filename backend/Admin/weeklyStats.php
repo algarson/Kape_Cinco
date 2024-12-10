@@ -5,11 +5,11 @@
     $weeklyStats = "SELECT 
        WEEK(order_date) AS weekly,
        SUM(order_total_amount) AS weekly_sales 
-       FROM order_number_table 
-       WHERE order_status = 'Completed' 
+       FROM `order_number_table` 
+       WHERE `order_status` = 'Completed' 
        AND EXTRACT(MONTH FROM order_date) = MONTH(curdate())
-       GROUP BY weekly
-       ORDER BY weekly ASC";
+       GROUP BY `weekly`
+       ORDER BY `weekly` ASC";
 
 
     $res = $conn->query($weeklyStats);

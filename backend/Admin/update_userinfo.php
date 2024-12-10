@@ -18,7 +18,7 @@
         }
 
         // Fetch existing user data
-        $sql = "SELECT user_firstname, user_lastname, user_role, user_username, user_password, user_image FROM user_table WHERE user_id = ?";
+        $sql = "SELECT `user_firstname`, `user_lastname`, `user_role`, `user_username`, `user_password`, `user_image` FROM `user_table` WHERE `user_id` = ?";
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param('i', $userId);
             $stmt->execute();

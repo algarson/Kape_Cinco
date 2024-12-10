@@ -5,11 +5,11 @@
     $monthlyStats = "SELECT 
        MONTH(order_date) AS monthly,
        SUM(order_total_amount) AS monthly_sales 
-       FROM order_number_table 
-       WHERE order_status = 'Completed'
+       FROM `order_number_table` 
+       WHERE `order_status` = 'Completed'
        AND EXTRACT(YEAR FROM order_date) = YEAR(curdate()) 
-       GROUP BY monthly
-       ORDER BY monthly ASC";
+       GROUP BY `monthly`
+       ORDER BY `monthly` ASC";
 
     $res = $conn->query($monthlyStats);
 

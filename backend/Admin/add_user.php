@@ -40,7 +40,7 @@
             }
         }
 
-        $sql = "INSERT INTO user_table (user_firstname, user_lastname, user_username, user_password, user_role" . ($fileName ? ", user_image" : "") . ") 
+        $sql = "INSERT INTO `user_table` (user_firstname, user_lastname, user_username, user_password, user_role" . ($fileName ? ", user_image" : "") . ") 
                 VALUES (?, ?, ?, ?, ?" . ($fileName ? ", ?" : "") . ")";
         if ($stmt = $conn->prepare($sql)) {
             if($fileName){
