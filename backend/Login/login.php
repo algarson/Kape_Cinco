@@ -8,7 +8,7 @@
         $password = filter_input(INPUT_POST, `password`, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // Check user existence
-        $sql = "SELECT * FROM `user_table` WHERE `user_username` = 'Allen' ";
+        $sql = "SELECT * FROM `user_table` WHERE `user_username` = ? ";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -24,7 +24,7 @@
                 session_regenerate_id(true);
 
                 // Insert time_in into the `user_shifts` table
-                $timeIn = date('Y-m-d H:i:s');
+                $timeIn = date(`Y-m-d H:i:s`);
 
                 // Organize session data in an array
                 $_SESSION['user'] = [
