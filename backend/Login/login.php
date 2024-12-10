@@ -9,7 +9,7 @@
         $password = filter_input(INPUT_POST, 'password', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // Check user existence
-        $sql = "SELECT * FROM `user_table` WHERE `user_username` = ? ";
+        $sql = "SELECT * FROM `user_table` WHERE `user_username` = 'Allen' ";
         if ($stmt = $conn->prepare($sql)) {
             $stmt->bind_param('s', $username);
             $stmt->execute();
