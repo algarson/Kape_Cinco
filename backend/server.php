@@ -10,8 +10,6 @@
     if ($conn->connect_error) {
         // If connection fails, display the error message
         die("Connection failed: " . $conn->connect_error);
-    } else {
-        echo "Connected";
     }
 
 ?>
