@@ -8,7 +8,7 @@
         $password = filter_input(INPUT_POST, `password`, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
         // Check user existence
-        $sql = "SELECT * FROM `user_table` WHERE `user_username` = `Allen` ";
+        $sql = "SELECT * FROM `user_table` WHERE `user_username` = 'Allen' ";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("s", $username);
         $stmt->execute();
@@ -28,10 +28,10 @@
 
                 // Organize session data in an array
                 $_SESSION['user'] = [
-                    'id' => $user[`user_id`],
-                    'role' => $user[`user_role`],
-                    'name' => $user[`user_firstname`] . ' ' . $user[`user_lastname`],
-                    'time_in' => $timeIn
+                    `id` => $user[`user_id`],
+                    `role` => $user[`user_role`],
+                    `name` => $user[`user_firstname`] . ' ' . $user[`user_lastname`],
+                    `time_in` => $timeIn
                 ];
 
                 $shiftSql = "INSERT INTO `user_shifts` (user_id, time_in) VALUES (?, ?)";
