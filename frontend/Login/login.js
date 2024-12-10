@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert('Login failed: ' + (data.error || 'Invalid credentials.'));
             }
         })
+        .catch(error => console.error('Error:', error));
     }
     /*
     // Add event listeners for registration form show/hide
