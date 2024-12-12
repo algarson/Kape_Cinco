@@ -1,11 +1,10 @@
 <?php
-    include '/backend/server.php';
+    include '../server.php';
 
     // Fetch all foods with their variants
-    $foodSql = "
-        SELECT f.food_id, f.food_name, f.food_price, f.food_desc, f.food_type, f.food_image, f.food_serve_count, f.food_status, v.food_variant_name, v.food_variant_price, v.food_variant_serve_count, v.food_variant_status 
-        FROM foods_table f
-        LEFT JOIN foods_variant_table v ON f.food_id = v.food_id
+    $foodSql = "SELECT f.food_id, f.food_name, f.food_price, f.food_desc, f.food_type, f.food_image, f.food_serve_count, f.food_status, v.food_variant_name, v.food_variant_price, v.food_variant_serve_count, v.food_variant_status 
+        FROM `foods_table` f
+        LEFT JOIN `foods_variant_table` v ON f.food_id = v.food_id
     ";
     $foodResult = $conn->query($foodSql);
 
@@ -42,10 +41,9 @@
         }
     }
 
-    $drinkSql = " 
-        SELECT d.drink_id, d.drink_name, d.drink_price, d.drink_type, d.drink_image, d.drink_serve_count, d.drink_status, dv.drink_variant_name, dv.drink_variant_price, dv.drink_variant_serve_count, dv.drink_variant_status
-        FROM drinks_table d
-        LEFT JOIN drinks_variant_table dv ON d.drink_id = dv.drink_id; ";
+    $drinkSql = " SELECT d.drink_id, d.drink_name, d.drink_price, d.drink_type, d.drink_image, d.drink_serve_count, d.drink_status, dv.drink_variant_name, dv.drink_variant_price, dv.drink_variant_serve_count, dv.drink_variant_status
+        FROM `drinks_table` d
+        LEFT JOIN `drinks_variant_table` dv ON d.drink_id = dv.drink_id; ";
     $drinkResult = $conn->query($drinkSql);
 
     $allDrinks = [];

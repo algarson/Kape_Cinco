@@ -13,14 +13,14 @@
     // Fetch user data from the database
     $sql = "SELECT `user_image` FROM `user_table` WHERE `user_id` = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $userId);
+    $stmt->bind_param('i', $userId);
     $stmt->execute();
     $stmt->bind_result($userImage);
     $stmt->fetch();
     $stmt->close();
 
     // Check if the user has an image or not
-    $imagePath = $userImage ? '/backend/User/' . $userImage : '/frontend/images/kape_cinco.jpg';
+    $imagePath = $userImage ? `/backend/User/` . $userImage : `/frontend/images/kape_cinco.jpg`;
 
     echo json_encode([
         'id' => $_SESSION['user']['id'] ?? null,

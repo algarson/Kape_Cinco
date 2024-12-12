@@ -1,5 +1,5 @@
 <?php
-    include '/backend/server.php';
+    include '../server.php';
 
     $orderSql = " SELECT
         o.order_number,
@@ -13,13 +13,13 @@
         d.item_total_price,
         COALESCE(f.food_image, dr.drink_image) AS item_image
     FROM
-        order_number_table o
+        `order_number_table` o
     JOIN
-        order_details_table d ON o.order_number = d.order_number
+        `order_details_table` d ON o.order_number = d.order_number
     LEFT JOIN
-        foods_table f ON d.item_name = f.food_name
+        `foods_table` f ON d.item_name = f.food_name
     LEFT JOIN
-        drinks_table dr ON d.item_name = dr.drink_name
+        `drinks_table` dr ON d.item_name = dr.drink_name
     ";
 
     $orderResult = $conn->query($orderSql);

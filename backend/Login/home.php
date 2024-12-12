@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include '/backend/server.php';
+    include '../server.php';
     // Check if the user is logged in and has a valid role (Admin or Cashier)
     if (!isset($_SESSION['user']['role']) || 
         ($_SESSION['user']['role'] !== 'Admin' && $_SESSION['user']['role'] !== 'Cashier')) {

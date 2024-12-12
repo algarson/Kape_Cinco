@@ -1,5 +1,5 @@
 <?php
-    include '/backend/server.php';
+    include '../server.php';
 
     date_default_timezone_set('Asia/Manila');
     
@@ -18,13 +18,13 @@
         $orderDetailsRaw = $_POST['order-details'];
         $orderDetails = json_decode($orderDetailsRaw, true);
 
-        $sql1 = "INSERT INTO order_number_table (order_number, order_date, order_total_amount, order_payment_received, order_status)
+        $sql1 = "INSERT INTO `order_number_table` (order_number, order_date, order_total_amount, order_payment_received, order_status)
                  VALUES (?, ?, ?, ?, ?)";
         $stmt1 = $conn->prepare($sql1);
         $stmt1->bind_param("ssdds", $orderNumber, $orderDate, $orderTotalAmount, $orderAmountReceived, $orderStatus);
         if ($stmt1->execute()) {
 
-            $sql2 = "INSERT INTO order_details_table (order_number, item_name, item_quantity, item_price, item_total_price) VALUES (?, ?, ?, ?, ?)";
+            $sql2 = "INSERT INTO `order_details_table` (order_number, item_name, item_quantity, item_price, item_total_price) VALUES (?, ?, ?, ?, ?)";
             $stmt2 = $conn->prepare($sql2);
     
             foreach ($orderDetails as $detail) {
