@@ -15,7 +15,6 @@
             $stmt->execute();
             $result = $stmt->get_result();
 
-            echo $username;
             
             if ($result->num_rows > 0) {
                 $user = $result->fetch_assoc();
