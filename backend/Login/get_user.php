@@ -20,7 +20,7 @@
     $stmt->close();
 
     // Check if the user has an image or not
-    $imagePath = $userImage ? `/backend/User/` . $userImage : `/frontend/images/kape_cinco.jpg`;
+    $imagePath = $userImage ? "/backend/User/" . $userImage : "/frontend/images/kape_cinco.jpg";
 
     echo json_encode([
         'id' => $_SESSION['user']['id'] ?? null,
