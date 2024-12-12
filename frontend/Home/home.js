@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(response => response.json())
         .then(data => {
             if (data.error){
-                window.location.href = `rontend/Login/login.html?redirect=Login/home.php`;
+                window.location.href = `frontend/Login/login.html?redirect=Login/home.php`;
             } else {
                 document.getElementById('user-role').textContent = `${data.role}`;
                 document.getElementById('user-name').textContent = `${data.name}`;
