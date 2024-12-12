@@ -11,7 +11,7 @@
         // Check user existence
         $sql = "SELECT * FROM `user_table` WHERE `user_username` = ? ";
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("s", $username);
+            $stmt->bind_param('s', $username);
             $stmt->execute();
             $result = $stmt->get_result();
 
