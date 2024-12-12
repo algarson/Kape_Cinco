@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     paymentModal.style.display = 'none';
 
     // Check login status
-    fetch('/backend/Login/check_login.php')
+    fetch(`/backend/Login/check_login.php`)
         .then(response => response.json())
         .then(data => {
             if (!data.loggedIn) {
@@ -37,11 +37,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     let intervalId;
     // Fetch user session details
-    fetch('/backend/Login/get_user.php')
+    fetch(`/backend/Login/get_user.php`)
         .then(response => response.json())
         .then(data => {
             if (data.error){
-                window.location.href = '/frontend/Login/login.html?redirect=Login/home.php';
+                window.location.href = `rontend/Login/login.html?redirect=Login/home.php`;
             } else {
                 document.getElementById('user-role').textContent = `${data.role}`;
                 document.getElementById('user-name').textContent = `${data.name}`;
@@ -83,11 +83,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function fetchAllItems() {
         try {
-            const res = await fetch("/backend/Home/allitems.php");
+            const res = await fetch(`/backend/Home/allitems.php`);
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
-                window.location.href = '/frontend/Login/login.html?redirect=Login/home.php'; 
+                window.location.href = `/frontend/Login/login.html?redirect=Login/home.php`; 
                 return []; 
             }
             
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     async function fetchAllOrders() {
         try {
-            const res = await fetch("/backend/Home/allorders.php");
+            const res = await fetch(`/backend/Home/allorders.php`);
             const data = await res.json();
             return data;
         } catch (err) {
@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function dailySales () {
         try {
-            const res = await fetch("/backend/Home/stats.php");
+            const res = await fetch(`/backend/Home/stats.php`);
             const data = await res.json();
             return data;
         } catch (err) {

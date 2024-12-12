@@ -1,5 +1,5 @@
 <?php
-    include '/backend/server.php'; 
+    include '../server.php'; 
 
     session_start();
     if (!isset($_SESSION['user'])) {
@@ -11,7 +11,7 @@
     $userId = $_SESSION['user']['id'];
 
     // Fetch user data from the database
-    $sql = "SELECT user_image FROM user_table WHERE user_id = ?";
+    $sql = "SELECT `user_image` FROM `user_table` WHERE `user_id` = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $userId);
     $stmt->execute();
