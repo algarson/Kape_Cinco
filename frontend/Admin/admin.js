@@ -109,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function fetchAllLogs() {
         try {
-            const res = await fetch("/backend/Admin/logs.php");
+            const res = await fetch(`/backend/Admin/logs.php`);
 
             if (res.status === 403) {
                 alert('Access denied: You do not have permission to view this content.');
