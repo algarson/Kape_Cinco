@@ -919,6 +919,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         let data  = weekly.slice(activeWeek - 1);
 
+        console.log(data);
+
 
         switch (timeframe) {
             case 'weekly':
