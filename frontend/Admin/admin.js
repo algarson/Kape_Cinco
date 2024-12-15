@@ -997,10 +997,10 @@ function openSummaryLogModalDate () {
     modal.style.display = "block";
 }
 
-// function openSummaryLogModal() {
-//     const modal = document.getElementById("summaryLogModal");
-//     modal.style.display = "block"; // Show the modal
-// }
+function openSummaryLogModal() {
+    const modal = document.getElementById("summaryLogModal");
+    modal.style.display = "block"; // Show the modal
+}
 
 // Function to close the Summary Log Modal
 function closeSummaryLogModal() {
@@ -1013,7 +1013,7 @@ function closeSummaryLogModalDate() {
 }
 
 // Add event listener to the close button
-// document.querySelector(".summarylog-button").addEventListener("click", openSummaryLogModal);
+document.querySelector(".summarylog-button").addEventListener("click", openSummaryLogModal);
 document.querySelector(".summarylogdate-button").addEventListener("click", openSummaryLogModalDate);
 document.querySelector("#summaryLogModal .close-button").addEventListener("click", closeSummaryLogModal);
 
