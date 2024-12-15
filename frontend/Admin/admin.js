@@ -992,29 +992,19 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 // Function to open the Summary Log Modal
-function openSummaryLogModalDate () {
-    const modal = document.getElementById("summaryLogModalDate");
-    modal.style.display = "block";
-}
-
 function openSummaryLogModal() {
-    const modal = document.getElementById("summaryLogModalDate");
+    const modal = document.getElementById("summaryLogModal");
     modal.style.display = "block"; // Show the modal
 }
 
 // Function to close the Summary Log Modal
 function closeSummaryLogModal() {
-    const modal = document.getElementById("summaryLogModalDate");
-    modal.style.display = "none"; // Hide the modal
-}
-function closeSummaryLogModalDate() {
-    const modal = document.getElementById("summaryLogModalDate");
+    const modal = document.getElementById("summaryLogModal");
     modal.style.display = "none"; // Hide the modal
 }
 
 // Add event listener to the close button
 document.querySelector(".summarylog-button").addEventListener("click", openSummaryLogModal);
-document.querySelector(".summarylogdate-button").addEventListener("click", openSummaryLogModalDate);
 document.querySelector("#summaryLogModal .close-button").addEventListener("click", closeSummaryLogModal);
 
 
