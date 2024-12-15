@@ -4,11 +4,11 @@ include '../server.php';
 
     $statSql = $statSql = "SELECT 
                                 COUNT(order_number) AS total_orders, 
-                                DATE_ADD(CURDATE(), INTERVAL 1 DAY) AS corrected_date, 
+                                CURDATE() AS corrected_date, 
                                 SUM(order_total_amount) AS Sales 
                             FROM `order_number_table` 
                             WHERE `order_status` = 'Completed' 
-                            AND DATE(order_date) = DATE_ADD(CURDATE(), INTERVAL 1 DAY)";
+                            AND DATE(order_date) = CURDATE()";
 
     $res = $conn->query($statSql);
 
