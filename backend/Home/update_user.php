@@ -16,11 +16,11 @@
             $userId = $_SESSION['user']['id'];
 
             // Define the upload directory
-            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/Kape_Cinco/backend/User/';
+            $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/backend/User/';
             $currentDate = date('Ymd_His');
 
             // Check if the user already has an image
-            $sql = "SELECT user_image FROM user_table WHERE user_id = ?";
+            $sql = "SELECT `user_image` FROM `user_table` WHERE `user_id` = ?";
             if ($stmt = $conn->prepare($sql)) {
                 $stmt->bind_param('i', $userId);
                 $stmt->execute();
