@@ -1004,7 +1004,7 @@ function openSummaryLogModal() {
 
 // Function to close the Summary Log Modal
 function closeSummaryLogModal() {
-    const modal = document.getElementById("summaryLogModal");
+    const modal = document.getElementById("summaryLogModalDate");
     modal.style.display = "none"; // Hide the modal
 }
 function closeSummaryLogModalDate() {
