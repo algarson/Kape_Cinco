@@ -998,7 +998,7 @@ function openSummaryLogModalDate () {
 }
 
 function openSummaryLogModal() {
-    const modal = document.getElementById("summaryLogModal");
+    const modal = document.getElementById("summaryLogModalDate");
     modal.style.display = "block"; // Show the modal
 }
 
