@@ -27,7 +27,7 @@
     
             if ($stmt1->execute()) {
                 // Successfully updated time_out and total_shift_duration
-                session_destroy(); // Destroy the session
+                //session_destroy(); // Destroy the session
                 echo json_encode(['success' => true]);
             } else {
                 // Failed to update the database
