@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function logout() {
         remittance();
-        fetch('/backend/Login/logout.php')
+        /*fetch('/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     alert('Logout failed!');
                 }
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.error('Error:', error));*/
     }
 
     async function remittance() {
@@ -391,7 +391,9 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('sid', sID);
         
 
-        console.log(formData);
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
 
         fetch('/backend/Home/remit.php', {
             method: 'POST',
