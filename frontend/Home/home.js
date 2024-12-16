@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const formData = new FormData();
         formData.append('total-sale', totalSale);
         formData.append('total-trans', totalTrans);
-        formData.append('total-remit', remitVal;
+        formData.append('total-remit', remitVal);
         formData.append('total-disc', totalDisc);
 
         fetch('/backend/Home/remit.php', {
