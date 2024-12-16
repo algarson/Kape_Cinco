@@ -360,7 +360,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    remittance();
+                    //remittance();
                     clearInterval(intervalId);
                     window.location.href = '/frontend/Login/login.html';
                 } else {
@@ -393,8 +393,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         })
         .then(response => response.json()) 
         .then(data => {
-            if (data.message) {
-                
+            if (data.success) {
+                logout();
             } else if (data.error) {
                 alert(data.error);
             }
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     confirmRemit.addEventListener('click', () => {
-        logout();
+        remittance();
         document.body.classList.remove('hidden');
     })
 
