@@ -993,7 +993,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 async function getSummaryLog() {
     // Get the selected date from the input field
-    getSummaryPerformance();    
+        
     const setDate = document.getElementById("summary-datetimelocal").value;
     const setDate2 = document.getElementById("summary-datetimelocal2").value;
 
@@ -1037,7 +1037,7 @@ async function getSummaryLog() {
     }
 }
 
-async function getSummaryPerformance() {
+
     async function getSummaryPerformance() {
         // Get the selected dates from the input fields
         const setDate = document.getElementById("summary-datetimelocal").value;
@@ -1087,6 +1087,8 @@ async function getSummaryPerformance() {
     
                     tbody.appendChild(row);
                 });
+
+                
             } else if (data.error) {
                 // Handle errors sent from the backend
                 alert(data.error);
@@ -1098,14 +1100,14 @@ async function getSummaryPerformance() {
         }
     }
     
-}
+
 
 
 
 // Function to open the Summary Log Modal
 function openSummaryLogModal() {
     getSummaryLog();
-    
+    getSummaryPerformance();
     const modal = document.getElementById("summaryLogModal");
     modal.style.display = "block"; // Show the modal
 }
