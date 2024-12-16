@@ -379,7 +379,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const totalSale = daily[0].Sales;
         const totalTrans = daily[0].total_orders;
-        const sID = shiftID[0].time_id;
+        //const sID = shiftID[0].time_id;
         const remitVal = document.getElementById('remit-amount').value;
         const totalDisc = totalSale - remitVal;
 
@@ -389,6 +389,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('total-remit', remitVal);
         formData.append('total-disc', totalDisc);
         formData.append('sid', sID);
+
+        console.log(shiftID);
         
 
         for (let [key, value] of formData.entries()) {
