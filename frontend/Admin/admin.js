@@ -1056,7 +1056,7 @@ async function getSummaryLog() {
     
         try {
             // Make the POST request
-            const response = await fetch('/backend/Admin/summaryPerformance.php', {
+            const response = await fetch('/backend/Admin/summaryPerfomance.php', {
                 method: 'POST',
                 body: formData
             });
