@@ -357,7 +357,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             .catch(error => console.error('Error:', error));
     }*/
 
-    console.log(remitModal.style.display);
 
     function showRemit() {
         if (remitModal.style.display = "none") {
