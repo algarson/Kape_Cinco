@@ -401,7 +401,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     confirmRemit.addEventListener('click', () => {
         remittance();
-        logout();
         document.body.classList.remove('hidden');
     })
 
