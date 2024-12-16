@@ -380,6 +380,12 @@ document.addEventListener('DOMContentLoaded', async function () {
         const remitVal = document.getElementById('remit-amount').value;
         const totalDisc = totalSale - remitVal;
 
+        console.log(totalSale);
+        console.log(totalTrans);
+        console.log(sID);
+        console.log(remitVal);
+        console.log(totalDisc);
+
         const formData = new FormData();
         formData.append('total-sale', totalSale);
         formData.append('total-trans', totalTrans);
@@ -392,11 +398,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             body: formData
         })
         .then(response => response.json()) 
-        .then(data => {
-            if (data.success) {
+        .then(response => {
+            if (response.success) {
                 logout();
-            } else if (data.error) {
-                alert(data.error);
+            } else if (response.error) {
+                alert(response.error);
             }
         })
         .catch(error => console.error('Error:', error));
