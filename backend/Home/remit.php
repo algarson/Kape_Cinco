@@ -17,11 +17,13 @@
         
     
             $updateSql = "UPDATE `user_performance` 
-                        SET `total_sale` = ?, 
-                            `total_trans` = ?,
-                            `total_remit` = ?,
-                            `total_disc` = ?
-                        WHERE `user_id` = ?";
+                        SET total_sale = ?, 
+                            total_trans = ?,
+                            total_remit = ?,
+                            total_disc = ?
+                        WHERE user_id = ?
+                        ORDER BY perf_id DESC";
+
             $stmt1 = $conn->prepare($updateSql);
             $stmt1->bind_param("iiiii", $total_sale, $total_trans, $total_remit, $total_disc, $userId);
     
