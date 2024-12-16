@@ -121,6 +121,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('Error fetching data:', err);
         }
     }
+
+    async function userShift () {
+        try {
+            const res = await fetch(`/backend/Home/userShift.php`);
+            const data = await res.json();
+            return data;
+        } catch (err) {
+            console.error('Error fetching data:', err);
+        }
+    }
     
     async function displaySales () {
         const totalSales = await dailySales();
@@ -350,6 +360,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+                    remittance();
                     clearInterval(intervalId);
                     window.location.href = '/frontend/Login/login.html';
                 } else {
@@ -361,9 +372,11 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function remittance() {
         const daily = await dailySales();
+        const shiftID = await userShift();
 
         const totalSale = daily[0].Sales;
         const totalTrans = daily[0].total_orders;
+        const sID = shiftID[0].time_id;
         const remitVal = document.getElementById('remit-amount').value;
         const totalDisc = totalSale - remitVal;
 
@@ -372,6 +385,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('total-trans', totalTrans);
         formData.append('total-remit', remitVal);
         formData.append('total-disc', totalDisc);
+        formData.append('sid', sID);
 
         fetch('/backend/Home/remit.php', {
             method: 'POST',
