@@ -11,7 +11,7 @@
             $total_trans = $_POST['total-trans'] ?? NULL;
             $total_remit = $_POST['total-remit'] ?? NULL;
             $total_disc = $_POST['total-disc'] ?? NULL;
-            //$shiftId = $_POST['sid'];
+            $shiftId = $_POST['sid'];
     
     
         
