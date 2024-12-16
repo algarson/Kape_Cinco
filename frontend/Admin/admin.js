@@ -1016,7 +1016,7 @@ async function getSummaryLog() {
         // Parse JSON response
         const data = await response.json();
 
-        console.log(data);
+       
 
         // Handle the response
         if (data.success) {
@@ -1061,6 +1061,7 @@ async function getSummaryPerformance() {
     
             // Parse JSON response
             const data = await response.json();
+            console.log(data);
     
             // Handle the response
             if (data.success) {
