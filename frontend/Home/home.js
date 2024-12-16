@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
 
-    function logout() {
+    /*function logout() {
         fetch('/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             })
             .catch(error => console.error('Error:', error));
-    }
+    }*/
 
     function remit() {
         if (remitModal.style.display = 'none') {
