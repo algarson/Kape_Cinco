@@ -993,6 +993,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 async function getSummaryLog() {
     // Get the selected date from the input field
+    getSummaryPerformance();    
     const setDate = document.getElementById("summary-datetimelocal").value;
     const setDate2 = document.getElementById("summary-datetimelocal2").value;
 
@@ -1021,7 +1022,7 @@ async function getSummaryLog() {
         // Handle the response
         if (data.success) {
             // Example: Update the UI with the total sales
-            getSummaryPerformance();
+            
             const totalSales = data.data.total_sales || 0;
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
             document.getElementById("sale-summary").textContent = ` PHP ${totalSales}`;
