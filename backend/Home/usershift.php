@@ -5,10 +5,10 @@ include '../server.php';
 if (isset($_SESSION['user'])) {
     $userId = $_SESSION['user']['id'];
 
-    $time = $statSql = "SELECT time_id
+    $time = "SELECT time_id
         FROM `user_performance`
         WHERE `user_id` = ?
-        ORDER BY time_id DESC"; 
+        ORDER BY `time_id` DESC"; 
     
     $stmt1 = $conn->prepare($statSql);
     $stmt1->bind_param("i", $userId);
