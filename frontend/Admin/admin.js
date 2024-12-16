@@ -991,6 +991,48 @@ document.addEventListener("DOMContentLoaded", async function () {
     inventoryLink.click();
 });
 
+async function getSummaryLog() {
+    // Get the selected date from the input field
+    const setDate = document.getElementById("summary-datetimelocal").value;
+
+    if (!setDate) {
+        alert("Please select a date.");
+        return;
+    }
+
+    // Prepare the form data
+    const formData = new FormData();
+    formData.append('setDate', setDate);
+
+    try {
+        // Make the POST request
+        const response = await fetch('/backend/Admin/summarySales.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        // Parse JSON response
+        const data = await response.json();
+
+        // Handle the response
+        if (data.success) {
+            // Example: Update the UI with the total sales
+            const totalSales = data.data.total_sales || 0;
+            document.getElementById("sale-summary").innerText = `Total Sales: PHP ${totalSales.toFixed(2)}`;
+        } else if (data.error) {
+            // Handle errors sent from the backend
+            alert(data.error);
+        }
+    } catch (error) {
+        // Handle fetch/network errors
+        console.error('Error:', error);
+        alert("An error occurred while fetching the summary log.");
+    }
+}
+
+
+
+
 // Function to open the Summary Log Modal
 function openSummaryLogModal() {
     const modal = document.getElementById("summaryLogModal");

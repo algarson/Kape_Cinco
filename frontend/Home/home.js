@@ -391,10 +391,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('sid', sID);
         
 
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
-
         fetch('/backend/Home/remit.php', {
             method: 'POST',
             body: formData
