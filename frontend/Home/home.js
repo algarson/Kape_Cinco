@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', async function () {
     const profileButton = document.getElementById('profile-button');
     const profileUpdateButton = document.getElementById('user-update-button')
     const logoutButton = document.getElementById('logout-button');
-    
+    const remitModal = document.getElementById('Remit-modal');
+    const cancelRemit = document.getElementById('cancel-remit-amount');
+    const confirmRemit = document.getElementById('confirm-remit-amount');
     const totalAmountElement = document.getElementById('total-amount');
     const totalIncome = document.getElementById('total-income-amount');
     const totalOrders = document.getElementById('total-order-amount');
@@ -357,10 +359,50 @@ document.addEventListener('DOMContentLoaded', async function () {
             .catch(error => console.error('Error:', error));
     }
 
+    async function remittance() {
+        const daily = await dailySales();
+
+        const totalSale = daily[0].Sales;
+        const totalTrans = daily[0].total_orders;
+        const remitVal = document.getElementById('remit-amount').value;
+        const totalDisc = totalSale - remitVal;
+
+        const formData = new FormData();
+        formData.append('total-sale', totalSale);
+        formData.append('total-trans', totalTrans);
+        formData.append('total-remit', remitVal);
+        formData.append('total-disc', totalDisc);
+
+        fetch('/backend/Home/remit.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json()) 
+        .then(data => {
+            if (data.message) {
+                
+            } else if (data.error) {
+                alert(data.error);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+
+    }
+
+
     logoutButton.addEventListener('click', () => {
+        remitModal.style.display = "block";
+        //
+    });
+
+    cancelRemit.addEventListener('click', () => {
+        remitModal.style.display = "none";
+    });
+
+    confirmRemit.addEventListener('click', () => {
         logout();
         document.body.classList.remove('hidden');
-    });
+    })
 
     profileButton.addEventListener('click', () => {
         userProfileModal.style.display = 'flex';
