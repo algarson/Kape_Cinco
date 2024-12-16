@@ -388,7 +388,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('total-trans', totalTrans);
         formData.append('total-remit', remitVal);
         formData.append('total-disc', totalDisc);
-        formData.append('sid', sID);
+        //formData.append('sid', sID);
 
         console.log(shiftID);
         
