@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     const remitModal = document.getElementById('Remit-modal');
     const cancelRemit = document.getElementById('cancel-remit-amount');
     const confirmRemit = document.getElementById('confirm-remit-amount');
+    const confirmLogout = document.getElementById('confirm-logout');
+    const cancelLogout = document.getElementById('cancel-logout');
     const totalAmountElement = document.getElementById('total-amount');
     const totalIncome = document.getElementById('total-income-amount');
     const totalOrders = document.getElementById('total-order-amount');
@@ -355,7 +357,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
 
-    /*function logout() {
+    function logout() {
         fetch('/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
@@ -368,7 +370,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             })
             .catch(error => console.error('Error:', error));
-    }*/
+    }
 
     async function remittance() {
         const daily = await dailySales();
@@ -386,7 +388,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('total-remit', remitVal);
         formData.append('total-disc', totalDisc);
         formData.append('sid', sID);
+        
 
+        console.log(formData);
+        
         fetch('/backend/Home/remit.php', {
             method: 'POST',
             body: formData
@@ -394,8 +399,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(response => response.json()) 
         .then(data => {
             if (data.message) {
-                clearInterval(intervalId);
-                window.location.href = '/frontend/Login/login.html';
+                logout();
             } else if (data.error) {
                 alert(data.error);
             }
@@ -418,8 +422,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     confirmRemit.addEventListener('click', () => {
         remittance();
         //logout();
-        document.body.classList.remove('hidden');
+        remitModal.style.display = "block";
     })
+
+    
 
     profileButton.addEventListener('click', () => {
         userProfileModal.style.display = 'flex';
