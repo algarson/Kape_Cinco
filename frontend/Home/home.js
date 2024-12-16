@@ -398,11 +398,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             body: formData
         })
         .then(response => response.json()) 
-        .then(response => {
-            if (response.success) {
+        .then(data => {
+            if (data.message) {
                 logout();
-            } else if (response.error) {
-                alert(response.error);
+            } else if (data.error) {
+                alert(data.error);
             }
         })
         .catch(error => console.error('Error:', error));
