@@ -390,7 +390,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('total-disc', totalDisc);
         //formData.append('sid', sID);
 
-        console.log(shiftID);
+        console.log(shiftID[0]);
         
 
         for (let [key, value] of formData.entries()) {
