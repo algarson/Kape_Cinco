@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     logoutButton.addEventListener('click', () => {
-        logout();
+        remitModal.style.display = 'block';
         document.body.classList.remove('hidden');
     });
 
