@@ -1019,6 +1019,7 @@ async function getSummaryLog() {
         // Handle the response
         if (data.success) {
             // Example: Update the UI with the total sales
+            getSummaryPerformance();
             const totalSales = data.data.total_sales || 0;
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
             document.getElementById("sale-summary").textContent = ` PHP ${totalSales}`;
@@ -1100,7 +1101,7 @@ async function getSummaryPerformance() {
 // Function to open the Summary Log Modal
 function openSummaryLogModal() {
     getSummaryLog();
-    getSummaryPerformance();
+    
     const modal = document.getElementById("summaryLogModal");
     modal.style.display = "block"; // Show the modal
 }
