@@ -994,6 +994,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 async function getSummaryLog() {
     // Get the selected date from the input field
     const setDate = document.getElementById("summary-datetimelocal").value;
+    const setDate2 = document.getElementById("summary-datetimelocal2").value;
 
     if (!setDate) {
         alert("Please select a date.");
@@ -1003,6 +1004,7 @@ async function getSummaryLog() {
     // Prepare the form data
     const formData = new FormData();
     formData.append('setDate', setDate);
+    formData.append('setDate2', setDate2);
 
     try {
         // Make the POST request

@@ -9,6 +9,7 @@ if (isset($_SESSION['user'])) {
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Check if setDate is provided
         $setDate = $_POST['setDate'] ?? null;
+        $setDate2 = $_POST['setDate2'] ?? null;
 
         if ($setDate === null) {
             echo json_encode(['success' => false, 'error' => 'Missing setDate parameter.']);
@@ -19,7 +20,8 @@ if (isset($_SESSION['user'])) {
         $sql = "SELECT 
                     SUM(order_total_amount) AS total_sales
                 FROM `order_number_table`
-                WHERE order_status = 'Completed' AND DATE(order_date) = ?";
+                WHERE order_status = 'Completed' 
+                AND DATE(order_date) BETWEEN ? AND ?";
 
         $stmt1 = $conn->prepare($sql);
         if (!$stmt1) {
@@ -28,7 +30,7 @@ if (isset($_SESSION['user'])) {
         }
 
         // Bind the parameter
-        $stmt1->bind_param("s", $setDate);
+        $stmt1->bind_param("sS", $setDate, $setDate2);
 
         // Execute the query
         if ($stmt1->execute()) {
