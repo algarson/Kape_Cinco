@@ -411,6 +411,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 
     logoutButton.addEventListener('click', () => {
+        userShift();
         remitModal.style.display = "block";
         //
     });
