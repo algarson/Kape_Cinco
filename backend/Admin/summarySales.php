@@ -30,7 +30,7 @@ if (isset($_SESSION['user'])) {
         }
 
         // Bind the parameter
-        $stmt1->bind_param("sS", $setDate, $setDate2);
+        $stmt1->bind_param("ss", $setDate, $setDate2);
 
         // Execute the query
         if ($stmt1->execute()) {
