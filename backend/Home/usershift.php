@@ -6,7 +6,7 @@ if (isset($_SESSION['user'])) {
     $userId = $_SESSION['user']['id'];
 
     // SQL query to fetch data
-    $time = "SELECT time_id
+    $time = "SELECT time_id AS tID
              FROM `user_performance`
              WHERE `user_id` = ?
              ORDER BY `time_id` DESC";
