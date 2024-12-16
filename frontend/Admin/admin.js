@@ -1100,6 +1100,7 @@ async function getSummaryPerformance() {
 // Function to open the Summary Log Modal
 function openSummaryLogModal() {
     getSummaryLog();
+    getSummaryPerformance();
     const modal = document.getElementById("summaryLogModal");
     modal.style.display = "block"; // Show the modal
 }
