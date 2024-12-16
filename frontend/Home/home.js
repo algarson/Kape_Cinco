@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     logoutButton.addEventListener('click', () => {
         remitModal.style.display = 'block';
-        document.body.classList.remove('hidden');
+        //document.body.classList.remove('hidden');
     });
 
     profileButton.addEventListener('click', () => {
