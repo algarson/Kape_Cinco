@@ -1033,6 +1033,67 @@ async function getSummaryLog() {
     }
 }
 
+async function getSummaryPerformance() {
+    async function getSummaryPerformance() {
+        // Get the selected dates from the input fields
+        const setDate = document.getElementById("summary-datetimelocal").value;
+        const setDate2 = document.getElementById("summary-datetimelocal2").value;
+    
+        if (!setDate) {
+            alert("Please select a date.");
+            return;
+        }
+    
+        // Prepare the form data
+        const formData = new FormData();
+        formData.append('setDate', setDate);
+        formData.append('setDate2', setDate2);
+    
+        try {
+            // Make the POST request
+            const response = await fetch('/backend/Admin/summaryPerformance.php', {
+                method: 'POST',
+                body: formData
+            });
+    
+            // Parse JSON response
+            const data = await response.json();
+    
+            // Handle the response
+            if (data.success) {
+                // Example: Update the UI with item names and their frequencies
+                const items = data.data || [];
+                const tbody = document.getElementById("performance-data");
+    
+                // Clear previous content
+                tbody.innerHTML = '';
+    
+                // Append each item to the table body
+                items.forEach(item => {
+                    const row = document.createElement('tr');
+    
+                    const cell1 = document.createElement('td');
+                    cell1.textContent = item.item_name;
+                    row.appendChild(cell1);
+    
+                    const cell2 = document.createElement('td');
+                    cell2.textContent = item.frequency;
+                    row.appendChild(cell2);
+    
+                    tbody.appendChild(row);
+                });
+            } else if (data.error) {
+                // Handle errors sent from the backend
+                alert(data.error);
+            }
+        } catch (error) {
+            // Handle fetch/network errors
+            console.error('Error:', error);
+            alert("An error occurred while fetching the summary log.");
+        }
+    }
+    
+}
 
 
 
