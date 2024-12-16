@@ -380,7 +380,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(response => response.json()) 
         .then(data => {
             if (data.message) {
-                logout();
+                
             } else if (data.error) {
                 alert(data.error);
             }
@@ -401,6 +401,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     confirmRemit.addEventListener('click', () => {
         remittance();
+        logout();
         document.body.classList.remove('hidden');
     })
 
