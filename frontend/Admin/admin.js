@@ -1019,7 +1019,7 @@ async function getSummaryLog() {
             // Example: Update the UI with the total sales
             const totalSales = data.data.total_sales || 0;
             document.getElementById("date-summary").textContent = setDate;
-            document.getElementById("sale-summary").textContent = ` PHP ${totalSales.toFixed(2)}`;
+            document.getElementById("sale-summary").textContent = ` PHP ${totalSales}`;
         } else if (data.error) {
             // Handle errors sent from the backend
             alert(data.error);
