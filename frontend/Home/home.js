@@ -357,8 +357,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             .catch(error => console.error('Error:', error));
     }
 
+    function remit() {
+        if (remitModal.style.display = 'none') {
+            remitModal.style.display = 'block';
+        } else {
+            remitModal.style.display = 'none';
+        }
+    }
+
     logoutButton.addEventListener('click', () => {
-        remitModal.style.display = 'block';
+        remit()
         //document.body.classList.remove('hidden');
     });
 
