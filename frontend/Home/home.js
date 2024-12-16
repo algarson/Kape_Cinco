@@ -358,7 +358,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
 
     function logout() {
-        remittance();
+        //emittance();
         fetch('/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
@@ -402,7 +402,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         .then(response => response.json()) 
         .then(data => {
             if (data.message) {
-                //logout();
+                logout();
             } else if (data.error) {
                 alert(data.error);
             }
@@ -423,8 +423,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     confirmRemit.addEventListener('click', () => {
-        //remittance();
-        logout();
+        remittance();
+        //logout();
         document.body.classList.remove('hidden');
         //remitModal.style.display = "block";
     })
