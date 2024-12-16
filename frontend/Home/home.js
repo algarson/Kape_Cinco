@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const profileUpdateButton = document.getElementById('user-update-button')
     const logoutButton = document.getElementById('logout-button');
     const remitModal = document.getElementById('Remit-modal');
+    const cancelRemit = document.getElementById('cancel-remit-amount');
     const totalAmountElement = document.getElementById('total-amount');
     const totalIncome = document.getElementById('total-income-amount');
     const totalOrders = document.getElementById('total-order-amount');
@@ -369,6 +370,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     logoutButton.addEventListener('click', () => {
         showRemit();
         //document.body.classList.remove('hidden');
+    });
+
+    cancelRemit.addEventListener('click', () => {
+        showRemit();
     });
 
     profileButton.addEventListener('click', () => {
