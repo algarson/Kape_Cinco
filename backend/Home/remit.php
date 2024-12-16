@@ -13,8 +13,7 @@
             $total_disc = $_POST['total-disc'];
     
     
-            $orderDetailsRaw = $_POST['order-details'];
-            $orderDetails = json_decode($orderDetailsRaw, true);
+        
     
             $updateSql = "UPDATE `user_performance` 
                         SET `total_sale` = ?, 
@@ -26,7 +25,7 @@
             $stmt1 = $conn->prepare($updateSql);
             $stmt1->bind_param("iiiii", $total_sale, $total_trans, $total_remit, $total_disc, $userId);
     
-            if ($stmt->execute()) {
+            if ($stmt1->execute()) {
                 // Successfully updated time_out and total_shift_duration
                 session_destroy(); // Destroy the session
                 echo json_encode(['success' => true]);
@@ -35,7 +34,7 @@
                 echo json_encode(['success' => false, 'error' => 'Failed to update shift details.']);
             }
     
-            $stmt->close();
+            $stmt1->close();
         } else {
             echo json_encode(["error" => $stmt1->error]);
         }
