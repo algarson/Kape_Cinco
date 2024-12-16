@@ -357,6 +357,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             .catch(error => console.error('Error:', error));
     }*/
 
+    console.log(remitModal.style.display);
+
     function remit() {
         if (remitModal.style.display = "none") {
             remitModal.style.display = "block";
