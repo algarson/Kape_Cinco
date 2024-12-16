@@ -21,10 +21,10 @@
                             total_trans = ?,
                             total_remit = ?,
                             total_disc = ?
-                        WHERE user_id = ?";
+                        WHERE time_id = ?";
 
             $stmt1 = $conn->prepare($updateSql);
-            $stmt1->bind_param("iiiii", $total_sale, $total_trans, $total_remit, $total_disc, $userId);
+            $stmt1->bind_param("iiiii", $total_sale, $total_trans, $total_remit, $total_disc, $shiftId);
     
             if ($stmt1->execute()) {
                 // Successfully updated time_out and total_shift_duration
