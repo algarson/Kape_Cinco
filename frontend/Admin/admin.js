@@ -1020,7 +1020,7 @@ async function getSummaryLog() {
         if (data.success) {
             // Example: Update the UI with the total sales
             const totalSales = data.data.total_sales || 0;
-            document.getElementById("date-summary").textContent = setDate;
+            document.getElementById("date-summary").textContent = `${setDate} - ${setDate2}`;
             document.getElementById("sale-summary").textContent = ` PHP ${totalSales}`;
         } else if (data.error) {
             // Handle errors sent from the backend
