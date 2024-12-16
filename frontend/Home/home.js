@@ -389,8 +389,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         formData.append('total-remit', remitVal);
         formData.append('total-disc', totalDisc);
         formData.append('sid', sID);
-
-        console.log(shiftID[0]);
         
 
         for (let [key, value] of formData.entries()) {
