@@ -31,7 +31,7 @@ if (isset($_SESSION['user'])) {
             while ($row = $result->fetch_assoc()) {
                 $allData[] = $row;
             }
-            echo json_encode(['success' => true, 'data' => $allData]);
+            echo json_encode($allData);
         } else {
             echo json_encode(['success' => false, 'error' => 'No records found.']);
         }
