@@ -11,7 +11,7 @@
             $total_trans = $_POST['total-trans'];
             $total_remit = $_POST['total-remit'];
             $total_disc = $_POST['total-disc'];
-            $shiftId = $_POST['sid'];
+            //$shiftId = $_POST['sid'];
     
     
         
@@ -21,8 +21,7 @@
                             `total_trans` = ?,
                             `total_remit` = ?,
                             `total_disc` = ?
-                        WHERE `user_id` = ?
-                        ORDER BY `perf_id` ASC";
+                        WHERE `user_id` = ?";
             $stmt1 = $conn->prepare($updateSql);
             $stmt1->bind_param("iiiii", $total_sale, $total_trans, $total_remit, $total_disc, $userId);
     
