@@ -358,11 +358,12 @@ document.addEventListener('DOMContentLoaded', async function () {
     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
 
     function logout() {
+        remittance();
         fetch('/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    remittance();
+                    
                     clearInterval(intervalId);
                     window.location.href = '/frontend/Login/login.html';
                 } else {
@@ -391,7 +392,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         
 
         console.log(formData);
-        
+
         fetch('/backend/Home/remit.php', {
             method: 'POST',
             body: formData
@@ -420,9 +421,10 @@ document.addEventListener('DOMContentLoaded', async function () {
     });
 
     confirmRemit.addEventListener('click', () => {
-        remittance();
-        //logout();
-        remitModal.style.display = "block";
+        //remittance();
+        logout();
+        document.body.classList.remove('hidden');
+        //remitModal.style.display = "block";
     })
 
     
