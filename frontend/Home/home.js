@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function remit() {
         if (remitModal.style.display = "none") {
-            remitModal.style.display = "flex";
+            remitModal.style.display = "block";
         } else {
             remitModal.style.display = "none";
         }
