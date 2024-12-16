@@ -1000,8 +1000,6 @@ async function getSummaryLog() {
         return;
     }
 
-    console.log(setDate);
-
     // Prepare the form data
     const formData = new FormData();
     formData.append('setDate', setDate);
@@ -1020,6 +1018,7 @@ async function getSummaryLog() {
         if (data.success) {
             // Example: Update the UI with the total sales
             const totalSales = data.data.total_sales || 0;
+            document.getElementById("date-summary").textContent = setDate;
             document.getElementById("sale-summary").textContent = ` PHP ${totalSales.toFixed(2)}`;
         } else if (data.error) {
             // Handle errors sent from the backend

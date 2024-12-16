@@ -19,7 +19,7 @@ if (isset($_SESSION['user'])) {
         $sql = "SELECT 
                     SUM(order_total_amount) AS total_sales
                 FROM `order_number_table`
-                WHERE order_status = 'Complete' AND DATE(order_date) = ?";
+                WHERE order_status = 'Completed' AND DATE(order_date) = ?";
 
         $stmt1 = $conn->prepare($sql);
         if (!$stmt1) {
