@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     async function userShift () {
         try {
-            const res = await fetch(`/backend/Home/userShift.php`);
+            const res = await fetch(`/backend/Home/usershift.php`);
             const data = await res.json();
             return data;
         } catch (err) {
