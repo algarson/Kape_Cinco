@@ -401,7 +401,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         })
         .then(response => response.json()) 
         .then(data => {
-            if (data.message) {
+            if (data.success) {
                 logout();
             } else if (data.error) {
                 alert(data.error);
