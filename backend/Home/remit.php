@@ -7,10 +7,10 @@
         $userId = $_SESSION['user']['id'];
         
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $total_sale = $_POST['total-sale'];
-            $total_trans = $_POST['total-trans'];
-            $total_remit = $_POST['total-remit'];
-            $total_disc = $_POST['total-disc'];
+            $total_sale = $_POST['total-sale'] ?? NULL;
+            $total_trans = $_POST['total-trans'] ?? NULL;
+            $total_remit = $_POST['total-remit'] ?? NULL;
+            $total_disc = $_POST['total-disc'] ?? NULL;
             //$shiftId = $_POST['sid'];
     
     
@@ -21,8 +21,7 @@
                             total_trans = ?,
                             total_remit = ?,
                             total_disc = ?
-                        WHERE user_id = ?
-                        ORDER BY perf_id DESC";
+                        WHERE user_id = ?";
 
             $stmt1 = $conn->prepare($updateSql);
             $stmt1->bind_param("iiiii", $total_sale, $total_trans, $total_remit, $total_disc, $userId);
@@ -45,6 +44,10 @@
         echo json_encode(['success' => false, 'error' => 'User not logged in.']);
     }
     
+    if ($total_sale === null || $total_trans === null || $total_remit === null || $total_disc === null) {
+        echo json_encode(['success' => false, 'error' => 'Missing POST data.']);
+        exit;
+    }
 
     $conn->close();
 ?>
