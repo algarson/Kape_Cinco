@@ -1000,6 +1000,8 @@ async function getSummaryLog() {
         return;
     }
 
+    console.log(setDate);
+
     // Prepare the form data
     const formData = new FormData();
     formData.append('setDate', setDate);
