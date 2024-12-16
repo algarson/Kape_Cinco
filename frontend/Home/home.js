@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     console.log(remitModal.style.display);
 
-    function remit() {
+    function showRemit() {
         if (remitModal.style.display = "none") {
             remitModal.style.display = "block";
         } else {
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     }
 
     logoutButton.addEventListener('click', () => {
-        remit()
+        showRemit();
         //document.body.classList.remove('hidden');
     });
 
