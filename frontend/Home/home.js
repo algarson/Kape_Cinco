@@ -359,21 +359,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     }*/
 
 
-    function showRemit() {
-        if (remitModal.style.display = "none") {
-            remitModal.style.display = "block";
-        } else {
-            remitModal.style.display = "none";
-        }
-    }
-
     logoutButton.addEventListener('click', () => {
-        showRemit();
+        remitModal.style.display = "block";
         //document.body.classList.remove('hidden');
     });
 
     cancelRemit.addEventListener('click', () => {
-        showRemit();
+        remitModal.style.display = "none";
     });
 
     profileButton.addEventListener('click', () => {
