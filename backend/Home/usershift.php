@@ -7,7 +7,7 @@ if (isset($_SESSION['user'])) {
 
     $time = $statSql = "SELECT time_id
         FROM `user_performance`
-        WHERE user_id = ?
+        WHERE `user_id` = ?
         ORDER BY time_id DESC"; 
     
     $stmt1 = $conn->prepare($statSql);
