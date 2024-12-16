@@ -992,29 +992,34 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 // Function to open the Summary Log Modal
-// function openSummaryLogModal() {
-//     const modal = document.getElementById("summaryLogModal");
-//     modal.style.display = "block"; // Show the modal
-// }
+function openSummaryLogModal() {
+    const modal = document.getElementById("summaryLogModal");
+    modal.style.display = "block"; // Show the modal
+}
 
 // Function to close the Summary Log Modal
 function closeSummaryLogModal() {
-    const modal = document.getElementById("summaryLogModalDate");
+    const modal = document.getElementById("summaryLogModal");
     modal.style.display = "none"; // Hide the modal
 }
 
-// Function to open the Summary Log for the date modal
-function openSummaryLogModalDate(){
-    const modal = document.getElementById("summaryLogModalDate");
+// Function to open summary log date modal
+function opensummarylogmodaldate() {
+    const modal = document.getElementById("summarylogmodaldate")
     modal.style.display = "block";
 }
+// Function to close the summary log date modal
+function closesummarylogmodaldate () {
+    const modal = document.getElementById("summarylogmodaldate")
+    modal.style.display = "none";
+}
 
-
-document.querySelector(".summarylog-button").addEventListener("click", openSummaryLogModalDate);
-document.querySelector(".#summaryLogModalDate .close-button").addEventListener("click", closeSummaryLogModal)
 // Add event listener to the close button
 // document.querySelector(".summarylog-button").addEventListener("click", openSummaryLogModal);
 // document.querySelector("#summaryLogModal .close-button").addEventListener("click", closeSummaryLogModal);
+
+// add event listener to the summary log date modal
+document.querySelector(".summarylogdate-button").addEventListener("click", opensummarylogmodaldate);
 
 
 //LOG EMPLOYEE MODAL

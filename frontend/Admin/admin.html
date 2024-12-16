@@ -149,7 +149,7 @@
         </div>
 
         <div id="logSection" style="display: none;">
-            <button class="summarylog-button" onclick="openSummaryLogModalDate()">Summary Logs</button>
+            <button class="summarylogdate-button" onclick="opensummarylogmodaldate()">Summary Logs</button>
 
             <div class="logSection-container">
                 <table id="LogTable">
@@ -196,13 +196,14 @@
             </div>  
         </div>
 
-        <div id="summaryLogModalDate" class="modal" style="display: none;">
-            <div class="summaryLogModalDate-content">
+        <div id="summarylogmodaldate" class="modal" style="display: none;">
+            <div class="summarylogmodaldate-content">
                 <span class="close-button">&times;</span>
                 <h2>Summary Logs</h2>
-                <div id="summaryLogDateContent">
-                    <h2>Summary Log Date</h2>
-                    <button class="Print-Button">Next</button>
+                <div class="summarylogdate-container">
+                    <h2>Please select a date for Summary Log</h2>
+                    <input type="date" id="summary-datetimelocal">
+                    <button class="nextsummary-button" onclick="openSummaryLogModal()">Next</button>
                 </div>
             </div>
         </div>
