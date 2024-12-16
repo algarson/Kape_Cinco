@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const profileButton = document.getElementById('profile-button');
     const profileUpdateButton = document.getElementById('user-update-button')
     const logoutButton = document.getElementById('logout-button');
-    const remitModal = document.getElementById('Remid-modal');
+    const remitModal = document.getElementById('Remit-modal');
     const totalAmountElement = document.getElementById('total-amount');
     const totalIncome = document.getElementById('total-income-amount');
     const totalOrders = document.getElementById('total-order-amount');
