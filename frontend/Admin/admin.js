@@ -1021,6 +1021,7 @@ async function getSummaryLog() {
 
         // Handle the response
         if (data.success) {
+            getSummaryPerformance();
             // Example: Update the UI with the total sales
             
             const totalSales = data.data.total_sales || 0;
@@ -1106,7 +1107,6 @@ async function getSummaryLog() {
 // Function to open the Summary Log Modal
 function openSummaryLogModal() {
     getSummaryLog();
-    getSummaryPerformance();
     const modal = document.getElementById("summaryLogModal");
     modal.style.display = "block"; // Show the modal
 }
