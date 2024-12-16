@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     function logout() {
         remittance();
-        /*fetch('/backend/Login/logout.php')
+        fetch('/backend/Login/logout.php')
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -370,7 +370,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     alert('Logout failed!');
                 }
             })
-            .catch(error => console.error('Error:', error));*/
+            .catch(error => console.error('Error:', error));
     }
 
     async function remittance() {
