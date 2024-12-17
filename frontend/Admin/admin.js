@@ -1033,7 +1033,7 @@ async function getSummaryLog() {
             const netSale = totalSales - salesTax;
 
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
-            document.getElementById("total-sale-summary").textContent = ` PHP ${totalSales}`;
+            document.getElementById("total-sale-summary").textContent = ` PHP ${totalSales.toFixed(2)}`;
             document.getElementById("total-sale-transact").textContent = `${totalTrans}`;
             document.getElementById("ave-sales-summary").textContent = `PHP ${aveSales}`;
             document.getElementById("vat-tax-summary").textContent = `PHP ${salesTax}`;
