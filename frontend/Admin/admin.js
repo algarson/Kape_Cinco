@@ -215,16 +215,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         const headers = {
             Cashier: {
                 show: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+                hide: [],
                 showCells: [2,3,4,5],
             },
             Admin: {
+                show: [],
                 hide: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
                 hideCells: [2,3,4,5],
             }
         };
 
-        //headers[category].show.forEach(selector => document.querySelector(selector).style.display = '');
-        //headers[category].hide.forEach(selector => document.querySelector(selector).style.display = 'none');
+        headers[category].show.forEach(selector => document.querySelector(selector).style.display = '');
+        headers[category].hide.forEach(selector => document.querySelector(selector).style.display = 'none');
     
 
         // Select all rows within the table body
@@ -250,7 +252,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
         });
 
-        // Handle header visibility
+        /* Handle header visibility
         if (category === 'Cashier') {
             headers.Cashier.forEach(headerSelector => {
                 document.querySelector(headerSelector).style.display = ''; // Show headers
@@ -259,7 +261,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             headers.Cashier.forEach(headerSelector => {
                 document.querySelector(headerSelector).style.display = 'none'; // Hide headers
             });
-        }
+        }*/
     }
 
     categoryButtons.forEach(button => {
