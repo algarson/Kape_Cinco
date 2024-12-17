@@ -1029,7 +1029,7 @@ async function getSummaryLog() {
             const totalTrans = data.data.total_transact || 0;
             
             const aveSales = totalSales / totalTrans;
-            const salesTax = totalSales / (12 % 100);
+            const salesTax = totalSales * (12 % 100);
             const netSale = totalSales - salesTax;
 
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
