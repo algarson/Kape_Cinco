@@ -20,15 +20,23 @@
             user_shifts.total_shift_duration, 
             user_table.user_firstname, 
             user_table.user_lastname,
-            user_table.user_role
+            user_table.user_role,
+            total_sale,
+            total_trans,
+            total_remit,
+            total_disc
         FROM 
-            user_shifts
+            user_performance
         INNER JOIN 
             user_table
         ON 
-            user_shifts.user_id = user_table.user_id
+            user_performance.user_id = user_table.user_id
+        INNER JOIN
+        	user_shifts
+        ON
+        	user_performance.time_id = user_shifts.time_id
         ORDER BY 
-            user_shifts.time_in DESC
+            user_shifts.time_in DESC;
     ";
 
     $result = $conn->query($logsql);
@@ -45,7 +53,11 @@
                 'user_role' => $row['user_role'],
                 'time_in' => $row['time_in'],
                 'time_out' => $row['time_out'],
-                'total_shift_duration' => $row['total_shift_duration']
+                'total_shift_duration' => $row['total_shift_duration'],
+                'total_sale' => $row['total_sale'],
+                'total_trans' => $row['total_trans'],
+                'total_remit' => $row['total_remit'],
+                'total_disc' => $row['total_disc'],
             ];
         }
     }

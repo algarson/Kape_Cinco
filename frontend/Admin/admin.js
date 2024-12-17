@@ -385,6 +385,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         const nameCell = document.createElement('td');
         nameCell.textContent = `${item.user_firstname} ${item.user_lastname}`;
         row.appendChild(nameCell);
+
+        const saleCell = document.createElement('td');
+        nameCell.textContent = `₱${Number(item.total_sale).toFixed(2)}`;
+        row.appendChild(nameCell);
+
+        const transCell = document.createElement('td');
+        nameCell.textContent = `${item.total_trans}`;
+        row.appendChild(nameCell);
+
+        const remitCell = document.createElement('td');
+        nameCell.textContent = `₱${Number(item.total_remit).toFixed(2)}`;
+        row.appendChild(nameCell);
+
+        const discCell = document.createElement('td');
+        nameCell.textContent = `₱${Number(item.total_disc).toFixed(2)}`;
+        row.appendChild(nameCell);
     
         // Extract formatted date and time
         const timeInFormatted = formatDateTime(item.time_in);
