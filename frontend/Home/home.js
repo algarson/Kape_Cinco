@@ -381,29 +381,61 @@ document.addEventListener('DOMContentLoaded', async function () {
         const totalTrans = daily[0].total_orders;
         const sID = shiftID[0].tID;
         const remitVal = document.getElementById('remit-amount').value;
-        const totalDisc = totalSale - remitVal;
-
-        const formData = new FormData();
-        formData.append('total-sale', totalSale);
-        formData.append('total-trans', totalTrans);
-        formData.append('total-remit', remitVal);
-        formData.append('total-disc', totalDisc);
-        formData.append('sid', sID);
         
 
-        fetch('/backend/Home/remit.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json()) 
-        .then(data => {
-            if (data.success) {
-                logout();
-            } else if (data.error) {
-                alert(data.error);
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        if (Number(remitVal) >= Number(totalSale)){
+            const newRemitVal = totalSale;
+            const totalDisc = totalSale - newRemitVal;
+
+            const formData = new FormData();
+            formData.append('total-sale', totalSale);
+            formData.append('total-trans', totalTrans);
+            formData.append('total-remit', newRemitVal);
+            formData.append('total-disc', totalDisc);
+            formData.append('sid', sID);
+        
+
+            fetch('/backend/Home/remit.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json()) 
+            .then(data => {
+                if (data.success) {
+                    logout();
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        } else {
+            const totalDisc = totalSale - remitVal;
+
+            const formData = new FormData();
+            formData.append('total-sale', totalSale);
+            formData.append('total-trans', totalTrans);
+            formData.append('total-remit', remitVal);
+            formData.append('total-disc', totalDisc);
+            formData.append('sid', sID);
+        
+
+            fetch('/backend/Home/remit.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json()) 
+            .then(data => {
+                if (data.success) {
+                    logout();
+                } else if (data.error) {
+                    alert(data.error);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+
+        }
+
+        
 
     }
 
