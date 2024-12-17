@@ -377,6 +377,7 @@ body.inventory-active .category-nav {
 
 .logSection-container{
     width: auto;
+    height: 100%;
     border-top-right-radius: 8px;
     border-top-left-radius: 8px;
     overflow-y: auto; /* Enable vertical scrolling */
