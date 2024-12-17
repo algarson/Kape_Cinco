@@ -12,8 +12,7 @@
     include '../server.php';
 
     // Query to fetch shift logs with user details
-    $logsql = "
-        SELECT 
+    $logsql = "SELECT 
             user_shifts.time_id, 
             user_shifts.user_id, 
             user_shifts.time_in, 
