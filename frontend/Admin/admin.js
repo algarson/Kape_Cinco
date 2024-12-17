@@ -420,7 +420,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         if (item.user_role === 'Cashier') {
             row.setAttribute('role-category', 'Cashier');
         } else {
-            row.setAttribute('role-attribute', 'Admin');
+            row.setAttribute('role-category', 'Admin');
         }
     
         return row;
