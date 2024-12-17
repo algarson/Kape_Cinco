@@ -214,7 +214,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     function filterRole(category) {
         const headers = {
             Cashier: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
-            Admin: []
+            Admin: {
+                hideCell: [2,3,4,5]
+            }
         };
 
         // Select all rows within the table body
@@ -224,6 +226,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             // Show or hide rows based on the selected role
             if (roleCategory === category) {
                 row.style.display = ''; // Show row
+                headers[category].hideCells.forEach(index => {
+                    if (cells[index]) cells[index].style.display = 'none'; // Hide specific cells
+                });
             } else {
                 row.style.display = 'none'; // Hide row
             }
