@@ -1028,12 +1028,12 @@ async function getSummaryLog() {
             const totalSales = data.data.total_sales || 0;
             const totalTrans = data.data.total_transact || 0;
             
-            const aveSales = totalSales / totalTrans;
-            const salesTax = totalSales * (12 / 100);
-            const netSale = totalSales - salesTax;
+            const aveSales = (totalSales / totalTrans).toFixed(2);
+            const salesTax = (totalSales * (12 / 100)).toFixed(2);
+            const netSale = (totalSales - salesTax).toFixed(2);
 
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
-            document.getElementById("total-sale-summary").textContent = ` ₱${totalSales}`;
+            document.getElementById("total-sale-summary").textContent = ` ₱${Number(totalSales).toFixed(2)}`;
             document.getElementById("total-sale-transact").textContent = `${totalTrans}`;
             document.getElementById("ave-sales-summary").textContent = `₱${aveSales}`;
             document.getElementById("vat-tax-summary").textContent = `₱${salesTax}`;
