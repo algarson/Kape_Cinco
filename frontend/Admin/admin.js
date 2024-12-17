@@ -1198,12 +1198,12 @@ function closeSummaryLogModal() {
 
 // Function to open summary log date modal
 function opensummarylogmodaldate() {
-    const modal = document.getElementById("summarylogmodaldate")
+    const modal = document.getElementById("summarylogmodaldate");
     modal.style.display = "block";
 }
 // Function to close the summary log date modal
 function closesummarylogmodaldate () {
-    const modal = document.getElementById("summarylogmodaldate")
+    const modal = document.getElementById("summarylogmodaldate");
     modal.style.display = "none";
 }
 
