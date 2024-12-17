@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             logsTableBody.appendChild(row);
         });
         //console.log(allLogs);
-        filterRole('Cashier'); 
+        filterRole('Admin'); 
     }
 
     async function generateAllUsers() {
@@ -886,7 +886,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         logSection.style.display = ''; // Show Log section
         usersSection.style.display = 'none'; // Hide Users section
         generateAllLogs();
-        filterRole('Cashier');  // Set default category to Cashier on Log section load
+        filterRole('Admin');  // Set default category to Cashier on Log section load
     });
 
     // Event listener for Users navigation
