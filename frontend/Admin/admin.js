@@ -416,6 +416,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         const totalShiftCell = document.createElement('td');
         totalShiftCell.textContent = item.total_shift_duration; 
         row.appendChild(totalShiftCell);
+
+        if (item.user_role === 'Cashier') {
+            row.setAttribute('role-category', 'Cashier');
+        } else {
+            row.setAttribute('role-attribute', 'Admin');
+        }
     
         return row;
     }
