@@ -2,14 +2,12 @@
 
 include '../server.php';
 
-    $statSql = $statSql = "
-                            SET time_zone = '+08:00'
-                            SELECT 
+    $statSql = $statSql = "SELECT 
                                 COUNT(order_number) AS total_orders, 
                                 SUM(order_total_amount) AS Sales 
                             FROM `order_number_table` 
                             WHERE `order_status` = 'Completed' 
-                            AND DATE(order_date) = CURDATE()";
+                            AND DATE(order_date) = DATE_ADD(CURDATE(), INTERVAL 1 DAY)";
 
     $res = $conn->query($statSql);
 
