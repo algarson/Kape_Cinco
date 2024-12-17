@@ -220,11 +220,11 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // Select all rows within the table body
         document.querySelectorAll('#LogTable tbody tr').forEach(row => {
-            const roleCategory = button.getAttribute('role-category'); // Get the role-category attribute
+            const roleCategory = row.getAttribute('role-category'); // Get the role-category attribute
 
             console.log(roleCategory);
             // Show or hide rows based on the selected role
-            if (roleCategory === category) {
+            if (roleCategory === 'Cashier') {
                 row.style.display = ''; // Show row
             } else {
                 row.style.display = 'none'; // Hide row
