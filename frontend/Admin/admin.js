@@ -158,7 +158,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             const row = createLogsTableRow(item);
             logsTableBody.appendChild(row);
         });
-        //console.log(allLogs);
         filterRole('Cashier'); 
     }
 
@@ -222,7 +221,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.querySelectorAll('#LogTable tbody tr').forEach(row => {
             const roleCategory = row.getAttribute('role-category'); // Get the role-category attribute
 
-            console.log(roleCategory);
             // Show or hide rows based on the selected role
             if (roleCategory === category) {
                 row.style.display = ''; // Show row
