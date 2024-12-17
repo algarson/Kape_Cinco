@@ -18,7 +18,8 @@ if (isset($_SESSION['user'])) {
 
         // SQL Query
         $sql = "SELECT 
-                    SUM(order_total_amount) AS total_sales
+                    SUM(order_total_amount) AS total_sales,
+                    COUNT(order_number) AS total_transact
                 FROM `order_number_table`
                 WHERE order_status = 'Completed' 
                 AND DATE(order_date) BETWEEN ? AND ?";
@@ -38,11 +39,13 @@ if (isset($_SESSION['user'])) {
             $result = $stmt1->get_result();
             if ($result && $row = $result->fetch_assoc()) {
                 $total_sales = $row['total_sales'];
+                $total_trans = $row['total_transact'];
 
                 echo json_encode([
                     'success' => true,
                     'data' => [
                         'total_sales' => $total_sales,
+                        'total_trans' => $total_trans,
                     ]
                 ]);
             } else {

@@ -1025,8 +1025,17 @@ async function getSummaryLog() {
             // Example: Update the UI with the total sales
             
             const totalSales = data.data.total_sales || 0;
+            const totalTrans = data.data.total_trans || 0
+
+            const aveSales = totalSales / totalTrans;
+            const salesTax = totalSales / (12%100);
+            const netSale = totalSales - salesTax;
+
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
             document.getElementById("total-sale-summary").textContent = ` PHP ${totalSales}`;
+            document.getElementById("ave-sales-summary").textContent = `PHP ${aveSales}`;
+            document.getElementById("vat-tax-summary").textContent = `PHP ${salesTax}`;
+            document.getElementById("net-sale-summary").textContent = `PHP ${netSale}`;
         } else if (data.error) {
             // Handle errors sent from the backend
             alert(data.error);
