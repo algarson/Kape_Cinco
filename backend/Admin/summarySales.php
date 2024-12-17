@@ -45,7 +45,7 @@ if (isset($_SESSION['user'])) {
                     'success' => true,
                     'data' => [
                         'total_sales' => $total_sales,
-                        'total_trans' => $total_trans,
+                        'total_transact' => $total_trans,
                     ]
                 ]);
             } else {
