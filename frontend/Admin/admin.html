@@ -219,17 +219,6 @@
                     <!-- The content for the summary logs will be dynamically populated here -->
                      <div class="summaryLog-Container">
                         <table id="Summary-Table">
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                </tr>
-                                <tr>
-                                    <th>Employee Name</th>
-                                    <th>Transaction Processed</th>
-                                    <th>Total Sales</th>
-                                </tr>
-                                
-                            </thead>
                             <thead >
                                 <tr>
                                     <th>Sales Overview</th>
@@ -289,6 +278,13 @@
                                 </tr>
                                 
                             </thead>
+                            <tbody id="employee-data">
+                                <tr>
+                                    <td>John</td>
+                                    <td>17</td>
+                                    <td>PHP 800</td>
+                                </tr>
+                            </tbody>
                         </table>    
                      </div>
                      <button class="Print-Button" onclick="window.print()">Print Report</button>
