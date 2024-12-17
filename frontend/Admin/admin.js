@@ -1022,6 +1022,7 @@ async function getSummaryLog() {
         // Handle the response
         if (data.success) {
             getSummaryPerformance();
+            getEmployeePerformance();
             // Example: Update the UI with the total sales
             
 
@@ -1110,6 +1111,71 @@ async function getSummaryLog() {
             alert("An error occurred while fetching the summary log.");
         }
     }
+
+    async function getEmployeePerformance() {
+        // Get the selected dates from the input fields
+        const setDate = document.getElementById("summary-datetimelocal").value;
+        const setDate2 = document.getElementById("summary-datetimelocal2").value;
+    
+        if (!setDate || !setDate2) {
+            alert("Please select both dates.");
+            return;
+        }
+    
+        // Prepare the form data
+        const formData = new FormData();
+        formData.append('setDate', setDate);
+        formData.append('setDate2', setDate2);
+    
+        try {
+            // Make the POST request
+            const response = await fetch('/backend/Admin/employeePerformance.php', {
+                method: 'POST',
+                body: formData
+            });
+    
+            // Parse JSON response
+            const data = await response.json();
+    
+            // Handle the response
+            if (data.success) {
+                const employees = data.data || [];
+                const tbody = document.getElementById("employee-data"); // Correct tbody id
+    
+                // Clear previous content
+                tbody.innerHTML = '';
+    
+                // Append each employee to the table body
+                employees.forEach(employee => {
+                    const row = document.createElement('tr');
+    
+                    // Combine firstname and lastname in one cell
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = `${employee.firstname} ${employee.lastname}`;
+                    row.appendChild(nameCell);
+    
+                    const totalSaleCell = document.createElement('td');
+                    totalSaleCell.textContent = employee.total_sale;
+                    row.appendChild(totalSaleCell);
+    
+                    const totalDiscCell = document.createElement('td');
+                    totalDiscCell.textContent = employee.total_disc;
+                    row.appendChild(totalDiscCell);
+    
+                    tbody.appendChild(row);
+                });
+            } else if (data.error) {
+                // Handle errors sent from the backend
+                alert(data.error);
+            }
+        } catch (error) {
+            // Handle fetch/network errors
+            console.error('Error:', error);
+            alert("An error occurred while fetching employee performance data.");
+        }
+    }
+    
+    
     
 
 
