@@ -20,7 +20,8 @@
             user_shifts.time_out, 
             user_shifts.total_shift_duration, 
             user_table.user_firstname, 
-            user_table.user_lastname
+            user_table.user_lastname,
+            user_table.user_role
         FROM 
             user_shifts
         INNER JOIN 
@@ -42,6 +43,7 @@
                 'user_id' => $row['user_id'],
                 'user_firstname' => $row['user_firstname'],
                 'user_lastname' => $row['user_lastname'],
+                'user_role' => $row['user_role'],
                 'time_in' => $row['time_in'],
                 'time_out' => $row['time_out'],
                 'total_shift_duration' => $row['total_shift_duration']

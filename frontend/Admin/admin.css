@@ -83,6 +83,26 @@ header {
     background-color: #4e342e;
 }
 
+.log-nav {
+    margin: 10px 0 10px 40px;
+    position:fixed;
+    left: 20px;
+    top: 80px;
+}
+.log-nav button {
+    background-color: #8d6e63;
+    border-radius: 20px;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 12px;
+}
+.log-nav button.active {
+    background-color: #4e342e;
+}
+
 main {
     display: flex;
     flex-direction: column;

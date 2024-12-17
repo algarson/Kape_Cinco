@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const usersTableBody = document.getElementById('usersTableBody');
 
     const categoryButtons = document.querySelectorAll('.category-nav button');
+    const RolecategoryButtons = document.querySelectorAll('.log-nav button');
     const updateModal = document.getElementById('updateModal');
     const addModal = document.getElementById('addModal');
     const deleteModal = document.getElementById('deleteModal');
@@ -157,6 +158,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const row = createLogsTableRow(item);
             logsTableBody.appendChild(row);
         });
+        filterRole('Cashier'); 
     }
 
     async function generateAllUsers() {
@@ -173,7 +175,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         const descriptionHeader = document.querySelector('.description-header');
         const drinkTypeHeader = document.querySelector('.drinktype-header');
 
-        document.querySelectorAll('tbody tr').forEach(row => {
+        document.querySelectorAll('#inventoryTable tbody tr').forEach(row => {
             const cells = row.cells;
             const itemCategory = row.getAttribute('data-category');
 
@@ -199,6 +201,53 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
     }
 
+    // Function for filtering roles 
+    function filterRole(category) {
+        const CashierSaleHeader = document.querySelector('.CashierSale-header');
+        const CashierTransHeader = document.querySelector('.CashierTrans-header');
+        const CashierRemitHeader = document.querySelector('.CashierRemit-header');
+        const CashierDiscHeader = document.querySelector('.CashierDisc-header');
+        
+        document.querySelectorAll('#LogTable tbody tr').forEach(row => {
+            const cells = row.cells;
+            const roleCategory = row.getAttribute('role-category');
+            console.log(roleCategory);
+            // // Check if the row has enough cells
+            // if (!cells[2] || !cells[3] || !cells[4] || !cells[5]) {
+            // // Skip rows that don't have the required cells
+            //     return;
+            // }
+            // Hide Cashier headers initially
+            if (category === 'Cashier') {
+                CashierSaleHeader.style.display = '';
+                CashierTransHeader.style.display = '';
+                CashierRemitHeader.style.display = '';
+                CashierDiscHeader.style.display = '';
+                // Show the row only if it matches the "Cashier" category
+                row.style.display = roleCategory === 'Cashier' ? '' : 'none';
+                // Show cells 2, 3, 4, 5 (Cashier details) for "Cashier"
+                if (roleCategory === 'Cashier') {
+                    cells[2].style.display = '';
+                    cells[3].style.display = '';
+                    cells[4].style.display = '';
+                    cells[5].style.display = '';
+                }
+            } else { // Admin category
+                CashierSaleHeader.style.display = 'none';
+                CashierTransHeader.style.display = 'none';
+                CashierRemitHeader.style.display = 'none';
+                CashierDiscHeader.style.display = 'none';
+                // Show the row only if it matches the "Admin" category
+                row.style.display = roleCategory === 'Admin' ? '' : 'none';
+                // Hide cells 2, 3, 4, 5 (Cashier details) for "Admin"
+                cells[2].style.display = 'none';
+                cells[3].style.display = 'none';
+                cells[4].style.display = 'none';
+                cells[5].style.display = 'none';
+            }
+        });
+    }
+
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
             categoryButtons.forEach(btn => btn.classList.remove('active'));
@@ -206,6 +255,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const category = button.getAttribute('data-category');
             filterItems(category);
+        });
+    });
+
+    RolecategoryButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            RolecategoryButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            const category = button.getAttribute('role-category');
+            filterRole(category);
         });
     });
 
@@ -407,6 +465,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         updateButton.addEventListener('click', () => openUpdateUserModal(item));
         updateCell.appendChild(updateButton);
         row.appendChild(updateCell);
+
+        if (item.user_role === 'Cashier') {
+            row.setAttribute('role-category', 'Cashier');
+        }else{
+            row.setAttribute('role-category', 'Admin');
+        }
     
         return row;
     }
@@ -827,6 +891,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         logSection.style.display = ''; // Show Log section
         usersSection.style.display = 'none'; // Hide Users section
         generateAllLogs();
+        filterRole('Cashier');  // Set default category to Cashier on Log section load
     });
 
     // Event listener for Users navigation

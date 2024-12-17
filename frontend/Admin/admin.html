@@ -149,14 +149,21 @@
         </div>
 
         <div id="logSection" style="display: none;">
+            <nav class="log-nav">
+                <button class="active" role-category="Cashier">Cashier</button>
+                <button role-category="Admin">Admin</button>
+            </nav>
             <button class="summarylogdate-button" onclick="opensummarylogmodaldate()">Summary Logs</button>
-
             <div class="logSection-container">
                 <table id="LogTable">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Date</th>
+                            <th class="CashierSale-header">Total Sale</th>
+                            <th class="CashierTrans-header">Total Transactions</th>
+                            <th class="CashierRemit-header">Total Remit</th>
+                            <th class="CashierDisc-header">Total Discrepancies</th>
                             <th>Time in</th>
                             <th>Time out</th>
                             <th>Total Shift Duration</th>
