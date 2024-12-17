@@ -1,5 +1,5 @@
 <?php
-    include '/backend/server.php';
+    include '../server.php';
 
     $orderSql = " SELECT
         o.order_number,

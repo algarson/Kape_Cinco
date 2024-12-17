@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include '/backend/server.php';
+    include '../server.php';
     date_default_timezone_set('Asia/Manila');
 
     if (isset($_SESSION['user'])) {

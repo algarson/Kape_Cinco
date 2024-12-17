@@ -1,5 +1,5 @@
 <?php
-    include '/backend/server.php'; 
+    include '../server.php'; 
 
     session_start();
     if (!isset($_SESSION['user'])) {

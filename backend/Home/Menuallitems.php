@@ -1,5 +1,5 @@
 <?php
-    include '/backend/server.php';
+    include '../server.php';
 
     // Fetch all foods with their variants
     $foodSql = "

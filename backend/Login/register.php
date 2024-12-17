@@ -1,5 +1,5 @@
 <?php
-include '/backend/server.php';
+include '../server.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = filter_input(INPUT_POST, 'admin_username', FILTER_SANITIZE_FULL_SPECIAL_CHARS);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/frontend/Admin/admin.css">
+    <link rel="stylesheet" href="./admin.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <title>Admin Page</title>
@@ -149,14 +149,21 @@
         </div>
 
         <div id="logSection" style="display: none;">
-            <button class="summarylog-button" onclick="openSummaryLogModal()">Summary Logs</button>
-
+            <nav class="log-nav">
+                <button class="active" role-category="Cashier">Cashier</button>
+                <button role-category="Admin">Admin</button>
+            </nav>
+            <button class="summarylogdate-button" onclick="opensummarylogmodaldate()">Summary Logs</button>
             <div class="logSection-container">
                 <table id="LogTable">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Date</th>
+                            <th class="CashierSale-header">Total Sale</th>
+                            <th class="CashierTrans-header">Total Transactions</th>
+                            <th class="CashierRemit-header">Total Remit</th>
+                            <th class="CashierDisc-header">Total Discrepancies</th>
                             <th>Time in</th>
                             <th>Time out</th>
                             <th>Total Shift Duration</th>
@@ -196,12 +203,24 @@
             </div>  
         </div>
 
+        <div id="summarylogmodaldate" class="modal" style="display: none;">
+            <div class="summarylogmodaldate-content">
+                <span class="close-button">&times;</span>
+                <h2>Summary Logs</h2>
+                <div class="summarylogdate-container">
+                    <h2>Please select a date for Summary Log</h2>
+                    <input type="date" id="summary-datetimelocal">
+                    <button class="nextsummary-button" onclick="openSummaryLogModal()">Next</button>
+                </div>
+            </div>
+        </div>
+
         <div id="summaryLogModal" class="modal" style="display: none;">
             <div class="summaryLogModal-content">
                 <span class="close-button">&times;</span>
                 <h2>Summary Logs</h2>
                 <div id="summaryLogContent">
-                    <!-- The content for the summary logs will be dynamically populated here -->
+                     The content for the summary logs will be dynamically populated here
                      <div class="summaryLog-Container">
                         <table id="Summary-Table">
                             <thead>
@@ -238,7 +257,7 @@
                                 </tr>
                             </thead>
                             <tbody id="tableBody">
-                                <!-- Items will be dynamically generated here -->
+                                 Items will be dynamically generated here 
                             </tbody>
                         </table>    
                      </div>
@@ -333,7 +352,7 @@
         </div>
     </main>
 
-    <script src="frontend/Admin/admin.js"></script>
+    <script src="/frontend/Admin/admin.js"></script>
   
 </body>
 </html>
