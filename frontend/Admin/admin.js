@@ -1033,11 +1033,11 @@ async function getSummaryLog() {
             const netSale = totalSales - salesTax;
 
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
-            document.getElementById("total-sale-summary").textContent = ` PHP ${totalSales}`;
+            document.getElementById("total-sale-summary").textContent = ` ₱${totalSales}`;
             document.getElementById("total-sale-transact").textContent = `${totalTrans}`;
-            document.getElementById("ave-sales-summary").textContent = `PHP ${aveSales}`;
-            document.getElementById("vat-tax-summary").textContent = `PHP ${salesTax}`;
-            document.getElementById("net-sale-summary").textContent = `PHP ${netSale}`;
+            document.getElementById("ave-sales-summary").textContent = `₱${aveSales}`;
+            document.getElementById("vat-tax-summary").textContent = `₱${salesTax}`;
+            document.getElementById("net-sale-summary").textContent = `₱${netSale}`;
         } else if (data.error) {
             // Handle errors sent from the backend
             alert(data.error);
