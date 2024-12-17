@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             console.log(roleCategory);
             // Show or hide rows based on the selected role
-            if (roleCategory === 'Cashier') {
+            if ('Cashier' === category) {
                 row.style.display = ''; // Show row
             } else {
                 row.style.display = 'none'; // Hide row
