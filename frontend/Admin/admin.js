@@ -1029,11 +1029,11 @@ async function getSummaryLog() {
             const totalTrans = data.data.total_transact || 0;
             
             const aveSales = totalSales / totalTrans;
-            const salesTax = totalSales * (12 % 100);
+            const salesTax = totalSales * (12 / 100);
             const netSale = totalSales - salesTax;
 
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
-            document.getElementById("total-sale-summary").textContent = ` PHP ${totalSales.toFixed(2)}`;
+            document.getElementById("total-sale-summary").textContent = ` PHP ${totalSales}`;
             document.getElementById("total-sale-transact").textContent = `${totalTrans}`;
             document.getElementById("ave-sales-summary").textContent = `PHP ${aveSales}`;
             document.getElementById("vat-tax-summary").textContent = `PHP ${salesTax}`;
