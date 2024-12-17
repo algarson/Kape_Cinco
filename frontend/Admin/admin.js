@@ -1185,9 +1185,7 @@ async function getSummaryLog() {
 function openSummaryLogModal() {
     getSummaryLog();
     const modal = document.getElementById("summaryLogModal");
-    const modal2 = document.getElementById("summarylogmodaldate");
-    modal.style.display = "block";
-    modal2.style.display = "none";
+    modal.style.display = "block"; // Show the modal
 }
 
 // Function to close the Summary Log Modal
@@ -1198,12 +1196,12 @@ function closeSummaryLogModal() {
 
 // Function to open summary log date modal
 function opensummarylogmodaldate() {
-    const modal = document.getElementById("summarylogmodaldate");
+    const modal = document.getElementById("summarylogmodaldate")
     modal.style.display = "block";
 }
 // Function to close the summary log date modal
 function closesummarylogmodaldate () {
-    const modal = document.getElementById("summarylogmodaldate");
+    const modal = document.getElementById("summarylogmodaldate")
     modal.style.display = "none";
 }
 
