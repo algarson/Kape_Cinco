@@ -196,8 +196,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.querySelectorAll('#inventoryTable tbody tr').forEach(row => {
             const itemCategory = row.getAttribute('data-category');
             const cells = row.cells;
-
-            console.log(itemCategory);
     
             // Show/hide the row based on the category
             row.style.display = itemCategory === category ? '' : 'none';
