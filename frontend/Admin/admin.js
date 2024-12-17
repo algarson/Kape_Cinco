@@ -173,86 +173,75 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     function filterItems(category) {
-        const descriptionHeader = document.querySelector('.description-header');
-        const drinkTypeHeader = document.querySelector('.drinktype-header');
-
+        const headers = {
+            Drinks: {
+                show: ['.drinktype-header'], // Headers to show
+                hide: ['.description-header'], // Headers to hide
+                showCells: [2], // Cell indices to show for "Drinks"
+                hideCells: [4]  // Cell indices to hide for "Drinks"
+            },
+            Foods: {
+                show: ['.description-header'],
+                hide: ['.drinktype-header'],
+                showCells: [4],
+                hideCells: [2]
+            }
+        };
+    
+        // Apply header visibility
+        headers[category].show.forEach(selector => document.querySelector(selector).style.display = '');
+        headers[category].hide.forEach(selector => document.querySelector(selector).style.display = 'none');
+    
+        // Loop through all rows in the table body
         document.querySelectorAll('#inventoryTable tbody tr').forEach(row => {
-            const cells = row.cells;
             const itemCategory = row.getAttribute('data-category');
-
-            // Check if the row has enough cells
-            if (!cells[2] || !cells[4]) {
-                // Skip rows that don't have the required cells
-                return;
-            }
-
-            if (category === 'Drinks') {
-                drinkTypeHeader.style.display = '';
-                descriptionHeader.style.display = 'none';
-                cells[4].style.display = 'none'; 
-                cells[2].style.display = '';     
-
-                row.style.display = itemCategory === 'Drinks' ? '' : 'none';
-            } else {
-                descriptionHeader.style.display = '';
-                cells[4].style.display = '';     
-
-                row.style.display = itemCategory === 'Foods' ? '' : 'none';
-            }
+            const cells = row.cells;
+    
+            // Show/hide the row based on the category
+            row.style.display = itemCategory === category ? '' : 'none';
+    
+            // Toggle cell visibility
+            headers[category].showCells.forEach(index => {
+                if (cells[index]) cells[index].style.display = ''; // Show specific cells
+            });
+            headers[category].hideCells.forEach(index => {
+                if (cells[index]) cells[index].style.display = 'none'; // Hide specific cells
+            });
         });
     }
+    
+
     // Function for filtering roles 
     function filterRole(category) {
-        const CashierSaleHeader = document.querySelector('.CashierSale-header');
-        const CashierTransHeader = document.querySelector('.CashierTrans-header');
-        const CashierRemitHeader = document.querySelector('.CashierRemit-header');
-        const CashierDiscHeader = document.querySelector('.CashierDisc-header');
-        
-
+        const headers = {
+            Cashier: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+            Admin: []
+        };
+    
+        // Select all rows within the table body
         document.querySelectorAll('#LogTable tbody tr').forEach(row => {
-            const cells = row.cells;
-            const roleCategory = row.getAttribute('role-category');
-            console.log(roleCategory);
-
-            // // Check if the row has enough cells
-            // if (!cells[2] || !cells[3] || !cells[4] || !cells[5]) {
-            // // Skip rows that don't have the required cells
-            //     return;
-            // }
-            // Hide Cashier headers initially
-            if (category === 'Cashier') {
-                CashierSaleHeader.style.display = '';
-                CashierTransHeader.style.display = '';
-                CashierRemitHeader.style.display = '';
-                CashierDiscHeader.style.display = '';
-
-                // Show the row only if it matches the "Cashier" category
-                row.style.display = roleCategory === 'Cashier' ? '' : 'none';
-
-                // Show cells 2, 3, 4, 5 (Cashier details) for "Cashier"
-                if (roleCategory === 'Cashier') {
-                    cells[2].style.display = '';
-                    cells[3].style.display = '';
-                    cells[4].style.display = '';
-                    cells[5].style.display = '';
-                }
-            } else { // Admin category
-                CashierSaleHeader.style.display = 'none';
-                CashierTransHeader.style.display = 'none';
-                CashierRemitHeader.style.display = 'none';
-                CashierDiscHeader.style.display = 'none';
-
-                // Show the row only if it matches the "Admin" category
-                row.style.display = roleCategory === 'Admin' ? '' : 'none';
-
-                // Hide cells 2, 3, 4, 5 (Cashier details) for "Admin"
-                cells[2].style.display = 'none';
-                cells[3].style.display = 'none';
-                cells[4].style.display = 'none';
-                cells[5].style.display = 'none';
+            const roleCategory = row.getAttribute('role-category'); // Get the role-category attribute
+    
+            // Show or hide rows based on the selected role
+            if (roleCategory === category) {
+                row.style.display = ''; // Show row
+            } else {
+                row.style.display = 'none'; // Hide row
             }
         });
+    
+        // Handle header visibility
+        if (category === 'Cashier') {
+            headers.Cashier.forEach(headerSelector => {
+                document.querySelector(headerSelector).style.display = ''; // Show headers
+            });
+        } else {
+            headers.Cashier.forEach(headerSelector => {
+                document.querySelector(headerSelector).style.display = 'none'; // Hide headers
+            });
+        }
     }
+    
 
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -403,7 +392,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     
         // Extract formatted date and time
         const timeInFormatted = formatDateTime(item.time_in);
-        const timeOutFormatted = formatDateTime(item.time_out);
     
         // Date cell (from time_in)
         const dateCell = document.createElement('td');
