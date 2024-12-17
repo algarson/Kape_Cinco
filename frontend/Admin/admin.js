@@ -1026,7 +1026,7 @@ async function getSummaryLog() {
             
             const totalSales = data.data.total_sales || 0;
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
-            document.getElementById("sale-summary").textContent = ` PHP ${totalSales}`;
+            document.getElementById("total-sale-summary").textContent = ` PHP ${totalSales}`;
         } else if (data.error) {
             // Handle errors sent from the backend
             alert(data.error);

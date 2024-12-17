@@ -212,20 +212,56 @@
         <div id="summaryLogModal" class="modal" style="display: none;">
             <div class="summaryLogModal-content">
                 <span class="close-button">&times;</span>
-                <h2>Summary Logs Date</h2>
+                <h2>Summary Report</h2>
                 <p id="date-summary">December 17, 2024</p>
+                <p>Store Name: Kape Cinco</p>
                 <div id="summaryLogContent">
                     <!-- The content for the summary logs will be dynamically populated here -->
                      <div class="summaryLog-Container">
                         <table id="Summary-Table">
-                            <thead >
+                            <thead>
                                 <tr>
-                                    <th>Sales Summary</th>
                                     <th></th>
                                 </tr>
                                 <tr>
+                                    <th>Employee Name</th>
+                                    <th>Transaction Processed</th>
+                                    <th>Total Sales</th>
+                                </tr>
+                                
+                            </thead>
+                            <thead >
+                                <tr>
+                                    <th>Sales Overview</th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>Metrics</td>
+                                    <td>Value</td>
+                                </tr>
+                                <tr>
                                     <td>Total Sales</td>
-                                    <td id="sale-summary"></td>
+                                    <td id="total-sale-summary"></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Sales</td>
+                                    <td id="total-sale-transact"></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Sales</td>
+                                    <td id="ave-sales-summary"></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Sales</td>
+                                    <td id="total-discount-summary"></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Sales</td>
+                                    <td id="vat-tax-summary"></td>
+                                </tr>
+                                <tr>
+                                    <td>Total Sales</td>
+                                    <td id="net-sale-summary"></td>
                                 </tr>
                             </thead>
                             <thead id="most-frequent">
@@ -235,12 +271,24 @@
                                 </tr>
                                 <tr>
                                     <td>Top Selling Products</td>
-                                    <td>Total Transaction</td>
+                                    <td>Quantity Sold</td>
                                 </tr>
                             </thead>
                             <tbody id="performance-data">
                                 <!-- Items will be dynamically generated here -->
                             </tbody>
+
+                            <thead id="employee-performance">
+                                <tr>
+                                    <th>Employee Performance</th>
+                                </tr>
+                                <tr>
+                                    <th>Employee Name</th>
+                                    <th>Transaction Processed</th>
+                                    <th>Total Sales</th>
+                                </tr>
+                                
+                            </thead>
                         </table>    
                      </div>
                      <button class="Print-Button" onclick="window.print()">Print Report</button>
