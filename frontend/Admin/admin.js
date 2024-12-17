@@ -230,6 +230,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         // Select all rows within the table body
         document.querySelectorAll('#LogTable tbody tr').forEach(row => {
             const roleCategory = row.getAttribute('role-category'); // Get the role-category attribute
+            const cells = row.cells;
 
             // Show or hide rows based on the selected role
             if (roleCategory === category) {
@@ -238,6 +239,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             } else {
                 row.style.display = 'none'; // Hide row
             }
+
+            row.style.display = roleCategory === category ? '' : 'none';
 
             headers[category].showCells.forEach(index => {
                 if (cells[index]) cells[index].style.display = ''; // Show specific cells
