@@ -196,6 +196,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.querySelectorAll('#inventoryTable tbody tr').forEach(row => {
             const itemCategory = row.getAttribute('data-category');
             const cells = row.cells;
+
+            console.log(itemCategory);
     
             // Show/hide the row based on the category
             row.style.display = itemCategory === category ? '' : 'none';
@@ -219,12 +221,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         };
 
         // Select all rows within the table body
-        document.querySelectorAll('button').forEach(row => {
+        document.querySelectorAll('#LogTable tbody tr').forEach(row => {
             const roleCategory = row.getAttribute('role-category'); // Get the role-category attribute
 
             console.log(roleCategory);
             // Show or hide rows based on the selected role
-            if ('Admin' === category) {
+            if (roleCategory === category) {
                 row.style.display = ''; // Show row
             } else {
                 row.style.display = 'none'; // Hide row
