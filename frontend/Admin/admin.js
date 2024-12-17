@@ -1187,7 +1187,7 @@ function openSummaryLogModal() {
     const modal = document.getElementById("summaryLogModal");
     const modal2 = document.getElementById("summarylogmodaldate")
     modal.style.display = "block";
-    modal2.style.display = "block"; // Show the modal
+    modal2.style.display = "none"; // Show the modal
 }
 
 // Function to close the Summary Log Modal
