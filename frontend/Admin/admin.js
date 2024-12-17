@@ -1028,7 +1028,6 @@ async function getSummaryLog() {
             const totalSales = data.data.total_sales || 0;
             const totalTrans = data.data.total_transact || 0;
             
-            const 
             const aveSales = totalSales / totalTrans;
             const salesTax = totalSales / (12 % 100);
             const netSale = totalSales - salesTax;
