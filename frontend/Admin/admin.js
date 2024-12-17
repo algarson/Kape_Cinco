@@ -223,8 +223,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
         };
 
-        headers[category].show.forEach(selector => document.querySelector(selector).style.display = '');
-        headers[category].hide.forEach(selector => document.querySelector(selector).style.display = 'none');
+        //headers[category].show.forEach(selector => document.querySelector(selector).style.display = '');
+        //headers[category].hide.forEach(selector => document.querySelector(selector).style.display = 'none');
     
 
         // Select all rows within the table body
