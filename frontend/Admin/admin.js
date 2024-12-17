@@ -213,11 +213,19 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Function for filtering roles 
     function filterRole(category) {
         const headers = {
-            Cashier: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+            Cashier: {
+                show: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+                showCells: [2,3,4,5],
+            },
             Admin: {
-                hideCell: [2,3,4,5]
+                hide: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+                hideCell: [2,3,4,5],
             }
         };
+
+        headers[category].show.forEach(selector => document.querySelector(selector).style.display = '');
+        headers[category].hide.forEach(selector => document.querySelector(selector).style.display = 'none');
+    
 
         // Select all rows within the table body
         document.querySelectorAll('#LogTable tbody tr').forEach(row => {
@@ -231,6 +239,9 @@ document.addEventListener("DOMContentLoaded", async function () {
                 row.style.display = 'none'; // Hide row
             }
 
+            headers[category].showCells.forEach(index => {
+                if (cells[index]) cells[index].style.display = ''; // Show specific cells
+            });
             headers[category].hideCells.forEach(index => {
                 if (cells[index]) cells[index].style.display = 'none'; // Hide specific cells
             });
