@@ -217,11 +217,14 @@ document.addEventListener("DOMContentLoaded", async function () {
                 show: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
                 hide: [],
                 showCells: [2,3,4,5],
+                hideCells: [],
             },
             Admin: {
                 show: [],
                 hide: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+                showCells: [],
                 hideCells: [2,3,4,5],
+
             }
         };
 
