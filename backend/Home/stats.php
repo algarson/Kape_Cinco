@@ -2,9 +2,10 @@
 
 include '../server.php';
 
-    $statSql = $statSql = "SELECT 
+    $statSql = $statSql = "
+                            set time_zone = '+08:00';
+                            SELECT 
                                 COUNT(order_number) AS total_orders, 
-                                CURDATE() AS corrected_date, 
                                 SUM(order_total_amount) AS Sales 
                             FROM `order_number_table` 
                             WHERE `order_status` = 'Completed' 
