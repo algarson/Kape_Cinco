@@ -1281,48 +1281,5 @@ function closesummarylogmodaldate () {
 document.querySelector(".summarylogdate-button").addEventListener("click", opensummarylogmodaldate);
 
 
-//LOG EMPLOYEE MODAL
-
-document.addEventListener("DOMContentLoaded", function () {
-    const tableBody = document.querySelector("#LogTable tbody");
-
-    // Event listener for row clicks
-    tableBody.addEventListener("click", handleRowClick);
-
-    // Get the modal elements
-    const modal = document.getElementById("myModal");
-    const modalOverlay = document.getElementById("modalOverlay");
-    const closeButton = document.querySelector(".close-button");
-
-    // Handle row click
-    function handleRowClick(event) {
-        const row = event.target.closest("tr");
-        if (row) {
-            // Get data from clicked row
-            const date = row.getAttribute("data-date");
-
-            // Populate the modal with data from the clicked row
-            document.getElementById("modalDate").textContent = date;
-
-            // Show the modal and overlay
-            modal.style.display = "block";
-            modalOverlay.style.display = "block";
-        }
-    }
-
-    // Close the modal when close button is clicked
-    closeButton.addEventListener("click", function () {
-        // Hide modal and overlay
-        modal.style.display = "none";
-        modalOverlay.style.display = "none";
-    });
-    /*
-    // Close the modal when clicking on the overlay (optional)
-    modalOverlay.addEventListener("click", function () {
-        modal.style.display = "none";
-        modalOverlay.style.display = "none";
-    });*/
-});
-
 
 
