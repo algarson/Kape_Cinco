@@ -226,12 +226,14 @@ document.addEventListener("DOMContentLoaded", async function () {
             // Show or hide rows based on the selected role
             if (roleCategory === category) {
                 row.style.display = ''; // Show row
-                headers[category].hideCells.forEach(index => {
-                    if (cells[index]) cells[index].style.display = 'none'; // Hide specific cells
-                });
+               
             } else {
                 row.style.display = 'none'; // Hide row
             }
+
+            headers[category].hideCells.forEach(index => {
+                if (cells[index]) cells[index].style.display = 'none'; // Hide specific cells
+            });
         });
 
         // Handle header visibility
