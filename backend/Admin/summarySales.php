@@ -38,13 +38,13 @@ if (isset($_SESSION['user'])) {
             $result = $stmt1->get_result();
             if ($result && $row = $result->fetch_assoc()) {
                 $total_sales = $row['total_sales'];
-                $total_trans = $row['total_transact'];
+                $total_transact = $row['total_transact'];
 
                 echo json_encode([
                     'success' => true,
                     'data' => [
                         'total_sales' => $total_sales,
-                        'total_trans' => $total_trans,
+                        'total_transact' => $total_transact,
                     ]
                 ]);
             } else {
