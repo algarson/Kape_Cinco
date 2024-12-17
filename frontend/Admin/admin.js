@@ -1024,6 +1024,7 @@ async function getSummaryLog() {
             getSummaryPerformance();
             // Example: Update the UI with the total sales
             
+
             const totalSales = data.data.total_sales || 0;
             const totalTrans = data.data.total_trans || 0
 
@@ -1031,6 +1032,7 @@ async function getSummaryLog() {
             const salesTax = totalSales / (12%100);
             const netSale = totalSales - salesTax;
 
+            console.log(totalTrans);
             document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
             document.getElementById("total-sale-summary").textContent = ` PHP ${totalSales}`;
             document.getElementById("ave-sales-summary").textContent = `PHP ${aveSales}`;

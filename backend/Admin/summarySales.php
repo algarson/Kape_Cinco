@@ -20,8 +20,8 @@ if (isset($_SESSION['user'])) {
         error_log("Received setDate2: " . $setDate2);
 
         $sql = "SELECT 
-                    COALESCE(SUM(order_total_amount), 0) AS total_sales,
-                    COALESCE(COUNT(order_number), 0) AS total_transact
+                    SUM(order_total_amount) AS total_sales,
+                    COUNT(order_number) AS total_transact
                 FROM `order_number_table`
                 WHERE order_status = 'Completed' 
                 AND DATE(order_date) BETWEEN ? AND ?";
