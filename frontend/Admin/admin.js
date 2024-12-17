@@ -1025,7 +1025,7 @@ async function getSummaryLog() {
             // Example: Update the UI with the total sales
             
             const totalSales = data.data.total_sales || 0;
-            const totalTrans = data.data.total_transact || 0
+            const totalTrans = data.data.total_trans || 0
 
             const aveSales = totalSales / totalTrans;
             const salesTax = totalSales / (12%100);
