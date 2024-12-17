@@ -3,7 +3,7 @@
 include '../server.php';
 
     $statSql = $statSql = "
-                            SET time_zone = '+08:00';
+                            SET time_zone = '+08:00'
                             SELECT 
                                 COUNT(order_number) AS total_orders, 
                                 SUM(order_total_amount) AS Sales 
