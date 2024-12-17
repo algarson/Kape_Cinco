@@ -158,8 +158,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             const row = createLogsTableRow(item);
             logsTableBody.appendChild(row);
         });
-        console.log(allLogs);
-        filterRole('Cashier'); 
+        //console.log(allLogs);
+        //filterRole('Cashier'); 
     }
 
     async function generateAllUsers() {
