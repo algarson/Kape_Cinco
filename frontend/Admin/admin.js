@@ -1185,7 +1185,9 @@ async function getSummaryLog() {
 function openSummaryLogModal() {
     getSummaryLog();
     const modal = document.getElementById("summaryLogModal");
-    modal.style.display = "block"; // Show the modal
+    const modal2 = document.getElementById("summarylogmodaldate")
+    modal.style.display = "block";
+    modal2.style.display = "block"; // Show the modal
 }
 
 // Function to close the Summary Log Modal
