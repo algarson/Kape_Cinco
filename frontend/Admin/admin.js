@@ -417,7 +417,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         row.appendChild(saleCell);
 
         const transCell = document.createElement('td');
-        transCell.textContent = `${item.total_trans}` || 0;
+        transCell.textContent = `${item.total_trans || 0}` ;
         row.appendChild(transCell);
 
         const remitCell = document.createElement('td');
