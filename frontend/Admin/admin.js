@@ -387,20 +387,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         row.appendChild(nameCell);
 
         const saleCell = document.createElement('td');
-        nameCell.textContent = `₱${Number(item.total_sale).toFixed(2)}`;
-        row.appendChild(nameCell);
+        saleCell.textContent = `₱${Number(item.total_sale).toFixed(2)}`;
+        row.appendChild(saleCell);
 
         const transCell = document.createElement('td');
-        nameCell.textContent = `${item.total_trans}`;
-        row.appendChild(nameCell);
+        transCell.textContent = `${item.total_trans}`;
+        row.appendChild(transCell);
 
         const remitCell = document.createElement('td');
-        nameCell.textContent = `₱${Number(item.total_remit).toFixed(2)}`;
-        row.appendChild(nameCell);
+        remitCell.textContent = `₱${Number(item.total_remit).toFixed(2)}`;
+        row.appendChild(remitCell);
 
         const discCell = document.createElement('td');
-        nameCell.textContent = `₱${Number(item.total_disc).toFixed(2)}`;
-        row.appendChild(nameCell);
+        discCell.textContent = `₱${Number(item.total_disc).toFixed(2)}`;
+        row.appendChild(discCell);
     
         // Extract formatted date and time
         const timeInFormatted = formatDateTime(item.time_in);
