@@ -417,11 +417,20 @@ body {
     border: 2px solid red;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
 }
 
 #confirm-remit-amount{
+    padding: 5px 10px;
+    background-color: #5c4033;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+#cancel-remit-amount{
     padding: 5px 10px;
     background-color: #5c4033;
     color: #fff;
