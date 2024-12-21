@@ -412,9 +412,11 @@ body {
     font-weight: bold;
     justify-content: space-between;
 }
+.modal-content{
+    background-color: #5c4033;
+}
 
 .logout-modal-div{
-    border: 2px solid red;
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -423,7 +425,7 @@ body {
 
 #confirm-remit-amount{
     padding: 5px 10px;
-    background-color: #5c4033;
+    background-color: #54c95d;
     color: #fff;
     border: none;
     border-radius: 20px;
