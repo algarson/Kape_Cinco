@@ -376,8 +376,8 @@ body {
 
 #user-profile-modal .modal-content{
     width: 500px;
+    height: 400px;
     bottom: 30px;
-
 }
 
 .user-profile-div{
@@ -400,7 +400,10 @@ body {
 }
 
 .profile-info{
-  display: inline;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-info1{
