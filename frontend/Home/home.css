@@ -408,7 +408,7 @@ body {
     background: #D9CBBD;
     border-radius: 20px;
 }
-.modal-content-logout{
+#Remit-modal .modal-content {
     background-color: #f5e3d3;
     margin: auto;
     padding: 20px;
@@ -419,6 +419,8 @@ body {
     border-radius: 10px;
     text-align: left;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .modal-content .remit-section{
