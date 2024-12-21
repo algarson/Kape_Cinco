@@ -413,10 +413,13 @@ body {
     justify-content: space-between;
 }
 .modal-content h2{
-    background-color: #5c4033;
-    color: white;
+    color: #5c4033;
+    font-weight: 600;
 }
-
+.logout-modal-line{
+    width: 100%;
+    background-color: #5c4033;
+}
 .logout-modal-div{
     display: flex;
     flex-direction: row;
