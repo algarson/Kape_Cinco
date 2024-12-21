@@ -412,7 +412,7 @@ body {
     font-weight: bold;
     justify-content: space-between;
 }
-.modal-content{
+.modal-content h2{
     background-color: #5c4033;
 }
 
