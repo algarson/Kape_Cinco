@@ -414,6 +414,7 @@ body {
 }
 .modal-content h2{
     background-color: #5c4033;
+    color: white;
 }
 
 .logout-modal-div{
