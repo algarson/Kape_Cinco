@@ -312,7 +312,7 @@ body {
 
 .modal-content h2 {
     color: #5c4033;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
@@ -415,16 +415,19 @@ body {
 .modal-content h2{
     color: #5c4033;
     font-weight: 600;
+    display: flex;
 }
 .logout-modal-line{
     width: 100%;
-    background-color: #5c4033;
+    height: 1px;
+    border: 1px solid #5c4033;
 }
 .logout-modal-div{
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: center;
     align-items: center;
+    gap: 5px;
 }
 
 #confirm-remit-amount{
