@@ -47,10 +47,13 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.location.href = `/backend/Login/home.php`;
                     } else {
                         window.location.href = `/backend/${redirectPage}`;
+                        buttonDisable();
                     }
+
                 } else {
                     if (role === 'Admin') {
                         window.location.href = `/backend/Login/admin.php`;
+                        buttonDisable();
                     } else if (role === 'Cashier') {
                         window.location.href = `/backend/Login/home.php`;
                     } else {
