@@ -440,8 +440,8 @@ body {
     margin-top: 10px;
     font-size: 12px;
 }
-#confirm-remmit-amount button:hover{
-    background-color: #2cce3a;
+#confirm-remmit-amount:hover{
+    background-color: #1c8d25;
 }
 #cancel-remit-amount{
     padding: 8px 15px;
@@ -453,7 +453,7 @@ body {
     margin-top: 10px;
     font-size: 12px;
 }
-#cancel-remit-amount{
+#cancel-remit-amount:hover{
     background-color: #442d23;
 }
 
