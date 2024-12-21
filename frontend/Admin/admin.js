@@ -213,23 +213,49 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Function for filtering roles 
     function filterRole(category) {
         const headers = {
-            Cashier: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
-            Admin: []
+            Cashier: {
+                show: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+                hide: [],
+                showCells: [1,2,3,4],
+                hideCells: [],
+            },
+            Admin: {
+                show: [],
+                hide: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+                showCells: [],
+                hideCells: [1,2,3,4],
+
+            }
         };
+
+        headers[category].show.forEach(selector => document.querySelector(selector).style.display = '');
+        headers[category].hide.forEach(selector => document.querySelector(selector).style.display = 'none');
+    
 
         // Select all rows within the table body
         document.querySelectorAll('#LogTable tbody tr').forEach(row => {
             const roleCategory = row.getAttribute('role-category'); // Get the role-category attribute
+            const cells = row.cells;
 
             // Show or hide rows based on the selected role
             if (roleCategory === category) {
                 row.style.display = ''; // Show row
+               
             } else {
                 row.style.display = 'none'; // Hide row
             }
+
+            row.style.display = roleCategory === category ? '' : 'none';
+
+            headers[category].showCells.forEach(index => {
+                if (cells[index]) cells[index].style.display = ''; // Show specific cells
+            });
+            headers[category].hideCells.forEach(index => {
+                if (cells[index]) cells[index].style.display = 'none'; // Hide specific cells
+            });
         });
 
-        // Handle header visibility
+        /* Handle header visibility
         if (category === 'Cashier') {
             headers.Cashier.forEach(headerSelector => {
                 document.querySelector(headerSelector).style.display = ''; // Show headers
@@ -238,7 +264,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             headers.Cashier.forEach(headerSelector => {
                 document.querySelector(headerSelector).style.display = 'none'; // Hide headers
             });
-        }
+        }*/
     }
 
     categoryButtons.forEach(button => {
@@ -385,6 +411,22 @@ document.addEventListener("DOMContentLoaded", async function () {
         const nameCell = document.createElement('td');
         nameCell.textContent = `${item.user_firstname} ${item.user_lastname}`;
         row.appendChild(nameCell);
+
+        const saleCell = document.createElement('td');
+        saleCell.textContent = `₱${Number(item.total_sale).toFixed(2)}`;
+        row.appendChild(saleCell);
+
+        const transCell = document.createElement('td');
+        transCell.textContent = `${item.total_trans || 0}` ;
+        row.appendChild(transCell);
+
+        const remitCell = document.createElement('td');
+        remitCell.textContent = `₱${Number(item.total_remit).toFixed(2)}`;
+        row.appendChild(remitCell);
+
+        const discCell = document.createElement('td');
+        discCell.textContent = `₱${Number(item.total_disc).toFixed(2)}`;
+        row.appendChild(discCell);
     
         // Extract formatted date and time
         const timeInFormatted = formatDateTime(item.time_in);
@@ -414,6 +456,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         const totalShiftCell = document.createElement('td');
         totalShiftCell.textContent = item.total_shift_duration; 
         row.appendChild(totalShiftCell);
+
+        if (item.user_role === 'Cashier') {
+            row.setAttribute('role-category', 'Cashier');
+        } else {
+            row.setAttribute('role-category', 'Admin');
+        }
     
         return row;
     }
@@ -1272,49 +1320,6 @@ function closesummarylogmodaldate () {
 // add event listener to the summary log date modal
 document.querySelector(".summarylogdate-button").addEventListener("click", opensummarylogmodaldate);
 
-
-//LOG EMPLOYEE MODAL
-
-document.addEventListener("DOMContentLoaded", function () {
-    const tableBody = document.querySelector("#LogTable tbody");
-
-    // Event listener for row clicks
-    tableBody.addEventListener("click", handleRowClick);
-
-    // Get the modal elements
-    const modal = document.getElementById("myModal");
-    const modalOverlay = document.getElementById("modalOverlay");
-    const closeButton = document.querySelector(".close-button");
-
-    // Handle row click
-    function handleRowClick(event) {
-        const row = event.target.closest("tr");
-        if (row) {
-            // Get data from clicked row
-            const date = row.getAttribute("data-date");
-
-            // Populate the modal with data from the clicked row
-            document.getElementById("modalDate").textContent = date;
-
-            // Show the modal and overlay
-            modal.style.display = "block";
-            modalOverlay.style.display = "block";
-        }
-    }
-
-    // Close the modal when close button is clicked
-    closeButton.addEventListener("click", function () {
-        // Hide modal and overlay
-        modal.style.display = "none";
-        modalOverlay.style.display = "none";
-    });
-    /*
-    // Close the modal when clicking on the overlay (optional)
-    modalOverlay.addEventListener("click", function () {
-        modal.style.display = "none";
-        modalOverlay.style.display = "none";
-    });*/
-});
 
 
 

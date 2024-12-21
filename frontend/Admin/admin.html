@@ -150,8 +150,8 @@
 
         <div id="logSection" style="display: none;">
             <nav class="log-nav">
-                <button class="active" role-category="Cashier">Cashier</button>
-                <button role-category="Admin">Admin</button>
+                <button  class="active" role-category="Cashier">Cashier</button>
+                <button  role-category="Admin">Admin</button>
             </nav>
             <button class="summarylogdate-button" onclick="opensummarylogmodaldate()">Summary Logs</button>
             <div class="logSection-container">
@@ -159,11 +159,11 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Date</th>
                             <th class="CashierSale-header">Total Sale</th>
                             <th class="CashierTrans-header">Total Transactions</th>
                             <th class="CashierRemit-header">Total Remit</th>
                             <th class="CashierDisc-header">Total Discrepancies</th>
+                            <th>Date</th>
                             <th>Time in</th>
                             <th>Time out</th>
                             <th>Total Shift Duration</th>
@@ -174,33 +174,6 @@
                     </tbody>
                 </table>
             </div>
-            
-            <!-- Modal -->
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close-button">&times;</span>
-                    <h3>Details</h3>
-                    <p><strong>Date: 11/24/24</strong> <span id="modalDate"></span></p>
-                    <table id="LogTable">
-                        <thead>
-                            <tr>
-                                <th>Employee Name</th>
-                                <th>Sales Revenue</th>
-                                <th>Transaction</th>
-                                <th>Discrepancies</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-name="User 1" data-timein="10:00 AM" data-timeout="12:00 PM">
-                                <td>Johny Sins</td>
-                                <td>5000</td>
-                                <td>15</td>
-                                <td>0</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>  
         </div>
 
         <div id="summarylogmodaldate" class="modal" style="display: none;">
