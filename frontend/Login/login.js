@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Add event listener for login form submission
     const loginForm = document.getElementById('login-form');
-    loginForm.addEventListener('submit', validateLogin);
+    loginForm.addEventListener('submit', validateLogin, buttonDisable);
 
     function validateLogin(event) {
         event.preventDefault();
@@ -62,6 +62,12 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
         .catch(error => console.error('Error:', error));
+    }
+
+    function buttonDisable (){
+        const Dbutton = document.getElementById('login-button');
+        Dbutton.disabled = true;
+        Dbutton.textContent = "Disabled";
     }
     /*
     // Add event listeners for registration form show/hide
