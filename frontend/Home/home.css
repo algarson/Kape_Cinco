@@ -408,6 +408,9 @@ body {
     background: #D9CBBD;
     border-radius: 20px;
 }
+.modal-content #Remit-modal{
+    height: 200px;
+}
 
 .modal-content .remit-section{
     display: flex;
