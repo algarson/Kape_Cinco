@@ -408,8 +408,17 @@ body {
     background: #D9CBBD;
     border-radius: 20px;
 }
-.modal-content #Remit-modal{
-    height: 200px;
+.modal-content-logout{
+    background-color: #f5e3d3;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #5c4033;
+    width: 80%;
+    max-width: 400px;
+    height: 210px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .modal-content .remit-section{
