@@ -305,14 +305,17 @@ body {
     border: 1px solid #5c4033;
     width: 80%;
     max-width: 400px;
+    height: 400px;
     border-radius: 10px;
     text-align: left;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .modal-content h2 {
     color: #5c4033;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
@@ -373,8 +376,8 @@ body {
 
 #user-profile-modal .modal-content{
     width: 500px;
+    height: 280px;
     bottom: 30px;
-
 }
 
 .user-profile-div{
@@ -397,13 +400,34 @@ body {
 }
 
 .profile-info{
-  display: inline;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .profile-info1{
+    width: 100%;
     padding: 5px;
     background: #D9CBBD;
     border-radius: 20px;
+    display: flex;
+    justify-content: center;
+}
+#Remit-modal .modal-content {
+    background-color: #f5e3d3;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #5c4033;
+    width: 80%;
+    max-width: 400px;
+    height: 210px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .modal-content .remit-section{
@@ -412,15 +436,49 @@ body {
     font-weight: bold;
     justify-content: space-between;
 }
+.modal-content h2{
+    color: #5c4033;
+    font-weight: 600;
+    display: flex;
+}
+.modal-line{
+    width: 100%;
+    height: 1px;
+    border: 1px solid #5c4033;
+}
+.logout-modal-div{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
 
 #confirm-remit-amount{
-    padding: 5px 10px;
+    padding: 8px 15px;
+    background-color: #54c95d;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 12px;
+}
+#confirm-remit-amount:hover{
+    background-color: #1c8d25;
+}
+#cancel-remit-amount{
+    padding: 8px 15px;
     background-color: #5c4033;
     color: #fff;
     border: none;
     border-radius: 20px;
     cursor: pointer;
     margin-top: 10px;
+    font-size: 12px;
+}
+#cancel-remit-amount:hover{
+    background-color: #442d23;
 }
 
 #remit-amount{
