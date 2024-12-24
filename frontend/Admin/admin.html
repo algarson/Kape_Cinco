@@ -159,11 +159,11 @@
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Date</th>
                             <th class="CashierSale-header">Total Sale</th>
                             <th class="CashierTrans-header">Total Transactions</th>
                             <th class="CashierRemit-header">Total Remit</th>
                             <th class="CashierDisc-header">Total Discrepancies</th>
+                            <th>Date</th>
                             <th>Time in</th>
                             <th>Time out</th>
                             <th>Total Shift Duration</th>
@@ -173,34 +173,7 @@
                        
                     </tbody>
                 </table>
-            </div>
-            
-            <!-- Modal -->
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <span class="close-button">&times;</span>
-                    <h3>Details</h3>
-                    <p><strong>Date: 11/24/24</strong> <span id="modalDate"></span></p>
-                    <table id="LogTable">
-                        <thead>
-                            <tr>
-                                <th>Employee Name</th>
-                                <th>Sales Revenue</th>
-                                <th>Transaction</th>
-                                <th>Discrepancies</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-name="User 1" data-timein="10:00 AM" data-timeout="12:00 PM">
-                                <td>Johny Sins</td>
-                                <td>5000</td>
-                                <td>15</td>
-                                <td>0</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>  
+            </div> 
         </div>
 
         <div id="summarylogmodaldate" class="modal" style="display: none;">
@@ -210,6 +183,7 @@
                 <div class="summarylogdate-container">
                     <h2>Please select a date for Summary Log</h2>
                     <input type="date" id="summary-datetimelocal">
+                    <input type="date" id="summary-datetimelocal2">
                     <button class="nextsummary-button" onclick="openSummaryLogModal()">Next</button>
                 </div>
             </div>
@@ -218,50 +192,81 @@
         <div id="summaryLogModal" class="modal" style="display: none;">
             <div class="summaryLogModal-content">
                 <span class="close-button">&times;</span>
-                <h2>Summary Logs</h2>
+                <h2>Summary Report</h2>
+                <p id="date-summary">December 17, 2024</p>
+                <p>Store Name: Kape Cinco</p>
                 <div id="summaryLogContent">
-                     The content for the summary logs will be dynamically populated here
+                    <!-- The content for the summary logs will be dynamically populated here -->
                      <div class="summaryLog-Container">
                         <table id="Summary-Table">
-                            <thead>
+                            <thead >
                                 <tr>
-                                    <th>Sales Summary</th>
+                                    <th>Sales Overview</th>
                                     <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>Metrics</td>
+                                    <td>Value</td>
                                 </tr>
                                 <tr>
                                     <td>Total Sales</td>
-                                    <td>10,000</td>
-                                </tr>
-                                <tr>
-                                    <td>Total Discount</td>
-                                    <td>128</td>
-
-                                </tr>
-                                <tr>
-                                    <td>Total Deducted Sales</td>
-                                    <td>9872</td>
-                                </tr>
-                            </thead>
-                            <thead>
-                                <tr>
-                                    <th>Sales Performance</th>
-                                    <th></th>
+                                    <td id="total-sale-summary"></td>
                                 </tr>
                                 <tr>
                                     <td>Total Transaction</td>
-                                    <td>25</td>
+                                    <td id="total-sale-transact"></td>
+                                </tr>
+                                <tr>
+                                    <td>Average Sale Value</td>
+                                    <td id="ave-sales-summary"></td>
+                                </tr>
+                               <!--<tr>
+                                    <td>Total Discount</td>
+                                    <td id="total-discount-summary"></td>
+                                </tr>--> 
+                                <tr>
+                                    <td>Sales Tax</td>
+                                    <td id="vat-tax-summary"></td>
+                                </tr>
+                                <tr>
+                                        <td>Net Sales</td>
+                                    <td id="net-sale-summary"></td>
+                                </tr>
+                            </thead>
+                            <thead id="most-frequent">
+                                <tr>
+                                    <th>Sales Performance</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                                 <tr>
                                     <td>Top Selling Products</td>
-                                    <td>Tapsilog</td>
+                                    <td>Quantity Sold</td>
                                 </tr>
                             </thead>
-                            <tbody id="tableBody">
-                                 Items will be dynamically generated here 
+                            <tbody id="performance-data">
+                                <!-- Items will be dynamically generated here -->
+                            </tbody>
+
+                            <thead id="employee-performance">
+                                <tr>
+                                    <th>Employee Performance</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                                <tr>
+                                    <td>Employee Name</td>
+                                    <td>Total Sales</td>
+                                    <td>Discrepancies</td>
+                                </tr>
+                                
+                            </thead>
+                            <tbody id="employee-data">
                             </tbody>
                         </table>    
                      </div>
-                     <button class="Print-Button">Print Report</button>
+                     <button class="Print-Button" onclick="window.print()">Print Report</button>
                 </div>
             </div>
         </div>

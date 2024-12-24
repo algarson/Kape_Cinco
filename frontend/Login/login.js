@@ -24,9 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function validateLogin(event) {
         event.preventDefault();
+        
+        const Dbutton = document.getElementById('login-button');
+        Dbutton.disabled = true;
+        Dbutton.textContent = "Disabled";
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
+
 
         const formData = new FormData();
         formData.append('username', username);
@@ -62,6 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             } else {
                 alert('Login failed: ' + (data.error || 'Invalid credentials.'));
+                Dbutton.disabled = false;
+                Dbutton.textContent = "Login";
             }
         })
         .catch(error => console.error('Error:', error));

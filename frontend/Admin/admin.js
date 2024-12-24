@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     const categoryButtons = document.querySelectorAll('.category-nav button');
     const RolecategoryButtons = document.querySelectorAll('.log-nav button');
-
     const updateModal = document.getElementById('updateModal');
     const addModal = document.getElementById('addModal');
     const deleteModal = document.getElementById('deleteModal');
@@ -211,37 +210,62 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
     
 
-    // Function for filtering roles 
-    function filterRole(category) {
-        const headers = {
-            Cashier: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
-            Admin: []
-        };
-    
-        // Select all rows within the table body
-        document.querySelectorAll('#LogTable tbody tr').forEach(row => {
-            const roleCategory = row.getAttribute('role-category'); // Get the role-category attribute
-            console.log(roleCategory);
-            // Show or hide rows based on the selected role
-            if (roleCategory === category) {
-                row.style.display = ''; // Show row
-            } else {
-                row.style.display = 'none'; // Hide row
-            }
-        });
-    
-        // Handle header visibility
-        if (category === 'Cashier') {
-            headers.Cashier.forEach(headerSelector => {
-                document.querySelector(headerSelector).style.display = ''; // Show headers
-            });
-        } else {
-            headers.Cashier.forEach(headerSelector => {
-                document.querySelector(headerSelector).style.display = 'none'; // Hide headers
-            });
+   // Function for filtering roles 
+   function filterRole(category) {
+    const headers = {
+        Cashier: {
+            show: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+            hide: [],
+            showCells: [1,2,3,4],
+            hideCells: [],
+        },
+        Admin: {
+            show: [],
+            hide: ['.CashierSale-header', '.CashierTrans-header', '.CashierRemit-header', '.CashierDisc-header'],
+            showCells: [],
+            hideCells: [1,2,3,4],
+
         }
-    }
-    
+    };
+
+    headers[category].show.forEach(selector => document.querySelector(selector).style.display = '');
+    headers[category].hide.forEach(selector => document.querySelector(selector).style.display = 'none');
+
+
+    // Select all rows within the table body
+    document.querySelectorAll('#LogTable tbody tr').forEach(row => {
+        const roleCategory = row.getAttribute('role-category'); // Get the role-category attribute
+        const cells = row.cells;
+
+        // Show or hide rows based on the selected role
+        if (roleCategory === category) {
+            row.style.display = ''; // Show row
+           
+        } else {
+            row.style.display = 'none'; // Hide row
+        }
+
+        row.style.display = roleCategory === category ? '' : 'none';
+
+        headers[category].showCells.forEach(index => {
+            if (cells[index]) cells[index].style.display = ''; // Show specific cells
+        });
+        headers[category].hideCells.forEach(index => {
+            if (cells[index]) cells[index].style.display = 'none'; // Hide specific cells
+        });
+    });
+
+    /* Handle header visibility
+    if (category === 'Cashier') {
+        headers.Cashier.forEach(headerSelector => {
+            document.querySelector(headerSelector).style.display = ''; // Show headers
+        });
+    } else {
+        headers.Cashier.forEach(headerSelector => {
+            document.querySelector(headerSelector).style.display = 'none'; // Hide headers
+        });
+    }*/
+}
 
     categoryButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -250,7 +274,6 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             const category = button.getAttribute('data-category');
             filterItems(category);
-
         });
     });
 
@@ -258,7 +281,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         button.addEventListener('click', () => {
             RolecategoryButtons.forEach(btn => btn.classList.remove('active'));
             button.classList.add('active');
-
             const category = button.getAttribute('role-category');
             filterRole(category);
         });
@@ -389,9 +411,26 @@ document.addEventListener("DOMContentLoaded", async function () {
         const nameCell = document.createElement('td');
         nameCell.textContent = `${item.user_firstname} ${item.user_lastname}`;
         row.appendChild(nameCell);
+
+        const saleCell = document.createElement('td');
+        saleCell.textContent = `₱${Number(item.total_sale).toFixed(2)}`;
+        row.appendChild(saleCell);
+
+        const transCell = document.createElement('td');
+        transCell.textContent = `${item.total_trans || 0}` ;
+        row.appendChild(transCell);
+
+        const remitCell = document.createElement('td');
+        remitCell.textContent = `₱${Number(item.total_remit).toFixed(2)}`;
+        row.appendChild(remitCell);
+
+        const discCell = document.createElement('td');
+        discCell.textContent = `₱${Number(item.total_disc).toFixed(2)}`;
+        row.appendChild(discCell);
     
         // Extract formatted date and time
         const timeInFormatted = formatDateTime(item.time_in);
+        const timeOutFormatted = formatDateTime(item.time_out);
     
         // Date cell (from time_in)
         const dateCell = document.createElement('td');
@@ -420,11 +459,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (item.user_role === 'Cashier') {
             row.setAttribute('role-category', 'Cashier');
-        }else{
+        } else {
             row.setAttribute('role-category', 'Admin');
         }
-        // console.log(item.user_role);
-
     
         return row;
     }
@@ -469,6 +506,12 @@ document.addEventListener("DOMContentLoaded", async function () {
         updateButton.addEventListener('click', () => openUpdateUserModal(item));
         updateCell.appendChild(updateButton);
         row.appendChild(updateCell);
+
+        if (item.user_role === 'Cashier') {
+            row.setAttribute('role-category', 'Cashier');
+        }else{
+            row.setAttribute('role-category', 'Admin');
+        }
     
         return row;
     }
@@ -973,6 +1016,8 @@ document.addEventListener("DOMContentLoaded", async function () {
         const yearly = await yearlySales();
         const YD = await yearlySalesDate();
 
+
+        
         switch (timeframe) {
             case 'weekly':
                 //for (i = 1; i>=4; i++){
@@ -1052,10 +1097,203 @@ document.addEventListener("DOMContentLoaded", async function () {
     inventoryLink.click();
 });
 
+async function getSummaryLog() {
+    // Get the selected date from the input field
+        
+    const setDate = document.getElementById("summary-datetimelocal").value;
+    const setDate2 = document.getElementById("summary-datetimelocal2").value;
+
+    if (!setDate) {
+        alert("Please select a date.");
+        return;
+    }
+
+    // Prepare the form data
+    const formData = new FormData();
+    formData.append('setDate', setDate);
+    formData.append('setDate2', setDate2);
+
+    try {
+        // Make the POST request
+        const response = await fetch('/backend/Admin/summarySales.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        // Parse JSON response
+        const data = await response.json();
+
+       
+
+        // Handle the response
+        if (data.success) {
+            getSummaryPerformance();
+            getEmployeePerformance();
+            // Example: Update the UI with the total sales
+            
+
+            const totalSales = data.data.total_sales || 0;
+            const totalTrans = data.data.total_transact || 0;
+            
+            const aveSales = totalSales / totalTrans;
+            const salesTax = totalSales * (12 / 100);
+            const netSale = totalSales - salesTax;
+
+            document.getElementById("date-summary").textContent = `${setDate} to ${setDate2}`;
+            document.getElementById("total-sale-summary").textContent = ` ₱${Number(totalSales).toFixed(2)}`;
+            document.getElementById("total-sale-transact").textContent = `${totalTrans}`;
+            document.getElementById("ave-sales-summary").textContent = `₱${aveSales.toFixed(2)}`;
+            document.getElementById("vat-tax-summary").textContent = `₱${salesTax.toFixed(2)}`;
+            document.getElementById("net-sale-summary").textContent = `₱${netSale.toFixed(2)}`;
+        } else if (data.error) {
+            // Handle errors sent from the backend
+            alert(data.error);
+        }
+    } catch (error) {
+        // Handle fetch/network errors
+        console.error('Error:', error);
+        alert("An error occurred while fetching the summary log.");
+    }
+}
+
+
+    async function getSummaryPerformance() {
+        // Get the selected dates from the input fields
+        const setDate = document.getElementById("summary-datetimelocal").value;
+        const setDate2 = document.getElementById("summary-datetimelocal2").value;
+    
+        if (!setDate) {
+            alert("Please select a date.");
+            return;
+        }
+    
+        // Prepare the form data
+        const formData = new FormData();
+        formData.append('setDate', setDate);
+        formData.append('setDate2', setDate2);
+    
+        try {
+            // Make the POST request
+            const response = await fetch('/backend/Admin/summaryPerfomance.php', {
+                method: 'POST',
+                body: formData
+            });
+    
+            // Parse JSON response
+            const data = await response.json();
+    
+            // Handle the response
+            if (data.success) {
+                // Example: Update the UI with item names and their frequencies
+                const items = data.data || [];
+                const tbody = document.getElementById("performance-data");
+    
+                // Clear previous content
+                tbody.innerHTML = '';
+    
+                // Append each item to the table body
+                items.forEach(item => {
+                    const row = document.createElement('tr');
+    
+                    const cell1 = document.createElement('td');
+                    cell1.textContent = item.item_name;
+                    row.appendChild(cell1);
+    
+                    const cell2 = document.createElement('td');
+                    cell2.textContent = item.frequency;
+                    row.appendChild(cell2);
+    
+                    tbody.appendChild(row);
+                });
+
+                
+            } else if (data.error) {
+                // Handle errors sent from the backend
+                alert(data.error);
+            }
+        } catch (error) {
+            // Handle fetch/network errors
+            console.error('Error:', error);
+            alert("An error occurred while fetching the summary log.");
+        }
+    }
+
+    async function getEmployeePerformance() {
+        // Get the selected dates from the input fields
+        const setDate = document.getElementById("summary-datetimelocal").value;
+        const setDate2 = document.getElementById("summary-datetimelocal2").value;
+    
+        if (!setDate || !setDate2) {
+            alert("Please select both dates.");
+            return;
+        }
+    
+        // Prepare the form data
+        const formData = new FormData();
+        formData.append('setDate', setDate);
+        formData.append('setDate2', setDate2);
+    
+        try {
+            // Make the POST request
+            const response = await fetch('/backend/Admin/employeePerformance.php', {
+                method: 'POST',
+                body: formData
+            });
+    
+            // Parse JSON response
+            const data = await response.json();
+    
+            // Handle the response
+            if (data.success) {
+                const employees = data.data || [];
+                const tbody = document.getElementById("employee-data"); // Correct tbody id
+    
+                // Clear previous content
+                tbody.innerHTML = '';
+    
+                // Append each employee to the table body
+                employees.forEach(employee => {
+                    const row = document.createElement('tr');
+    
+                    // Combine firstname and lastname in one cell
+                    const nameCell = document.createElement('td');
+                    nameCell.textContent = `${employee.firstname} ${employee.lastname}`;
+                    row.appendChild(nameCell);
+    
+                    const totalSaleCell = document.createElement('td');
+                    totalSaleCell.textContent = employee.total_sale;
+                    row.appendChild(totalSaleCell);
+    
+                    const totalDiscCell = document.createElement('td');
+                    totalDiscCell.textContent = employee.total_disc;
+                    row.appendChild(totalDiscCell);
+    
+                    tbody.appendChild(row);
+                });
+            } else if (data.error) {
+                // Handle errors sent from the backend
+                alert(data.error);
+            }
+        } catch (error) {
+            // Handle fetch/network errors
+            console.error('Error:', error);
+            alert("An error occurred while fetching employee performance data.");
+        }
+    }
+
+
+
+
+
+
+
 // Function to open the Summary Log Modal
 function openSummaryLogModal() {
+    getSummaryLog();
     const modal = document.getElementById("summaryLogModal");
+    const modal2 = document.getElementById("summarylogmodaldate");
     modal.style.display = "block"; // Show the modal
+    modal2.style.display = "none";
 }
 
 // Function to close the Summary Log Modal
@@ -1085,46 +1323,46 @@ document.querySelector(".summarylogdate-button").addEventListener("click", opens
 
 //LOG EMPLOYEE MODAL
 
-document.addEventListener("DOMContentLoaded", function () {
-    const tableBody = document.querySelector("#LogTable tbody");
+// document.addEventListener("DOMContentLoaded", function () {
+//     const tableBody = document.querySelector("#LogTable tbody");
 
-    // Event listener for row clicks
-    tableBody.addEventListener("click", handleRowClick);
+//     // Event listener for row clicks
+//     tableBody.addEventListener("click", handleRowClick);
 
-    // Get the modal elements
-    const modal = document.getElementById("myModal");
-    const modalOverlay = document.getElementById("modalOverlay");
-    const closeButton = document.querySelector(".close-button");
+//     // Get the modal elements
+//     const modal = document.getElementById("myModal");
+//     const modalOverlay = document.getElementById("modalOverlay");
+//     const closeButton = document.querySelector(".close-button");
 
-    // Handle row click
-    function handleRowClick(event) {
-        const row = event.target.closest("tr");
-        if (row) {
-            // Get data from clicked row
-            const date = row.getAttribute("data-date");
+//     // Handle row click
+//     function handleRowClick(event) {
+//         const row = event.target.closest("tr");
+//         if (row) {
+//             // Get data from clicked row
+//             const date = row.getAttribute("data-date");
 
-            // Populate the modal with data from the clicked row
-            document.getElementById("modalDate").textContent = date;
+//             // Populate the modal with data from the clicked row
+//             document.getElementById("modalDate").textContent = date;
 
-            // Show the modal and overlay
-            modal.style.display = "block";
-            modalOverlay.style.display = "block";
-        }
-    }
+//             // Show the modal and overlay
+//             modal.style.display = "block";
+//             modalOverlay.style.display = "block";
+//         }
+//     }
 
-    // Close the modal when close button is clicked
-    closeButton.addEventListener("click", function () {
-        // Hide modal and overlay
-        modal.style.display = "none";
-        modalOverlay.style.display = "none";
-    });
-    /*
-    // Close the modal when clicking on the overlay (optional)
-    modalOverlay.addEventListener("click", function () {
-        modal.style.display = "none";
-        modalOverlay.style.display = "none";
-    });*/
-});
+//     // Close the modal when close button is clicked
+//     closeButton.addEventListener("click", function () {
+//         // Hide modal and overlay
+//         modal.style.display = "none";
+//         modalOverlay.style.display = "none";
+//     });
+//     /*
+//     // Close the modal when clicking on the overlay (optional)
+//     modalOverlay.addEventListener("click", function () {
+//         modal.style.display = "none";
+//         modalOverlay.style.display = "none";
+//     });*/
+// });
 
 
 
