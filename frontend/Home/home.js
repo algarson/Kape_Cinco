@@ -355,6 +355,64 @@ document.addEventListener('DOMContentLoaded', async function () {
         billsSection.style.display = 'none';*/
     });
 
+    const searchOrdNum = document.getElementById('search-orders');
+
+    searchOrdNum.addEventListener('input', function () {
+        const query = this.value.toLowerCase();
+        
+        // Search within pending orders
+        const pendingOrdersContainer = document.getElementById('pending-orders');
+        const pendingOrders = pendingOrdersContainer.querySelectorAll('.order-card');
+
+        pendingOrders.forEach(order => {
+            const orderNumber = order.getAttribute('data-order-number');
+            if (orderNumber && orderNumber.toLowerCase().includes(query)) {
+                order.style.display = 'block'; // Show matching orders
+            } else {
+                order.style.display = 'none'; // Hide non-matching orders
+            }
+        });
+
+        // Search within ongoing orders
+        const ongoingOrdersContainer = document.getElementById('ongoing-orders');
+        const ongoingOrders = ongoingOrdersContainer.querySelectorAll('.order-card');
+
+        ongoingOrders.forEach(order => {
+            const orderNumber = order.querySelector('#order-number').textContent;
+            if (orderNumber && orderNumber.toLowerCase().includes(query)) {
+                order.style.display = 'block'; // Show matching orders
+            } else {
+                order.style.display = 'none'; // Hide non-matching orders
+            }
+        });
+
+        // Search within ongoing orders
+        const canceledOrdersContainer = document.getElementById('canceled-orders');
+        const canceledOrders = canceledOrdersContainer.querySelectorAll('.order-card');
+
+        canceledOrders.forEach(order => {
+            const orderNumber = order.querySelector('#order-number').textContent;
+            if (orderNumber && orderNumber.toLowerCase().includes(query)) {
+                order.style.display = 'block'; // Show matching orders
+            } else {
+                order.style.display = 'none'; // Hide non-matching orders
+            }
+        });
+
+        // Search within ongoing orders
+        const completedOrdersContainer = document.getElementById('completed-orders');
+        const completedOrders = completedOrdersContainer.querySelectorAll('.order-card');
+
+        completedOrders.forEach(order => {
+            const orderNumber = order.querySelector('#order-number').textContent;
+            if (orderNumber && orderNumber.toLowerCase().includes(query)) {
+                order.style.display = 'block'; // Show matching orders
+            } else {
+                order.style.display = 'none'; // Hide non-matching orders
+            }
+        });
+    });
+
     /*------------------------ END OF GENERATE ALL ITEMS ------------------------------*/
 
     function logout() {
