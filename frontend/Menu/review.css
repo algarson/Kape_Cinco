@@ -117,3 +117,35 @@ body.hidden {
     color: black;
 }
 
+.table-num{
+    width: 100%;
+    align-items: center;
+    display: flex;
+}
+
+.container p{
+    font-size: 15px;
+    font-weight: 400;
+
+}
+
+select {
+    width: 30%;
+    background-color: #3D2C24;
+    border: #5c4033 2px solid;
+    position: relative;
+    text-align: center;
+    font-size: 15px;
+    border-radius: 10px;
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+    margin: 5px;
+}
+
+select>option {
+    background-color: #5c4033;
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+}
