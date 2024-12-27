@@ -72,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
         .catch(error => console.error('Error:', error));
-        Dbutton.disabled = false;
     }
     /*
     // Add event listeners for registration form show/hide
