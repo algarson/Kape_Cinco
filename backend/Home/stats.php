@@ -7,7 +7,7 @@ include '../server.php';
                                 SUM(order_total_amount) AS Sales 
                             FROM `order_number_table` 
                             WHERE `order_status` = 'Completed' 
-                            AND DATE(order_date) = DATE_ADD(CURDATE(), INTERVAL 1 DAY)";
+                            AND DATE(order_date) = CURDATE()";
 
     $res = $conn->query($statSql);
 
