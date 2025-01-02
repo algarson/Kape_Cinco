@@ -809,6 +809,17 @@ th {
     cursor: pointer;
 }
 
+.table-num{
+    width: 100%;
+    align-items: center;
+    display: flex;
+    gap: 10px;
+    margin-left: 10px;
+}
+
+.table-num input{
+    width: 10%;
+}
 
 
 /* Responsive layout for smaller screens for images on a foodlist*/
