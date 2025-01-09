@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cart = JSON.parse(localStorage.getItem('cart')) || [];
     const orderListContainer = document.getElementById('order-list');
     const summaryContainer = document.getElementById('summary');
+    
 
     if (cart.length === 0) {
         window.location.href = '/frontend/Menu/menu.html';
@@ -51,6 +52,13 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
 
     document.querySelector('.complete-order-btn').addEventListener('click', function() {
+        const orderType = document.querySelector('input[name="order_type"]:checked');
+    
+        if (!orderType) {
+            alert('Please select Dine-In or Take-Out');
+            return; // Exit the function if no option is selected
+        }
+
         const orderNumber = generateOrderNumber(); 
         const orderToken = generateOrderToken();
         const receivedAmount = 0;
@@ -65,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
         formData.append('total-amount', totalPrice);
         formData.append('received-amount', receivedAmount);
         formData.append('order-stats', orderStats);
+        formData.append('order-type', orderType.value);
         formData.append('order-details', JSON.stringify(cart));
 
         fetch('/backend/Home/confirm_order.php', {
@@ -90,7 +99,8 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function generateOrderNumber() {
-    return `ORD-${Math.floor(Math.random() * 1000000)}`;
+    const tableNum = document.getElementById('order_table_input');
+    return `ORD-${tableNum.value}-${Math.floor(Math.random() * 1000000)}`;
 }
 
 function generateOrderToken() {

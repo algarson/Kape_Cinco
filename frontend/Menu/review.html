@@ -16,7 +16,17 @@
         </div>
         <div class="table-num">
             <Label>Table Number</Label>
-            <input type="number" name="" id="order_table_input">
+            <input type="number" name="" id="order_table_input" >
+
+            <form>
+                <span>Order Type:</span>
+                <label for="dinein">Dine-In</label>
+                <input type="radio" id="dinein" name="order_type" value="Dine-In" required>
+          
+                <label for="takeout">Take-Out</label>
+                <input type="radio" id="takeout" name="order_type" value="Take-Out" required>
+        
+            </form>
          </div>
         <div class="order-list" id="order-list">
             <!-- Order items  -->\

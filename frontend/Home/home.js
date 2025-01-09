@@ -717,11 +717,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     /*------------------------------------- END OF ADD TO CART FUNCTIONS -------------------------------*/
 
-    // Generate a random order number
-    function generateOrderNumber() {
-        return `ORD-${Math.floor(Math.random() * 1000000)}`;
-    }
-
     // Display order details in the modal
 
     function displayOrderDetails() {
@@ -729,10 +724,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         const orderDetailsElement = document.querySelector('#order-details');
         const modalTotalAmountElement = document.querySelector('#modal-total-amount');
         const totalAmountElement = document.querySelector('#total-amount'); 
-        const orderNumberElement = document.querySelector('#manual-order-number');
-        
-        orderNumberElement.textContent = `Order Number: ${generateOrderNumber()}`;
-        const orderNumber = orderNumberElement.textContent.replace('Order Number:', '').trim();
+
+    
 
         orderDetailsElement.innerHTML = '';
 
@@ -768,7 +761,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         const totalPrice = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
         const ManualOrderDetails = {
-            orderNumber: orderNumber,
             totalPrice: totalPrice,
             cart: cartItems
         };
@@ -802,46 +794,115 @@ document.addEventListener('DOMContentLoaded', async function () {
     
     // Event listener for the Confirm Order button in the modal
     confirmOrderButton.addEventListener('click', () => {
+        //fetchAndRenderOngoingOrder();
+        const orderType = document.querySelector('input[name="order_type"]:checked');
+        const tableNum = document.getElementById('order_table_input');
+        const orderItems = document.querySelectorAll('#order-details .order-detail-item');
         const orderDetails = JSON.parse(localStorage.getItem('ManualOrderDetails'));
         const pendingTotalAmountElement = document.querySelector('#modal-total-amount');
         const totalAmount = parseFloat(pendingTotalAmountElement.textContent.replace('₱', '').replace(',','').trim());
-        const receivedAmount = document.getElementById('received-amount').value;
+        const receivedAmount = parseFloat(document.getElementById('received-amount').value);
+        const orderNum =  `ORD-${tableNum.value}-${Math.floor(Math.random() * 1000000)}`;
         const orderStats = 'Ongoing';
+        const orderItemDetails = [];
 
-        if (!orderDetails.orderNumber) {
-            alert('No order details found!');
-            return;
+        // Loop through each order item and extract the details
+        orderItems.forEach(item => {
+            const name = item.querySelector('.order-item-name').textContent;
+            const quantity = item.querySelector('.order-item-quantity').textContent;
+            const price = item.querySelector('.order-item-price').textContent;
+  
+    // Add the extracted details to the orderDetails array
+            orderItemDetails.push({
+                name: name,
+                quantity: quantity,
+                price: price
+            });
+        });
+    
+        if (!orderType) {
+            alert('Please select Dine-In or Take-Out');
+            return; // Exit the function if no option is selected
+        } else {
+            //console.log(orderItemDetails);
         }
+
+        
+        if (tableNum <= 0) {
+            alert('Please Enter Correct Table Number');
+            return; // Exit the function if no option is selected
+        }
+
+        
 
         if (isNaN(receivedAmount) || receivedAmount <= 0 || receivedAmount < totalAmount) {
             alert('Please enter a valid amount');
         } else {
             const formData = new FormData();
-            formData.append('order-number', orderDetails.orderNumber);
+            formData.append('order-number', orderNum);
             formData.append('total-amount', orderDetails.totalPrice);
             formData.append('received-amount', receivedAmount);
             formData.append('order-stats', orderStats);
+            formData.append('order-type', orderType.value);
             formData.append('order-details', JSON.stringify(orderDetails.cart));
 
-            fetch('/backend/Home/confirm_order.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json()) 
-            .then(data => {
-                if (data.message) {
-                    alert('Order Confirmed');
-                    clearAmountFields ()
-                    fetchAndRenderOngoingOrder();
-                    paymentModal.style.display = 'none';
-                    billsSection.style.display = 'none';
-                } else if (data.error) {
-                    alert(data.error);
-                }
-            })
-            .catch(error => console.error('Error:', error));
+            if (orderItemDetails.length > 0) {
+                setTimeout(() => {
+                    fetch('/backend/Home/confirm_order.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+        
+                            const receiptContent = `
+Kape Cinco
+-----------------------------
+Order Number: ${orderNum}
+Date: ${new Date().toLocaleDateString()}
+                                
+Order Type: ${orderType.value}
+Table Number: ${tableNum.value}
+        
+Items:
+${orderItemDetails.map(item => `${item.name} ${item.quantity} ${item.price}`).join('\n')}
+                                
+-----------------------------
+Total:        ₱${totalAmount.toFixed(2)}
+Received:     ₱${receivedAmount.toFixed(2)}
+Change:       ₱${(receivedAmount - totalAmount).toFixed(2)}
+                                
+VATable:      ₱${(totalAmount - (totalAmount * (12 / 112))).toFixed(2)}
+VAT Tax:      ₱${(totalAmount * (12 / 112)).toFixed(2)}
+                            `;
+        
+                            // Create a Blob for the text file
+                            const blob = new Blob([receiptContent], { type: "text/plain" });
+        
+                            // Trigger file download
+                            const link = document.createElement("a");
+                            link.href = URL.createObjectURL(blob);
+                            link.download = `receipt_table_${orderNum}.txt`;
+                            link.click();
+        
+                            alert('Order Confirmed');
+                            clearAmountFields();
+                            fetchAndRenderOngoingOrder();
+                            paymentModal.style.display = 'none';
+                            billsSection.style.display = 'none';
+                        } else if (data.error) {
+                            alert(data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+        
+                    clearCart();
+                }, 500);
+            } else {
+                alert('No Item Selected');
+            }
 
-            clearCart();
         }
     });
 
@@ -866,6 +927,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         //console.log(orders);
         const pendingOrdersContainer = document.getElementById('pending-orders');
         const pendingOrderNumber = document.getElementById('pending-order-number');
+        const pendingOrderType = document.getElementById('pending-order-type');
         const pendingOrderDetails = document.getElementById('pending-order-details');
         const modalTotalAmount = document.getElementById('pending-modal-total-amount');
         const modal = document.getElementById('pending-orders-modal');
@@ -914,6 +976,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             orderItem.addEventListener('click', function() {
                 pendingOrderNumber.textContent = order.order_number;
+                pendingOrderType.textContent = order.order_type;
                 pendingOrderDetails.innerHTML = order.cart.map(item => `
                     <div class="order-item">
                         <span class="food-name">${item.item_name}</span>
@@ -934,6 +997,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const ongoingOrdersContainer = document.getElementById('ongoing-orders');
         const ongoingOrderNumber = document.getElementById('ongoing-order-number');
+        const ongoingOrderType = document.getElementById('ongoing-order-type');
         const ongoingOrderDetails = document.getElementById('ongoing-order-details');
         const modalTotalAmount = document.getElementById('ongoing-modal-total-amount');
         const modalTotalReceived = document.getElementById('ongoing-modal-received-amount');
@@ -954,6 +1018,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             orderItem.addEventListener('click', function () {
                 ongoingOrderNumber.textContent = order.order_number;
+                ongoingOrderType.textContent = order.order_type;
                 ongoingOrderDetails.innerHTML = order.cart.map(item => `
                     <div class="order-item">
                         <span class="food-name">${item.item_name}</span>
@@ -974,6 +1039,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         const completedOrdersContainer = document.getElementById('completed-orders');
         const completedOrderNumber = document.getElementById('completed-order-number');
+        const completedOrderType = document.getElementById('completed-order-type');
         const completedOrderDetails = document.getElementById('completed-order-details');
         const modalTotalAmount = document.getElementById('completed-modal-total-amount');
         const modalTotalReceived = document.getElementById('completed-modal-received-amount');
@@ -993,6 +1059,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             orderItem.addEventListener('click', function () {
                 completedOrderNumber.textContent = order.order_number;
+                completedOrderType.textContent = order.order_type;
                 completedOrderDetails.innerHTML = order.cart.map(item => `
                     <div class="order-item">
                         <span class="food-name">${item.item_name}</span>
@@ -1110,6 +1177,24 @@ document.addEventListener('DOMContentLoaded', async function () {
         const totalAmount = parseFloat(pendingTotalAmountElement.textContent.replace('₱', '').trim());
         const receivedAmountInput = document.getElementById('pending-received-amount');
         const receivedAmount = parseFloat(receivedAmountInput.value);
+        const pendingItems = document.querySelectorAll('#pending-order-details .order-item');
+        const orderType = document.getElementById('pending-order-type').textContent;
+        const pendingOrderItems = [];
+
+        pendingItems.forEach((item) => {
+            const name = item.querySelector('.food-name').textContent;
+            const quantity = item.querySelector('.quantity').textContent;
+            const price = item.querySelector('.total').textContent;
+  
+    // Add the extracted details to the orderDetails array
+        pendingOrderItems.push({
+                name: name,
+                quantity: quantity,
+                price: price
+            });
+        });
+
+        
 
         if (isNaN(receivedAmount) || receivedAmount <= 0 || receivedAmount < totalAmount) {
             alert('Please enter a valid amount');
@@ -1120,7 +1205,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             formData.append('order-number', orderNumber);
             formData.append('received-amount',receivedAmount);
             formData.append('order-stats',orderStatus);
-        
+            
             try {
                 const response = await fetch('/backend/Home/update_status.php', {
                     method: 'POST',
@@ -1129,22 +1214,61 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 if (response.ok) {
                     const responseData = await response.json();
-                    if (responseData.success) {
-                        alert("Pending Order Confirmed");
-                        fetchAndRenderOngoingOrder();
-                        fetchAndRenderPendingOrder();
-                        clearPendingAmountFields();
-                        document.getElementById('pending-orders-modal').style.display = 'none';
-                    } else {
-                        alert('Update failed!');
-                    }
+               //setTimeout(() => {
+                if (responseData.success) {
+
+                    console.log(orderType)
+                    const receiptContent = `
+Kape Cinco
+-----------------------------
+Order Number: ${orderNumber}
+Date: ${new Date().toLocaleDateString()}
+                            
+Order Type: ${orderType}
+Table Number: ${orderNumber.split('-')[1]}
+    
+Items:
+${pendingOrderItems.map(item => `${item.name} ${item.quantity} ${item.price}`).join('\n')}
+                            
+-----------------------------
+Total:        ₱${totalAmount.toFixed(2)}
+Received:     ₱${receivedAmount.toFixed(2)}
+Change:       ₱${(receivedAmount - totalAmount).toFixed(2)}
+                            
+VATable:      ₱${(totalAmount - (totalAmount * (12 / 112))).toFixed(2)}
+VAT Tax:      ₱${(totalAmount * (12 / 112)).toFixed(2)}
+                        `;
+    
+                        // Create a Blob for the text file
+                        const blob = new Blob([receiptContent], { type: "text/plain" });
+    
+                        // Trigger file download
+                        const link = document.createElement("a");
+                        link.href = URL.createObjectURL(blob);
+                        link.download = `receipt_table_${orderNumber}.txt`;
+                        link.click();
+
+                    alert("Pending Order Confirmed");
+                    fetchAndRenderOngoingOrder();
+                    fetchAndRenderPendingOrder();
+                    clearPendingAmountFields();
+                    document.getElementById('pending-orders-modal').style.display = 'none';
+                    
+                } else {
+                    alert('Update failed!');
+                }
+              // }, 500);
+                    
+                
                 } else {
                     alert('Update request failed!');
                 }
+            
             } catch (error) {
                 console.error('Error updating item:', error);
                 alert('An error occurred during the update.');
             }
+        
         }
         
     });

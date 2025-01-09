@@ -7,6 +7,7 @@
         o.order_total_amount,
         o.order_payment_received,
         o.order_status,
+        o.order_type,
         d.item_name,
         d.item_quantity,
         d.item_price,
@@ -34,6 +35,7 @@
                     'order_total_amount' => (float) $row['order_total_amount'], 
                     'order_payment_received' => (float) $row['order_payment_received'],
                     'order_status' => $row['order_status'],
+                    'order_type' => $row['order_type'],
                     'cart' => [] 
                 ];
             }

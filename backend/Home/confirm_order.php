@@ -9,7 +9,8 @@
         $orderTotalAmount = $_POST['total-amount'];
         $orderAmountReceived = $_POST['received-amount'];
         $orderStatus = $_POST['order-stats'];
-        
+        $orderType = $_POST['order-type'];
+
         if ($orderStatus === ''){
             $orderStatus = 'Pending';
         }
@@ -18,10 +19,10 @@
         $orderDetailsRaw = $_POST['order-details'];
         $orderDetails = json_decode($orderDetailsRaw, true);
 
-        $sql1 = "INSERT INTO order_number_table (order_number, order_date, order_total_amount, order_payment_received, order_status)
-                 VALUES (?, ?, ?, ?, ?)";
+        $sql1 = "INSERT INTO order_number_table (order_number, order_date, order_total_amount, order_payment_received, order_status, order_type)
+                 VALUES (?, ?, ?, ?, ?, ?)";
         $stmt1 = $conn->prepare($sql1);
-        $stmt1->bind_param("ssdds", $orderNumber, $orderDate, $orderTotalAmount, $orderAmountReceived, $orderStatus);
+        $stmt1->bind_param("ssddss", $orderNumber, $orderDate, $orderTotalAmount, $orderAmountReceived, $orderStatus, $orderType);
         if ($stmt1->execute()) {
 
             $sql2 = "INSERT INTO order_details_table (order_number, item_name, item_quantity, item_price, item_total_price) VALUES (?, ?, ?, ?, ?)";

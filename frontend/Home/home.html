@@ -180,9 +180,21 @@
                 <h2>Order Summary</h2>
                 <div class="table-num">
                     <Label>Table Number</Label>
-                    <input type="number" name="" id="order_table_input">
+                    <input type="number" name="" id="order_table_input" required>
                  </div>
-                <div id="manual-order-number" ></div>
+                 <div>
+                    <!-- Dine-In or Take-Out -->
+
+                    <form>
+                        <span>Order Type:</span>
+                        <label for="dinein">Dine-In</label>
+                        <input type="radio" id="dinein" name="order_type" value="Dine-In">
+                      
+                        <label for="takeout">Take-Out</label>
+                        <input type="radio" id="takeout" name="order_type" value="Take-Out">
+                    
+                    </form>
+                 </div>
                 <div id="order-details" ></div>
                 <hr class="total-hr">
                 <div class="total">
@@ -208,6 +220,7 @@
             <span class="close-button">&times;</span>
             <h2>Pending Order Details</h2>
             <div id="pending-order-number"></div>
+            <div id="pending-order-type"></div>
             <div id="pending-order-details">
                 <!-- Order Details Here -->
             </div>
@@ -236,6 +249,7 @@
             <h2>Ongoing Order Number</h2>
             <div class="modal-line"></div>
             <div id="ongoing-order-number"></div>
+            <div id="ongoing-order-type"></div>
             <div id="ongoing-order-details"></div>
             <hr class="total-hr">
             <div class="total">
@@ -257,6 +271,7 @@
             <h2>Completed Order Details</h2>
             <div class="modal-line"></div>
             <div id="completed-order-number"></div>
+            <div id="completed-order-type"></div>
             <div id="completed-order-details"></div>
             <hr class="total-hr">
             <div class="modal-line"></div>

@@ -1011,8 +1011,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     async function generateStatisticsChart(timeframe = 'weekly') {
         let chartData = {};
-        const weekly = await weeklySales();
-        const monthly = await monthlySales();
+        const weeklyy = await weeklySales();
+        const monthlyy = await monthlySales();
         const yearly = await yearlySales();
         const YD = await yearlySalesDate();
 
@@ -1020,39 +1020,346 @@ document.addEventListener("DOMContentLoaded", async function () {
         
         switch (timeframe) {
             case 'weekly':
-                //for (i = 1; i>=4; i++){
-                    chartData = {
-                        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-                        datasets: [
+                //console.log(weeklyy.weekly_sales);
+                    if (weeklyy.length > 1) {
+                        const weeklyCount = new Array(4).fill(0);
+                        weeklyy.forEach(e => {
+                            numberOfweek = parseInt(e.weekly)
+                            weeks = ((numberOfweek - 1) % 4 + 1) % 4 + 1;
+
+                            const weekIndex = weeks - 1;
+                            weeklyCount[weekIndex] = parseInt(e.weekly_sales);
+                        })
+
+                        console.log(weeklyCount);
+
+                        chartData = {
+                            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                            datasets: [
+        
+                                {
+                                    label: 'Sales',
+                                    data: weeklyCount,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        };
+
+                    } else {
+                        weeklyy.forEach(item => {
+                            numberOfweek = parseInt(item.weekly)
+                            weeks = ((numberOfweek - 1) % 4 + 1) % 4 + 1;
     
-                            {
-                                label: 'Sales',
-                                data: weekly,
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                            }
-                        ]
-                    };
-                //}
+                            if(weeks == 1){
+                                chartData = {
+                                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: [item.weekly_sales, 0, 0, 0],
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+            
+                            } else if (weeks == 2) {
+                                chartData = {
+                                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: [0, item.weekly_sales, 0, 0],
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+            
+                            } else if (weeks == 3) {
+                                chartData = {
+                                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: [0, 0, item.weekly_sales, 0],
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+            
+                            } else {
+                                chartData = {
+                                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: [0, 0, 0, item.weekly_sales],
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+    
+                            } 
+    
+                    })};
+                    
+                    
                 break;
                 case 'monthly':
-                    chartData = {
-                        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                            "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                        datasets: [
-    
-                            {
-                                label: 'Sales',
-                                data: monthly,
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
-                            }
-                        ]
-                    };
-                    break;
+                    
 
+                    if (monthlyy.length > 1) {
+                        // Initialize an array of 12 zeros
+                        const monthsCount = new Array(12).fill(0);
+                        console.log(monthlyy);
+                        // Populate monthsCount with sales data
+                        monthlyy.forEach(i => {
+                            const monthIndex = i.monthly - 1; // Convert to 0-based index
+                            monthsCount[monthIndex] = parseInt(i.monthly_sales); // Only assign valid numbers
+                        
+                        
+                        });
+                
+                
+                        // Chart data
+                            chartData = {
+                            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                 "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                            datasets: [
+                                {
+                                    label: 'Sales',
+                                    data: monthsCount,
+                                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                    borderColor: 'rgba(54, 162, 235, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        };
+                
+                    } else {
+                        monthlyy.forEach(i => {
+                            if (parseInt(i.monthly) === 1) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[0] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 2) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[1] =parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 3) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[2] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 4) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[3] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 5) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[4] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 6) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[5] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 7) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[6] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 8) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[7] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 9) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[8] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 10) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[9] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) === 11) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[10] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            } else if (parseInt(i.monthly) == 12) {
+                                const monthsCount  = new Array(12).fill(0);
+                                monthsCount[11] = parseInt(i.monthly_sales);
+                                chartData = {
+                                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
+                                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                                    datasets: [
+                
+                                        {
+                                            label: 'Sales',
+                                            data: monthsCount,
+                                            backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                            borderColor: 'rgba(54, 162, 235, 1)',
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                };
+                            }
+                        })
+                    }
+
+                    break;
                     case 'yearly':
                         chartData = {
                             labels: YD,

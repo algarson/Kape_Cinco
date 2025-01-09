@@ -7,7 +7,7 @@
        SUM(order_total_amount) AS monthly_sales 
        FROM order_number_table 
        WHERE order_status = 'Completed'
-       AND EXTRACT(YEAR FROM order_date) = YEAR(curdate()) 
+       AND EXTRACT(YEAR FROM order_date) = YEAR(CONVERT_TZ(NOW(), @@session.time_zone, '+08:00')) 
        GROUP BY monthly
        ORDER BY monthly ASC";
 
@@ -17,7 +17,10 @@
 
     if ($res->num_rows > 0) {
         while ($row = $res->fetch_assoc()) {
-            $allData[] = $row['monthly_sales'];
+            $allData[] = [
+                'monthly' => $row['monthly'],
+                'monthly_sales' => $row['monthly_sales'],
+            ];
         }
     }
 
